@@ -1,0 +1,78 @@
+			----- Web-Programmierung -----
+# Titel
+	"Stadtwerke Bonn Kundenportal"
+
+
+# Client / Besitzer
+	- SWB als Energieversorger fuer Strom Gas Wasser
+	- Kundenservice entlasten, Kunden Moeglichkeiten bieten
+	  selbst Informationen zu erhalten und zu liefern
+	? aenderungen nachvollziehen
+	? Kundenangaben auswerten
+
+
+# Audience / Kunden
+	- Informationen zum Tarif
+	- Informationen zum Verbrauch
+	- Zaehlerstaende angeben
+	- Tarif wechseln
+	- Kontaktformular 
+
+
+# Programmiersprachen
+	- HTML
+	- CSS
+	- Java
+
+
+# Technologien
+	- Eclipse JEE IDE
+	- Restful MVC Konzept
+	? Datenbank (MySQL, .csv, .json)
+	- Bootstrap CSS Framework
+	- GitHub kolllaborative Versionsverwaltung
+
+
+# Funktionalitaeten
+	- Login fuer Kunden (Kunden-Nr & PW)
+	- Daten einsehen (Anschrift, Objekt, Zaehler)
+	- Tarifansicht (Name, Preis, Konditionen)
+	- Tarifwechsel (nach VL-Ende, Preis anhand Verbrauchsstufe, ? PLZ)
+		- Alternativangebote aus DB
+		- aenderung der Kunden-DB
+	- Historydatensaetze erzeugen und beachten
+	- Verbrauchsanzeige (letzten Jahre, Zeitraum, Z-Staende, Verbrauch, [Umrechnungsfaktor])
+	- Zaehlerstand angeben (Energieart, Zaehler-Nr, Ablesedatum, Stand)
+
+
+# Design
+	- Dashboard
+
+
+# Datenbanken
+	- Kunden Stammdaten (PK Kunden-Nr)
+		- Name, Anschrift, Objekt, VL-Beginn, VL-Ende, History-KZ
+	- Zaehlerdaten (PK E-Art & Zaehler-Nr, N-1 -> FK Kunden-Nr)
+	- Zaehlerstaende (PK E-Art & Zaehler-Nr & Datum, N-1 -> FK Zaehler-Nr)
+		- Zaehlerstand, Ablesedatum, Ablesung durch, History-KZ
+	? Verbrauch
+	- Tarife (PK Produkt ID)
+		- Produkt-ID, E-Art, Preis, Konditionen
+	- Alternativtarife
+		- E-Art, Verbrauch von bis, Produkt-ID, Preis, Konditionen
+	-
+
+# Ansichten:
+	- Login	- Securitycheck und Wahl ob Kunde oder Admin
+	Kunde:	- Liste Zähler & Kundendaten
+		Klick auf Zähler	- neuen Zählerstand angeben
+		Klick auf Verbrauch	- Verbrauch anzeigen
+		Klick auf Kundendaten	- Kundendaten ändern
+	Admin:	- Liste Kunden mit Anzahl Zähler je E-Art
+		Klick auf Kunde		- Zähler und Kundendaten
+			Klick auf Zähler hinzufügen	- neuen Zähler anlegen
+			Klick auf Zähler bearbeiten	- Zähler bearbeiten
+			Klick auf Zähler löschen	- Bestätigungsabfrage
+		Klick auf neuen Kunden	- neuen Kunden anlegen
+		Klick auf Kunde löschen	- Bestätigungsabfrage
+
