@@ -21,8 +21,13 @@ public class Person {
 	private String land;
 	private boolean adminrechte;
 	
-	public Person(String email, String passwort, String vorname, String nachname, String anrede, Date geburtsdatum,
+	public Person(){
+		
+	}
+	
+	public Person(Integer id, String email, String passwort, String vorname, String nachname, String anrede, Date geburtsdatum,
 			String straﬂe, String hausNr, Integer plz, String ort, String land, boolean adminrechte) {
+		this.id = id;
 		this.email = email;
 		this.passwort = passwort;
 		this.vorname = vorname;
@@ -115,8 +120,5 @@ public class Person {
 	public void setAdminrechte(boolean adminrechte) {
 		this.adminrechte = adminrechte;
 	}
-
-
-	
 	
 }

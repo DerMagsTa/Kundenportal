@@ -2,6 +2,7 @@ package de.fom.kp.dao;
 
 import java.security.*;
 import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 
 import javax.annotation.Resource;
@@ -32,6 +33,7 @@ public class JdbcPersonDao implements PersonDao {
 	@Override
 	public Person read(Integer id) throws DaoException {
 		try (Connection c = ds.getConnection()) {
+			//!TODO SQL
 			PreparedStatement pst = c.prepareStatement("select pi.interest_fid as interestid, p.* from wp.person p left join wp.person_interest pi on pi.person_fid = p.id where p.id = ?");
 			pst.setInt(1, id);
 			ResultSet rs = pst.executeQuery();
@@ -39,10 +41,6 @@ public class JdbcPersonDao implements PersonDao {
 			while(rs.next()) {
 				if(p==null){
 					p = readPersonFromResultset(rs);
-				}
-				Integer interestid = rs.getInt("interestid");
-				if(!rs.wasNull()){
-					p.getInterests().add(interestid);
 				}
 			}
 			return p;
@@ -64,37 +62,38 @@ public class JdbcPersonDao implements PersonDao {
 				r.nextBytes(pass);
 				String encodedSalt = Base64.getEncoder().encodeToString(salt);
 				String password = Base64.getEncoder().encodeToString(pass);
+				//!TODO SQL Text und pst Nummern
 				pst = c.prepareStatement(
 						"INSERT INTO person (firstname, lastname, email, birthday, gender, height, company_fid, comment, newsletter"
 								+ ", passphrase, passphrase_md5, passphrase_sha2, passphrase_sha2_salted, salt) VALUES (?,?,?,?,?,?,?,?,?,?, md5(?), sha2(?, 512), sha2(?, 512), ?)", Statement.RETURN_GENERATED_KEYS);
-				pst.setString(10, password);
+				pst.setString(2, password);
 				pst.setString(11, password);
 				pst.setString(12, password);
 				pst.setString(13, password + encodedSalt);
 				pst.setString(14, encodedSalt);
 			} else {
+				//!TODO SQL Text und pst Nummern
 				pst = c.prepareStatement(
 						"UPDATE person set firstname=?, lastname=?, email=?, birthday=?, gender=?, height=?, company_fid=?, comment=?, newsletter=? WHERE (id=?)");
-				pst.setInt(10, person.getId());
+				pst.setInt(13, person.getId());
 			}
-			pst.setString(1, person.getFirstname());
-			pst.setString(2, person.getLastname());
-			pst.setString(3, person.getEmail());
-			pst.setObject(4, person.getBirthday());
-			pst.setString(5, person.getGender().name());
-			if (person.getHeight() != null) {
-				pst.setDouble(6, person.getHeight());
-			} else {
-				pst.setNull(6, Types.INTEGER);
-			}
-			if (person.getCompanyid() != null) {
-				pst.setInt(7, person.getCompanyid());
-			} else {
-				pst.setNull(7, Types.INTEGER);
-			}
-			pst.setString(8, person.getComment());
-			pst.setInt(9, person.isNewsletter() ? 1 : 0);
+			pst.setString(1, person.getEmail());
+			
+			pst.setString(3, person.getVorname());
+			pst.setString(4, person.getNachname());
+			pst.setDate(5, (Date) person.getGeburtsdatum());
+			pst.setString(6, person.getAnrede());
+			
+			pst.setString(7, person.getStraﬂe());
+			pst.setString(8, person.getHausNr());
+			pst.setInt(9, person.getPlz());
+			pst.setString(10, person.getOrt());
+			pst.setString(11, person.getLand());
+			
+			pst.setInt(12, person.isAdminrechte() ? 1 : 0);
+			
 			pst.executeUpdate();
+			
 			if(person.getId()==null){
 				// automatisch generierten Prim‰rschl¸ssel von DB auslesen
 				ResultSet rs = pst.getGeneratedKeys();
@@ -104,16 +103,7 @@ public class JdbcPersonDao implements PersonDao {
 			
 			PreparedStatement pd = c.prepareStatement("delete from person_interest where person_fid = ?");
 			pd.setInt(1, person.getId());
-			pd.executeUpdate();
-			
-			PreparedStatement pi = c.prepareStatement("insert into person_interest "
-					+ "(interest_fid, person_fid) values (?,?)");
-			pi.setInt(2, person.getId());
-			for (Integer i : person.getInterests()) {
-				pi.setInt(1, i);
-				pi.executeUpdate();
-			}
-			
+			pd.executeUpdate();	
 			
 			
 		} catch (SQLException e) {
@@ -198,24 +188,17 @@ public class JdbcPersonDao implements PersonDao {
 	private Person readPersonFromResultset(ResultSet rs) throws SQLException {
 		Person p = new Person();
 		p.setId(rs.getInt("id"));
-		String g = rs.getString("gender");
-		if (StringUtils.isNotBlank(g)) {
-			p.setGender(Gender.valueOf(g));
-		}
-		p.setFirstname(rs.getString("firstname"));
-		p.setLastname(rs.getString("lastname"));
 		p.setEmail(rs.getString("email"));
-		p.setBirthday(rs.getDate("birthday"));
-		p.setHeight(rs.getDouble("height"));
-		if (rs.wasNull()) {
-			p.setHeight(null);
-		}
-		p.setCompanyid(rs.getInt("company_fid"));
-		if (rs.wasNull()) {
-			p.setCompanyid(null);
-		}
-		p.setComment(rs.getString("comment"));
-		p.setNewsletter(rs.getInt("newsletter") == 1 ? true : false);
+		p.setVorname(rs.getString("vorname"));
+		p.setNachname(rs.getString("nachname"));
+		p.setAnrede(rs.getString("anrede"));
+		p.setGeburtsdatum(rs.getDate("geburtsdatum"));
+		p.setStraﬂe(rs.getString("straﬂe"));
+		p.setHausNr(rs.getString("hausNr"));
+		p.setPlz(rs.getInt("plz"));
+		p.setOrt(rs.getString("ort"));
+		p.setLand(rs.getString("land"));
+		p.setAdminrechte(rs.getInt("adminrechte") == 1 ? true : false);
 		return p;
 	}
 }
