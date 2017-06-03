@@ -64,8 +64,6 @@ public class DispatcherServlet extends HttpServlet {
 				break;
 			case "register":
 				forward = "register";
-				request.setAttribute("companylist", masterDataDao.getAllCompanies());
-				request.setAttribute("interestlist", masterDataDao.getAllInterests());
 				if(request.getParameter("register")!=null){
 					//abgeschicktes Formular
 					RegisterForm form = new RegisterForm(request, df, d);
@@ -81,9 +79,6 @@ public class DispatcherServlet extends HttpServlet {
 						Person p = form.getPerson();
 						if(form.getCompanyid()==null&&StringUtils.isNotBlank(form.getNewcompany())){
 							// Company abspeichern
-							Company c = new Company(form.getNewcompany().trim());
-							masterDataDao.save(c);
-							p.setCompanyid(c.getId());
 						}
 						personDao.save(p);
 						forward = list(request);
@@ -101,6 +96,12 @@ public class DispatcherServlet extends HttpServlet {
 				break;
 			case "contact":
 				break;
+			case "entnahmestelle":
+				EntnahmestelleDao eDao = new TestEntnahmestelleDao();
+				request.setAttribute("entnahmestelle",eDao.read(1));
+				forward = "entnahmestelle";
+				break;
+				
 			case "logout":
 				request.getSession().invalidate();
 				response.sendRedirect(request.getContextPath()+"/login.jsp");

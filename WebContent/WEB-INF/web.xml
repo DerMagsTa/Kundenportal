@@ -36,10 +36,10 @@
     <filter-name>security</filter-name>
     <filter-class>de.fom.kp.controller.SecurityFilter</filter-class>
   </filter>
-  <filter-mapping>
-    <filter-name>security</filter-name>
-    <url-pattern>*.html</url-pattern>
-  </filter-mapping>
+<!--   <filter-mapping> -->
+<!--     <filter-name>security</filter-name> -->
+<!--     <url-pattern>*.html</url-pattern> -->
+<!--   </filter-mapping> -->
   <filter-mapping>
     <filter-name>security</filter-name>
     <url-pattern>/api/*</url-pattern>
