@@ -30,9 +30,9 @@ public class DispatcherServlet extends HttpServlet {
 		try {
 			String s = config.getServletContext().getInitParameter("datasource");
 			InitialContext initialContext = new InitialContext();
-			DataSource wp = (DataSource) initialContext.lookup(s);
-			personDao = new JdbcPersonDao(wp);
-			masterDataDao = new JdbcMasterDataDao(wp);
+			DataSource kp = (DataSource) initialContext.lookup(s);
+			personDao = new JdbcPersonDao(kp);
+			//masterDataDao = new JdbcMasterDataDao(kp);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -101,7 +101,10 @@ public class DispatcherServlet extends HttpServlet {
 				request.setAttribute("entnahmestelle",eDao.read(1));
 				forward = "entnahmestelle";
 				break;
-				
+			case "welcome":
+				forward = "welcome";
+			
+				break;
 			case "logout":
 				request.getSession().invalidate();
 				response.sendRedirect(request.getContextPath()+"/login.jsp");

@@ -18,7 +18,7 @@ import de.fom.kp.persistence.*;
 @Alternative
 public class JdbcPersonDao implements PersonDao {
 	
-	@Resource(mappedName="java:comp/env/tomee/wpdatasource")
+	//@Resource(mappedName="java:comp/env/tomee/kpdatasource")
 	private DataSource ds;
 
 	public JdbcPersonDao() {
@@ -34,7 +34,8 @@ public class JdbcPersonDao implements PersonDao {
 	public Person read(Integer id) throws DaoException {
 		try (Connection c = ds.getConnection()) {
 			//!TODO SQL
-			PreparedStatement pst = c.prepareStatement("select pi.interest_fid as interestid, p.* from wp.person p left join wp.person_interest pi on pi.person_fid = p.id where p.id = ?");
+			PreparedStatement pst = c.prepareStatement(
+					"select * from kundenportal.person p where p.id = ?");
 			pst.setInt(1, id);
 			ResultSet rs = pst.executeQuery();
 			Person p = null;
@@ -121,7 +122,7 @@ public class JdbcPersonDao implements PersonDao {
 	public List<Person> list() throws DaoException {
 		List<Person> list = new ArrayList<>();
 		try (Connection c = ds.getConnection()) {
-			PreparedStatement pst = c.prepareStatement("select * from wp.person");
+			PreparedStatement pst = c.prepareStatement("select * from kundenportal.person");
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				Person p = readPersonFromResultset(rs);
@@ -137,7 +138,7 @@ public class JdbcPersonDao implements PersonDao {
 	public Person login(String email, String password) throws DaoException {
 		try (Connection c = ds.getConnection()) {
 			PreparedStatement pst = c.prepareStatement(
-					"select * from wp.person  p where p.email = ? and p.passphrase_sha2_salted = sha2(CONCAT(?, salt), 512)");
+					"select * from kundenportal.person p where p.EMail = ? and p.Passwort = ?");
 			pst.setString(1, email);
 			pst.setString(2, password);
 			ResultSet rs = pst.executeQuery();
@@ -188,17 +189,17 @@ public class JdbcPersonDao implements PersonDao {
 	private Person readPersonFromResultset(ResultSet rs) throws SQLException {
 		Person p = new Person();
 		p.setId(rs.getInt("id"));
-		p.setEmail(rs.getString("email"));
-		p.setVorname(rs.getString("vorname"));
-		p.setNachname(rs.getString("nachname"));
-		p.setAnrede(rs.getString("anrede"));
-		p.setGeburtsdatum(rs.getDate("geburtsdatum"));
-		p.setStraﬂe(rs.getString("straﬂe"));
-		p.setHausNr(rs.getString("hausNr"));
-		p.setPlz(rs.getInt("plz"));
-		p.setOrt(rs.getString("ort"));
-		p.setLand(rs.getString("land"));
-		p.setAdminrechte(rs.getInt("adminrechte") == 1 ? true : false);
+		p.setEmail(rs.getString("EMail"));
+		p.setVorname(rs.getString("Vorname"));
+		p.setNachname(rs.getString("Nachname"));
+		p.setAnrede(rs.getString("Anrede"));
+		p.setGeburtsdatum(rs.getDate("Geburtstag"));
+		p.setStraﬂe(rs.getString("Straﬂe"));
+		p.setHausNr(rs.getString("HausNr"));
+		p.setPlz(rs.getInt("PLZ"));
+		p.setOrt(rs.getString("Ort"));
+		p.setLand(rs.getString("Land"));
+		p.setAdminrechte(rs.getInt("Adminrechte") == 1 ? true : false);
 		return p;
 	}
 }

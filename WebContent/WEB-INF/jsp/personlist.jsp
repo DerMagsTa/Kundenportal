@@ -7,7 +7,7 @@
 	Person List
 	</jsp:attribute>
 	<jsp:attribute name="headline">
-	Meine Super Personen Liste
+	Nutzerkonto ${p.anrede} ${p.vorname} ${p.nachname}
 	</jsp:attribute>
 	<jsp:body>
 		<table class="table table-hover">
@@ -25,20 +25,11 @@
 		<tbody>
 			<c:forEach items="${personlist}" var="p">
 				<tr>
-					<td class="hidden-xs"><img src="<c:url value="/images/${p.gender.icon}"/>"></td>
-					<td>${p.firstname}</td>
-					<td>${p.lastname}</td>
+					<td>${p.anrede}</td>
+					<td>${p.vorname}</td>
+					<td>${p.nachname}</td>
 					<td><a href="<c:url value="/register.html?id=${p.id}"/>">${p.email}</a></td>
-					<td class="hidden-xs"><fmt:formatDate value="${p.birthday}" pattern="${datepattern}"/></td>
-					<td class="hidden-xs"><fmt:formatNumber value="${p.height}"/></td>
-					<td class="hidden-xs">
-						<c:if test="${p.newsletter}">
-							<img src="<c:url value="/images/checkbox.png"/>">
-						</c:if>
-						<c:if test="${!p.newsletter}">
-							<img src="<c:url value="/images/checkbox_unchecked.png"/>">
-						</c:if>
-					</td>
+					<td class="hidden-xs"><fmt:formatDate value="${p.geburtsdatum}" pattern="${datepattern}"/></td>
 				</tr>
 			</c:forEach>
 		</tbody>

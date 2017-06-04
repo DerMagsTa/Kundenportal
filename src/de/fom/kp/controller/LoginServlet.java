@@ -27,9 +27,8 @@ public class LoginServlet extends HttpServlet {
 		try {
 			String s = config.getServletContext().getInitParameter("datasource");
 			InitialContext initialContext = new InitialContext();
-			DataSource wp = (DataSource) initialContext.lookup(s);
-			//wp = (DataSource)config.getServletContext().getAttribute("ds");
-			personDao = new JdbcPersonDao(wp);
+			DataSource kp = (DataSource) initialContext.lookup(s);			
+			personDao = new JdbcPersonDao(kp);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -41,7 +40,8 @@ public class LoginServlet extends HttpServlet {
 
 			if (user != null) {
 				request.getSession().setAttribute("user", user);
-				response.sendRedirect(request.getContextPath() + "/personlist.html");
+				//response.sendRedirect(request.getContextPath() + "/personlist.html");
+				response.sendRedirect(request.getContextPath() + "/welcome.html");
 				return;
 			}
 			request.getRequestDispatcher("/login.jsp").forward(request, response);

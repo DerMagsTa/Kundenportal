@@ -20,23 +20,6 @@
 
 
 
-<script type="text/javascript">
-        $(function(){
-        	$("#search").on("keyup", function(){
-        		$.ajax({
-        			url: "api/personsearch?q="+$(this).val(),
-        			context: document.body
-        		}).done(function(data) {
-        			$("#personenliste > tbody").empty();
-        			var html = "";
-        			$.each(data, function(i,p){
-        				html += "<tr><td>"+p.email+"</td></tr>";
-        			});
-        			$("#personenliste > tbody").append(html);
-        		});
-        	});
-        });
-</script>
 
 </body>
 </html>

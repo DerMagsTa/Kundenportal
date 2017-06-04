@@ -5,7 +5,7 @@ import javax.sql.DataSource;
 
 public abstract class JdbcDao {
 	@Resource(mappedName="java:comp/env/tomee/wpdatasource")
-	private DataSource ds;
+	protected DataSource ds;
 	
 	public JdbcDao(DataSource ds) {
 		this.ds = ds;
@@ -14,5 +14,15 @@ public abstract class JdbcDao {
 	public JdbcDao(){
 		
 	}
+
+	public DataSource getDs() {
+		return ds;
+	}
+
+	public void setDs(DataSource ds) {
+		this.ds = ds;
+	}
+	
+	
 	
 }

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
-  <display-name>Kundenportal</display-name>
+  <display-name>kundenportal</display-name>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
   <context-param>
     <param-name>datasource</param-name>
-    <param-value>java:comp/env/wpdatasource</param-value>
+    <param-value>java:comp/env/kddatasource</param-value>
   </context-param>
   <resource-ref>
-    <res-ref-name>wpdatasource</res-ref-name>
+    <res-ref-name>kddatasource</res-ref-name>
     <res-type>javax.sql.DataSource</res-type>
   </resource-ref>
   <servlet>
@@ -36,10 +36,10 @@
     <filter-name>security</filter-name>
     <filter-class>de.fom.kp.controller.SecurityFilter</filter-class>
   </filter>
-<!--   <filter-mapping> -->
-<!--     <filter-name>security</filter-name> -->
-<!--     <url-pattern>*.html</url-pattern> -->
-<!--   </filter-mapping> -->
+  <filter-mapping>
+    <filter-name>security</filter-name>
+    <url-pattern>*.html</url-pattern>
+  </filter-mapping>
   <filter-mapping>
     <filter-name>security</filter-name>
     <url-pattern>/api/*</url-pattern>
