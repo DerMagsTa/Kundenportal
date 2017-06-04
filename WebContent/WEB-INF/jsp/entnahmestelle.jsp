@@ -15,11 +15,10 @@
 			<tr>
 				<th class="hidden-xs"><fmt:message key="i18n.gender"/></th>
 				<th><fmt:message key="i18n.firstname"/></th>
-<%-- 				<th><fmt:message key="i18n.lastname"/></th> --%>
-<%-- 				<th><fmt:message key="i18n.email"/></th> --%>
-<%-- 				<th class="hidden-xs"><fmt:message key="i18n.birthday"/></th> --%>
-<%-- 				<th class="hidden-xs"><fmt:message key="i18n.height"/></th> --%>
-<%-- 				<th class="hidden-xs"><fmt:message key="i18n.newsletter"/></th> --%>
+				<th><fmt:message key="i18n.lastname"/></th>
+				<th><fmt:message key="i18n.email"/></th>
+				<th class="hidden-xs"><fmt:message key="i18n.birthday"/></th>
+
 			</tr>
 		</thead>
 		<tbody>
@@ -27,6 +26,9 @@
 				<tr>
 
 					<td>${entnahmestelle.straﬂe}</td>
+					<td>${entnahmestelle.hausNr}</td>
+					<td>${entnahmestelle.plz}</td>
+					<td>${entnahmestelle.ort}</td>
 <%-- 					<td>${p.name}</td> --%>
 <%-- 					<td><a href="<c:url value="/register.html?id=${p.id}"/>">${p.email}</a></td> --%>
 <%-- 					<td class="hidden-xs"><fmt:formatDate value="${p.birthday}" pattern="${datepattern}"/></td> --%>

@@ -22,8 +22,19 @@ public class Entnahmestelle {
 		this.ort = ort;
 		this.land = land;
 		this.hinweis = hinweis;
-		PersonId = personId;
+		this.PersonId = personId;
 	}
+	
+	
+	public Entnahmestelle(String straﬂe, String hausNr, Integer plz, String ort, String land, String hinweis) {
+		this.straﬂe = straﬂe;
+		this.hausNr = hausNr;
+		this.plz = plz;
+		this.ort = ort;
+		this.land = land;
+		this.hinweis = hinweis;
+	}
+
 	public Integer getId() {
 		return id;
 	}

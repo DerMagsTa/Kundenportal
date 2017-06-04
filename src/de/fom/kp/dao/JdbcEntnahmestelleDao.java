@@ -2,23 +2,28 @@ package de.fom.kp.dao;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+
 import de.fom.kp.controller.DaoException;
 import de.fom.kp.persistence.Entnahmestelle;
 
-public class TestEntnahmestelleDao implements EntnahmestelleDao {
+public class JdbcEntnahmestelleDao extends JdbcDao implements EntnahmestelleDao {
+	
+	public JdbcEntnahmestelleDao() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public JdbcEntnahmestelleDao(DataSource ds) {
+		super(ds);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public Entnahmestelle read(Integer id) throws DaoException {
 		// TODO Auto-generated method stub
-		Entnahmestelle e = new Entnahmestelle();
-		e.setId(id);
-		e.setStraﬂe("Teststraﬂe");
-		e.setHausNr("1a");
-		e.setPlz(53562);
-		e.setOrt("St.Katharinen");
-		e.setPersonId(1);
-		e.setLand("DE");
-		return e;
+		return null;
 	}
 
 	@Override
@@ -44,5 +49,6 @@ public class TestEntnahmestelleDao implements EntnahmestelleDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 
 }
