@@ -1,9 +1,6 @@
-CREATE 
-    ALGORITHM = UNDEFINED 
-    DEFINER = `root`@`localhost` 
-    SQL SECURITY DEFINER
-VIEW `verbrauch` AS
+CREATE OR REPLACE VIEW `verbrauch` AS
     SELECT 
+		`zaehler`.`ID` AS `ZaehlerID`,
         `zaehler`.`Energieart` AS `Energieart`,
         `zaehler`.`ZaehlerNr` AS `ZaehlerNr`,
         `anfangs_messwerte`.`Ablesung_von` AS `Ablesung_von`,

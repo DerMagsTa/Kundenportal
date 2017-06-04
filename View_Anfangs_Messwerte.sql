@@ -1,8 +1,4 @@
-CREATE 
-    ALGORITHM = UNDEFINED 
-    DEFINER = `root`@`localhost` 
-    SQL SECURITY DEFINER
-VIEW `anfangs_messwerte` AS
+CREATE OR REPLACE VIEW `anfangs_messwerte` AS
     SELECT 
         `messwerte`.`ZaehlerID` AS `ZaehlerID`,
         `messwerte`.`Ablesedatum` AS `Ablesung_von`,
