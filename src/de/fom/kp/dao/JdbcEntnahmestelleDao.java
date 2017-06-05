@@ -1,8 +1,12 @@
 package de.fom.kp.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 import de.fom.kp.controller.DaoException;
@@ -12,17 +16,29 @@ public class JdbcEntnahmestelleDao extends JdbcDao implements EntnahmestelleDao 
 	
 	public JdbcEntnahmestelleDao() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public JdbcEntnahmestelleDao(DataSource ds) {
 		super(ds);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public Entnahmestelle read(Integer id) throws DaoException {
-		// TODO Auto-generated method stub
+		try (Connection c = ds.getConnection()) {
+			PreparedStatement pst = c.prepareStatement(
+					"select * from kundenportal.entnahmestelle e where e.id = ?");
+			pst.setInt(1, id);
+			ResultSet rs = pst.executeQuery();
+			Entnahmestelle e = null;
+			while(rs.next()) {
+				if(e==null){
+					e = readEntnahmestelleFromResultset(rs);
+				}
+			}
+			return e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
@@ -40,15 +56,49 @@ public class JdbcEntnahmestelleDao extends JdbcDao implements EntnahmestelleDao 
 
 	@Override
 	public List<Entnahmestelle> list() throws DaoException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Entnahmestelle> list = new ArrayList<>();
+		try (Connection c = ds.getConnection()) {
+			PreparedStatement pst = c.prepareStatement("select * from kundenportal.entnahmestelle");
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				Entnahmestelle e = readEntnahmestelleFromResultset(rs);
+				list.add(e);
+			}
+		} catch (Exception e) {
+			throw new DaoException(e.getMessage(), e);
+		}
+		return list;
 	}
 
 	@Override
-	public List<Entnahmestelle> listByPerson() throws DaoException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Entnahmestelle> listByPerson(Integer id) throws DaoException {
+		List<Entnahmestelle> list = new ArrayList<>();
+		try (Connection c = ds.getConnection()) {
+			PreparedStatement pst = c.prepareStatement("select * from kundenportal.entnahmestelle e Where e.PersonId = ?");
+			pst.setInt(1, id);
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				Entnahmestelle e = readEntnahmestelleFromResultset(rs);
+				list.add(e);
+			}
+		} catch (Exception e) {
+			throw new DaoException(e.getMessage(), e);
+		}
+		return list;
 	}
 	
+	// ----------- private Hilfsmethoden ----------------------------------
+	private Entnahmestelle readEntnahmestelleFromResultset(ResultSet rs) throws SQLException {
+		Entnahmestelle e = new Entnahmestelle();
+		e.setId(rs.getInt("ID"));
+		e.setPersonId(rs.getInt("PersonId"));
+		e.setStraﬂe(rs.getString("Straﬂe"));
+		e.setHausNr(rs.getString("HausNr"));
+		e.setPlz(rs.getInt("PLZ"));
+		e.setOrt(rs.getString("Ort"));
+		e.setLand(rs.getString("Land"));
+		e.setHinweis(rs.getString("Hinweis"));
+		return e;
+	}
 
 }

@@ -20,7 +20,8 @@ import de.fom.kp.view.Message;
 public class DispatcherServlet extends HttpServlet {
 
 	private PersonDao personDao;
-	private MasterDataDao masterDataDao;
+	private EntnahmestelleDao eDao;
+	private ZaehlerDao zDao;
 	
 	private static final long serialVersionUID = 1L;
 
@@ -32,7 +33,8 @@ public class DispatcherServlet extends HttpServlet {
 			InitialContext initialContext = new InitialContext();
 			DataSource kp = (DataSource) initialContext.lookup(s);
 			personDao = new JdbcPersonDao(kp);
-			//masterDataDao = new JdbcMasterDataDao(kp);
+			eDao = new JdbcEntnahmestelleDao(kp);
+			zDao = new JdbcZaehlerDao(kp);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -52,7 +54,7 @@ public class DispatcherServlet extends HttpServlet {
 			df.setLenient(false);
 			NumberFormat d = NumberFormat.getNumberInstance(locale);
 			//DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
-			System.out.println(request.getRequestURI());
+			//System.out.println(request.getRequestURI());
 			String[] sa = StringUtils.split(request.getServletPath(), "/.\\");
 			String forward = null;
 			switch (sa[0]) {
@@ -96,11 +98,21 @@ public class DispatcherServlet extends HttpServlet {
 				break;
 			case "contact":
 				break;
+
+// ---------------------------------------------				
+// ---------- K U N D E N P O R T A L ----------		
+// ---------------------------------------------
+				
 			case "entnahmestelle":
-				EntnahmestelleDao eDao = new TestEntnahmestelleDao();
-				request.setAttribute("entnahmestelle",eDao.read(1));
+				request.setAttribute("entnahmestelle",eDao.list());
 				forward = "entnahmestelle";
 				break;
+				
+			case "zaehlerliste":
+				request.setAttribute("zaehlerliste",zDao.list());
+				forward = "zaehlerliste";
+				break;
+				
 			case "welcome":
 				forward = "welcome";
 			

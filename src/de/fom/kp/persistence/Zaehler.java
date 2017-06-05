@@ -3,9 +3,27 @@ package de.fom.kp.persistence;
 public class Zaehler {
 
 	private Integer id;
-	private String ZaehlerNr;
-	private String EnergieArt;
-	private Integer EntnahmestelleId;
+	private String zaehlerNr;
+	private String energieArt;
+	private Integer entnahmestelleId;
+	
+	
+	public Zaehler() {
+	}
+	
+	public Zaehler(String zaehlerNr, String energieArt) {
+		this.zaehlerNr = zaehlerNr;
+		this.energieArt = energieArt;
+	}
+	
+	public Zaehler(Integer id, String zaehlerNr, String energieArt, Integer entnahmestelleId) {
+		this.id = id;
+		this.zaehlerNr = zaehlerNr;
+		this.energieArt = energieArt;
+		this.entnahmestelleId = entnahmestelleId;
+	}
+	
+	
 	public Integer getId() {
 		return id;
 	}
@@ -13,38 +31,21 @@ public class Zaehler {
 		this.id = id;
 	}
 	public String getZaehlerNr() {
-		return ZaehlerNr;
+		return zaehlerNr;
 	}
 	public void setZaehlerNr(String zaehlerNr) {
-		ZaehlerNr = zaehlerNr;
+		this.zaehlerNr = zaehlerNr;
 	}
 	public String getEnergieArt() {
-		return EnergieArt;
+		return energieArt;
 	}
 	public void setEnergieArt(String energieArt) {
-		EnergieArt = energieArt;
+		this.energieArt = energieArt;
 	}
 	public Integer getEntnahmestelleId() {
-		return EntnahmestelleId;
+		return entnahmestelleId;
 	}
 	public void setEntnahmestelleId(Integer entnahmestelleId) {
-		EntnahmestelleId = entnahmestelleId;
-	}
-	
-	public Zaehler() {
-	}
-	
-	public Zaehler(String zaehlerNr, String energieArt) {
-		ZaehlerNr = zaehlerNr;
-		EnergieArt = energieArt;
-	}
-	
-	public Zaehler(Integer id, String zaehlerNr, String energieArt, Integer entnahmestelleId) {
-		this.id = id;
-		ZaehlerNr = zaehlerNr;
-		EnergieArt = energieArt;
-		EntnahmestelleId = entnahmestelleId;
-	}
-	
-	
+		this.entnahmestelleId = entnahmestelleId;
+	}	
 }
