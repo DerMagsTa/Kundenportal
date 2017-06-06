@@ -2,6 +2,7 @@ package de.fom.kp.controller;
 
 import java.io.*;
 import java.sql.*;
+import java.util.List;
 
 import javax.naming.*;
 import javax.servlet.*;
@@ -16,6 +17,7 @@ public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private PersonDao personDao;
+	private EntnahmestelleDao eDao;
 	
 	// private static final String loginsql = "select * from wp.person p where
 	// p.email = ? and p.passphrase_sha2_salted = sha2(CONCAT(?, salt), 512)";
@@ -29,6 +31,7 @@ public class LoginServlet extends HttpServlet {
 			InitialContext initialContext = new InitialContext();
 			DataSource kp = (DataSource) initialContext.lookup(s);			
 			personDao = new JdbcPersonDao(kp);
+			eDao = new JdbcEntnahmestelleDao(kp);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -37,10 +40,11 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 			Person user = personDao.login(request.getParameter("j_username"), request.getParameter("j_password"));
-
 			if (user != null) {
 				request.getSession().setAttribute("user", user);
-				//response.sendRedirect(request.getContextPath() + "/personlist.html");
+				List<Entnahmestelle> entnahmestellen = eDao.listByPerson(user.getId());
+				request.getSession().setAttribute("entnahmestellen", entnahmestellen);
+				
 				response.sendRedirect(request.getContextPath() + "/welcome.html");
 				return;
 			}

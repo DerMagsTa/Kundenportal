@@ -1,5 +1,10 @@
 package de.fom.kp.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -11,16 +16,28 @@ public class JdbcZaehlerDao extends JdbcDao implements ZaehlerDao {
 
 	public JdbcZaehlerDao(DataSource ds) {
 		super(ds);
-		// TODO Auto-generated constructor stub
 	}
 
 	public JdbcZaehlerDao() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public Zaehler read(Integer id) throws DaoException {
-		// TODO Auto-generated method stub
+		try (Connection c = ds.getConnection()) {
+			PreparedStatement pst = c.prepareStatement(
+					"select * from kundenportal.zaehler z where z.id = ?");
+			pst.setInt(1, id);
+			ResultSet rs = pst.executeQuery();
+			Zaehler z = null;
+			while(rs.next()) {
+				if(z==null){
+					z = readZaehlerFromResultset(rs);
+				}
+			}
+			return z;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
@@ -38,14 +55,45 @@ public class JdbcZaehlerDao extends JdbcDao implements ZaehlerDao {
 
 	@Override
 	public List<Zaehler> list() throws DaoException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Zaehler> list = new ArrayList<>();
+		try (Connection c = ds.getConnection()) {
+			PreparedStatement pst = c.prepareStatement("select * from kundenportal.zaehler");
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				Zaehler z = readZaehlerFromResultset(rs);
+				list.add(z);
+			}
+		} catch (Exception e) {
+			throw new DaoException(e.getMessage(), e);
+		}
+		return list;
 	}
 
 	@Override
 	public List<Zaehler> listByEStelle(Integer eId) throws DaoException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Zaehler> list = new ArrayList<>();
+		try (Connection c = ds.getConnection()) {
+			PreparedStatement pst = c.prepareStatement("select * from kundenportal.zaehler z where z.EntnahmestellenID = ?");
+			pst.setInt(1, eId);
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				Zaehler z = readZaehlerFromResultset(rs);
+				list.add(z);
+			}
+		} catch (Exception e) {
+			throw new DaoException(e.getMessage(), e);
+		}
+		return list;
 	}
+	
+	// ----------- private Hilfsmethoden ----------------------------------
+		private Zaehler readZaehlerFromResultset(ResultSet rs) throws SQLException {
+			Zaehler z = new Zaehler();
+			z.setId(rs.getInt("ID"));
+			z.setEntnahmestelleId(rs.getInt("EntnahmestellenID"));
+			z.setEnergieArt(rs.getString("Energieart"));
+			z.setZaehlerNr(rs.getString("ZaehlerNr"));
+			return z;
+		}
 
 }

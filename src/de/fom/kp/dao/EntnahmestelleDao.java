@@ -11,6 +11,6 @@ public interface EntnahmestelleDao {
 	public void save(Entnahmestelle e) throws DaoException;
 	public Entnahmestelle delete(Integer id) throws DaoException;
 	public List<Entnahmestelle> list() throws DaoException;
-	public List<Entnahmestelle> listByPerson() throws DaoException;
+	public List<Entnahmestelle> listByPerson(Integer id) throws DaoException;
 	
 }

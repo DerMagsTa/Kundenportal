@@ -7,7 +7,7 @@
 	Person List
 	</jsp:attribute>
 	<jsp:attribute name="headline">
-	Nutzerkonto ${p.anrede} ${p.vorname} ${p.nachname}
+	Nutzerkonten
 	</jsp:attribute>
 	<jsp:body>
 		<table class="table table-hover">
@@ -18,8 +18,6 @@
 				<th><fmt:message key="i18n.lastname"/></th>
 				<th><fmt:message key="i18n.email"/></th>
 				<th class="hidden-xs"><fmt:message key="i18n.birthday"/></th>
-				<th class="hidden-xs"><fmt:message key="i18n.height"/></th>
-				<th class="hidden-xs"><fmt:message key="i18n.newsletter"/></th>
 			</tr>
 		</thead>
 		<tbody>

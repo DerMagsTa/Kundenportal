@@ -33,7 +33,6 @@ public class JdbcPersonDao implements PersonDao {
 	@Override
 	public Person read(Integer id) throws DaoException {
 		try (Connection c = ds.getConnection()) {
-			//!TODO SQL
 			PreparedStatement pst = c.prepareStatement(
 					"select * from kundenportal.person p where p.id = ?");
 			pst.setInt(1, id);
