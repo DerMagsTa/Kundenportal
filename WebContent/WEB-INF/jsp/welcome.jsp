@@ -10,23 +10,31 @@
 	Willkommen ${user.anrede} ${user.vorname} ${user.nachname}
 	</jsp:attribute>
 	
-	<jsp:body>
+
+		
+	<jsp:body>		
 	<div class="col-md-4">
-	<form>
+	<form method="post">
 		<h2>Meine Daten</h2>
 		<fieldset id="MeineDaten">
-		<p><label for="anrede">Anrede</label> <input type="text" value="${user.anrede}"><br/><p>
-		<p><label for="vorname">Vorname</label> <input type="text" value="${user.vorname}"><br/></p>
-		<p><label for="nachname">Nachname</label> <input type="text" value="${user.nachname}"><br/><p>
-		<p><label for="geburtstag">Geburtsdatum</label> <input type="text" value="${user.geburtsdatum}"><br/><p>	
-		<p><label for="strasse">Straﬂe</label> <input type="text" value="${user.straﬂe}"><br/><p>
-		<p><label for="hausnr">HausNr.</label> <input type="text" value="${user.hausNr }"><br/></p>
-		<p><label for="plz">PLZ</label> <input type="text" value="${user.plz}"><br/>
-		<p><label for="ort">Ort</label> <input type="text" value="${user.ort}"><br/><p>
-		<p><label for="email">E-Mail</label> <input type="text" value="${user.email}"><br/></p>
+		<input type="hidden" name="id" value="${personform.id}">
+		<input type="hidden" name="admin" value="${personform.admin}">
+		<p><label for="anrede">Anrede</label> <input type="text" name="anrede" id = "anrede" value="${personform.anrede}"><br/><p>
+		<p><label for="vorname">Vorname</label> <input type="text" name="vorname" id = "vorname" value="${personform.vorname}"><br/></p>
+		<p><label for="nachname">Nachname</label> <input type="text" name="nachname" id = "nachname" value="${personform.nachname}"><br/><p>
+		<p><label for="geburtstag">Geburtsdatum</label> <input type="date" name="geburtstag" id = "geburtstag" value="${personform.geburtsdatum}"><br/><p>	
+		<p><label for="strasse">Straﬂe</label> <input type="text" name="strasse" id = "strasse" value="${personform.straﬂe}"><br/><p>
+		<p><label for="hausnr">HausNr.</label> <input type="text" name="hausnr" id = "hausnr" value="${personform.hausNr }"><br/></p>
+		<p><label for="plz">PLZ</label> <input type="text" name="plz" id = "plz" value="${personform.plz}"><br/>
+		<p><label for="ort">Ort</label> <input type="text" name="ort" id = "ort" value="${personform.ort}"><br/><p>
+		<p><label for="email">E-Mail</label> <input type="email" name="email" id = "email" value="${personform.email}"><br/></p>
+		<p><label for="land">Land></label> <input type="text" name="land" id = "land" value="${personform.land}"><br/></p>
+
+  
+  
 		</fieldset>
 		<input type="submit" class="btn btn-default" value="ƒndern" name="MeineDatenƒndern" onclick="‰ndern();">
-		
+		<input type="submit" class="btn btn-default" value="Speichern" name="Speichern">
 		</form>
 	</div>
 	<div class="col-md-8">
@@ -56,12 +64,7 @@
 		</tbody>
 		</table>
 	</div>
-		<Script>
-		function ‰ndern() {	  
-		    var e = document.getElementById('MeineDaten');
-		    e.removetAttribute('disabled');
-		}
-		</Script>
+
 		
    </jsp:body>
 	

@@ -55,42 +55,40 @@ public class JdbcPersonDao implements PersonDao {
 		try (Connection c = ds.getConnection()) {
 			PreparedStatement pst = null;
 			if (person.getId() == null) {
-				final Random r = new SecureRandom();
-				byte[] salt = new byte[32];
-				byte[] pass = new byte[8];
-				r.nextBytes(salt);
-				r.nextBytes(pass);
-				String encodedSalt = Base64.getEncoder().encodeToString(salt);
-				String password = Base64.getEncoder().encodeToString(pass);
-				//!TODO SQL Text und pst Nummern
-				pst = c.prepareStatement(
-						"INSERT INTO person (firstname, lastname, email, birthday, gender, height, company_fid, comment, newsletter"
-								+ ", passphrase, passphrase_md5, passphrase_sha2, passphrase_sha2_salted, salt) VALUES (?,?,?,?,?,?,?,?,?,?, md5(?), sha2(?, 512), sha2(?, 512), ?)", Statement.RETURN_GENERATED_KEYS);
-				pst.setString(2, password);
-				pst.setString(11, password);
-				pst.setString(12, password);
-				pst.setString(13, password + encodedSalt);
-				pst.setString(14, encodedSalt);
+//				final Random r = new SecureRandom();
+//				byte[] salt = new byte[32];
+//				byte[] pass = new byte[8];
+//				r.nextBytes(salt);
+//				r.nextBytes(pass);
+//				String encodedSalt = Base64.getEncoder().encodeToString(salt);
+//				String password = Base64.getEncoder().encodeToString(pass);
+//				//!TODO SQL Text und pst Nummern
+//				pst = c.prepareStatement(
+//						"INSERT INTO person (firstname, lastname, email, birthday, gender, height, company_fid, comment, newsletter"
+//								+ ", passphrase, passphrase_md5, passphrase_sha2, passphrase_sha2_salted, salt) VALUES (?,?,?,?,?,?,?,?,?,?, md5(?), sha2(?, 512), sha2(?, 512), ?)", Statement.RETURN_GENERATED_KEYS);
+//				pst.setString(2, password);
+//				pst.setString(11, password);
+//				pst.setString(12, password);
+//				pst.setString(13, password + encodedSalt);
+//				pst.setString(14, encodedSalt);
 			} else {
 				//!TODO SQL Text und pst Nummern
 				pst = c.prepareStatement(
-						"UPDATE person set firstname=?, lastname=?, email=?, birthday=?, gender=?, height=?, company_fid=?, comment=?, newsletter=? WHERE (id=?)");
-				pst.setInt(13, person.getId());
+						"UPDATE person set Vorname=?, Nachname=?, EMail=?, Geburtstag=?, Anrede=?, Straﬂe=?, HausNr=?, PLZ=?, Ort=?, Land=?, Adminrechte=? WHERE (id=?)");
+				pst.setInt(12, person.getId());
 			}
-			pst.setString(1, person.getEmail());
-			
-			pst.setString(3, person.getVorname());
-			pst.setString(4, person.getNachname());
-			pst.setDate(5, (Date) person.getGeburtsdatum());
-			pst.setString(6, person.getAnrede());
-			
-			pst.setString(7, person.getStraﬂe());
-			pst.setString(8, person.getHausNr());
-			pst.setInt(9, person.getPlz());
-			pst.setString(10, person.getOrt());
-			pst.setString(11, person.getLand());
-			
-			pst.setInt(12, person.isAdminrechte() ? 1 : 0);
+			pst.setString(1, person.getVorname());
+			pst.setString(2, person.getNachname());
+			pst.setString(3, person.getEmail());
+			//pst.setDate(4, (Date) person.getGeburtsdatum());
+			pst.setObject(4, person.getGeburtsdatum());
+			pst.setString(5, person.getAnrede());
+			pst.setString(6, person.getStraﬂe());
+			pst.setString(7, person.getHausNr());
+			pst.setInt(8, person.getPlz());
+			pst.setString(9, person.getOrt());
+			pst.setString(10, person.getLand());
+			pst.setInt(11, person.isAdminrechte() == true ? 1 : 0);
 			
 			pst.executeUpdate();
 			
@@ -101,9 +99,6 @@ public class JdbcPersonDao implements PersonDao {
 				person.setId(rs.getInt(1));
 			}
 			
-			PreparedStatement pd = c.prepareStatement("delete from person_interest where person_fid = ?");
-			pd.setInt(1, person.getId());
-			pd.executeUpdate();	
 			
 			
 		} catch (SQLException e) {

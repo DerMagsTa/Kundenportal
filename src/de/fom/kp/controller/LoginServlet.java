@@ -42,8 +42,7 @@ public class LoginServlet extends HttpServlet {
 			Person user = personDao.login(request.getParameter("j_username"), request.getParameter("j_password"));
 			if (user != null) {
 				request.getSession().setAttribute("user", user);
-				List<Entnahmestelle> entnahmestellen = eDao.listByPerson(user.getId());
-				request.getSession().setAttribute("entnahmestellen", entnahmestellen);
+				request.getSession().setAttribute("entnahmestellen", eDao.listByPerson(user.getId()));
 				
 				response.sendRedirect(request.getContextPath() + "/welcome.html");
 				return;

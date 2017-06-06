@@ -101,4 +101,10 @@ public class JdbcEntnahmestelleDao extends JdbcDao implements EntnahmestelleDao 
 		return e;
 	}
 
+	@Override
+	public List<Entnahmestelle> listByPerson() throws DaoException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
