@@ -13,16 +13,16 @@
 	<jsp:body>
 	<form>
 		<h2>Meine Daten</h2>
-		<fieldset id="MeineDaten" disabled>
+		<fieldset id="MeineDaten">
 		<p><label for="anrede">Anrede</label> <input type="text" value="${user.anrede}"><br/><p>
 		<p><label for="vorname">Vorname</label> <input type="text" value="${user.vorname}"><br/></p>
-		<p><label for="nachname">Nachname</label> ${user.nachname}<br/><p>
-		<p><label for="geburtstag">Geburtsdatum</label> ${user.geburtsdatum}<br/><p>	
-		<p><label for="strasse">Straße</label> ${user.straße}<br/><p>
-		<p><label for="hausnr">HausNr.</label> ${user.hausNr }<br/></p>
-		<p><label for="plz">PLZ</label> ${user.plz}<br/>
-		<p><label for="ort">Ort</label> ${user.ort}<br/><p>
-		<p><label for="email">E-Mail</label> ${user.email}<br/></p>
+		<p><label for="nachname">Nachname</label> <input type="text" value="${user.nachname}"><br/><p>
+		<p><label for="geburtstag">Geburtsdatum</label> <input type="text" value="${user.geburtsdatum}"><br/><p>	
+		<p><label for="strasse">Straße</label> <input type="text" value="${user.straße}"><br/><p>
+		<p><label for="hausnr">HausNr.</label> <input type="text" value="${user.hausNr }"><br/></p>
+		<p><label for="plz">PLZ</label> <input type="text" value="${user.plz}"><br/>
+		<p><label for="ort">Ort</label> <input type="text" value="${user.ort}"><br/><p>
+		<p><label for="email">E-Mail</label> <input type="text" value="${user.email}"><br/></p>
 		</fieldset>
 		<input type="submit" class="btn btn-default" value="Ändern" name="MeineDatenÄndern" onclick="ändern();">
 		

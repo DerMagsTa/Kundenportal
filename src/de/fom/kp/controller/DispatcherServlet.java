@@ -8,6 +8,7 @@ import javax.naming.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.sql.DataSource;
+import javax.xml.registry.infomodel.User;
 
 import org.apache.commons.lang3.*;
 
@@ -103,7 +104,9 @@ public class DispatcherServlet extends HttpServlet {
 				break;
 			case "welcome":
 				forward = "welcome";
-			
+				if(request.getParameter("MeineDatenÄndern")!=null){
+					
+				}
 				break;
 			case "logout":
 				request.getSession().invalidate();
