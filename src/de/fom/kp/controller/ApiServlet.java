@@ -17,7 +17,7 @@ import com.google.gson.GsonBuilder;
 
 import de.fom.kp.dao.MesswertDao;
 import de.fom.kp.dao.PersonDao;
-import de.fom.kp.dao.TestPersonDao;
+
 
 
 @WebServlet("/api/*")
@@ -39,7 +39,8 @@ public class ApiServlet extends HttpServlet {
 		case "/zaehlerstaende":
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("application/json");
-			gson.toJson(mDao.listByZaehler( Integer.parseInt(request.getParameter("id"))), response.getWriter());
+			//gson.toJson(mDao.listByZaehler( Integer.parseInt(request.getParameter("id"))), response.getWriter());
+			gson.toJson(mDao.listByZaehler(1), response.getWriter());
 			break;
 		default:
 			break;

@@ -21,21 +21,38 @@
 
 
 <script type="text/javascript">
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
+	
 	$(function(){
-		$.ajax({
-			url: "api/zaehlerstaende?id="+$(this).val(),
+		
+		 $.ajax({
+			url: "api/zaehlerstaende?id="+getUrlParameter("id"),
 			context: document.body
 		}).done(function(data) {
-			$("#personenliste > tbody").empty();
+			$("#Messwerte > tbody").empty();
 			var html = "";
-			$.each(data, function(i,p){
-				html += "<tr><td>"+p.email+"</td></tr>";
+			$.each(data, function(i,m){
+				html += "<tr><td>"+m.messwert+"</td></tr>";
 			});
-			$("#personenliste > tbody").append(html);
-	});
+			$("#Messwerte > tbody").append(html); 
+		});
+
+		 
 
 
-        $(function(){
         	$("#search").on("keyup", function(){
         		$.ajax({
         			url: "api/personsearch?q="+$(this).val(),
@@ -49,7 +66,7 @@
         			$("#personenliste > tbody").append(html);
         		});
         	});
-        });
+        }); 
 </script>
 
 </body>
