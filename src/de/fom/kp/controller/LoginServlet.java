@@ -18,6 +18,7 @@ public class LoginServlet extends HttpServlet {
 
 	private PersonDao personDao;
 	private EntnahmestelleDao eDao;
+	private ZaehlerDao zDao;
 	
 	// private static final String loginsql = "select * from wp.person p where
 	// p.email = ? and p.passphrase_sha2_salted = sha2(CONCAT(?, salt), 512)";
@@ -32,6 +33,7 @@ public class LoginServlet extends HttpServlet {
 			DataSource kp = (DataSource) initialContext.lookup(s);			
 			personDao = new JdbcPersonDao(kp);
 			eDao = new JdbcEntnahmestelleDao(kp);
+			zDao = new JdbcZaehlerDao(kp);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -43,6 +45,11 @@ public class LoginServlet extends HttpServlet {
 			if (user != null) {
 				request.getSession().setAttribute("user", user);
 				List<Entnahmestelle> entnahmestellen = eDao.listByPerson(user.getId());
+				for (Entnahmestelle e : entnahmestellen) {
+					List<Zaehler> zaehler = zDao.listByEStelle(e.getId());
+					e.setZaehler(zaehler);
+				}
+				
 				request.getSession().setAttribute("entnahmestellen", entnahmestellen);
 				
 				response.sendRedirect(request.getContextPath() + "/welcome.html");

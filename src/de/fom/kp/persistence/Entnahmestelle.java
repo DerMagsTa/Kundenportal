@@ -1,5 +1,7 @@
 package de.fom.kp.persistence;
 
+import java.util.List;
+
 public class Entnahmestelle {
 	
 	private Integer id;
@@ -10,10 +12,11 @@ public class Entnahmestelle {
 	private String land;
 	private String hinweis;
 	private Integer PersonId;
+	private List<Zaehler> zaehler;
 	
 	public Entnahmestelle() {
 	}
-	
+
 	public Entnahmestelle(String straﬂe, String hausNr, Integer plz, String ort, String land, String hinweis,
 			Integer personId) {
 		this.straﬂe = straﬂe;
@@ -24,7 +27,6 @@ public class Entnahmestelle {
 		this.hinweis = hinweis;
 		this.PersonId = personId;
 	}
-	
 	
 	public Entnahmestelle(String straﬂe, String hausNr, Integer plz, String ort, String land, String hinweis) {
 		this.straﬂe = straﬂe;
@@ -83,7 +85,13 @@ public class Entnahmestelle {
 	public void setPersonId(Integer personId) {
 		PersonId = personId;
 	}
+	public List<Zaehler> getZaehler() {
+		return zaehler;
+	}
 
+	public void setZaehler(List<Zaehler> zaehler) {
+		this.zaehler = zaehler;
+	}
 
 	
 
