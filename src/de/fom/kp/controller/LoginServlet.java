@@ -18,6 +18,7 @@ public class LoginServlet extends HttpServlet {
 
 	private PersonDao personDao;
 	private EntnahmestelleDao eDao;
+	private ZaehlerDao zDao;
 	
 	// private static final String loginsql = "select * from wp.person p where
 	// p.email = ? and p.passphrase_sha2_salted = sha2(CONCAT(?, salt), 512)";
@@ -25,13 +26,14 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 
-		// DB Verbindungen zur Verfügung stellen
+		// DB Verbindungen zur VerfÃ¼gung stellen
 		try {
 			String s = config.getServletContext().getInitParameter("datasource");
 			InitialContext initialContext = new InitialContext();
 			DataSource kp = (DataSource) initialContext.lookup(s);			
 			personDao = new JdbcPersonDao(kp);
 			eDao = new JdbcEntnahmestelleDao(kp);
+			zDao = new JdbcZaehlerDao(kp);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -42,8 +44,15 @@ public class LoginServlet extends HttpServlet {
 			Person user = personDao.login(request.getParameter("j_username"), request.getParameter("j_password"));
 			if (user != null) {
 				request.getSession().setAttribute("user", user);
-				request.getSession().setAttribute("entnahmestellen", eDao.listByPerson(user.getId()));
+
+				List<Entnahmestelle> entnahmestellen = eDao.listByPerson(user.getId());
+				for (Entnahmestelle e : entnahmestellen) {
+					List<Zaehler> zaehler = zDao.listByEStelle(e.getId());
+					e.setZaehler(zaehler);
+				}
 				
+				request.getSession().setAttribute("entnahmestellen", entnahmestellen);
+
 				response.sendRedirect(request.getContextPath() + "/welcome.html");
 				return;
 			}

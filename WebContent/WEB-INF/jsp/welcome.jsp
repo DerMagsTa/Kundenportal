@@ -1,5 +1,4 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@page import="de.fom.kp.persistence.Gender"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <my:base>
@@ -79,6 +78,23 @@
 					<td class="hidden-xs">${e.land}</td>
 					<td class="hidden-xs">${e.hinweis}</td>
 				</tr>
+				<tr>
+					<th></th>
+					<th><fmt:message key="i18n.Z-ID"/></th>
+					<th><fmt:message key="i18n.E-ID"/></th>
+					<th><fmt:message key="i18n.E-Art"/></th>
+					<th><fmt:message key="i18n.ZählerNr"/></th>
+				</tr>
+					<c:forEach items="${e.zaehler}" var="z">
+						<tr>
+							<td></td>
+							<td>${z.id}</td>
+							<td>${z.entnahmestelleId}</td>
+							<td>${z.energieArt}</td>
+							<td>${z.zaehlerNr}</td>
+							<td><a href="<c:url value="/zaehlerstaende.htm?id=${z.id}"/>"><button type="button" class="btn btn-primary btn-xs"><fmt:message key="i18n.Zählerstände"/></button></a></td>
+						</tr>
+					</c:forEach>
  			</c:forEach>
 		</tbody>
 		</table>
