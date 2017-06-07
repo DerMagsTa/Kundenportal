@@ -32,6 +32,7 @@ public class PersonForm {
 	private String ort;
 	private String land;
 	private Integer admin;
+	private boolean changemode = false;
 	
 	
 	public Integer getAdmin() {
@@ -78,6 +79,7 @@ public class PersonForm {
 		this.ort = request.getParameter("ort");
 		this.land = request.getParameter("land");
 		this.admin = Integer.parseInt(request.getParameter("admin"));
+		this.changemode = Boolean.parseBoolean(request.getParameter("changemode"));
 
 	}
 	
@@ -207,6 +209,14 @@ public class PersonForm {
 
 	public void setLand(String land) {
 		this.land = land;
+	}
+
+	public boolean getChangemode() {
+		return changemode;
+	}
+
+	public void setChangemode(boolean changemode) {
+		this.changemode = changemode;
 	}
 	
 	

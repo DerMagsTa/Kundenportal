@@ -119,20 +119,23 @@ public class DispatcherServlet extends HttpServlet {
 				
 			case "welcome":
 				forward = "welcome";
-										
 				if(request.getParameter("MeineDatenÄndern")!=null){
-					
-				}else if(request.getParameter("Speichern")!=null){
+					PersonForm pf = new PersonForm(request,df,d);
+					pf.setChangemode(true);
+					request.setAttribute("personform",pf);
+				}else if(request.getParameter("Speichern")!=null){	
 					PersonForm pf = new PersonForm(request,df,d);
 					Person u  = pf.getPerson();
-					//u.setAdminrechte(((Person) request.getSession().getAttribute("user")).isAdminrechte());
 					personDao.save(u);
 					request.getSession().setAttribute("user",u);
-				}
+					pf = new PersonForm(u, df, d);
+					request.setAttribute("personform",pf);
+					
+				}else {
 				Person p = (Person) request.getSession().getAttribute("user");
 				PersonForm pf = new PersonForm(p, df, d);
-				//pf.setAnrede("KAHN!");
 				request.setAttribute("personform",pf);
+				}
 				break;
 				
 			case "logout":

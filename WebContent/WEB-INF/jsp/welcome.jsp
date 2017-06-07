@@ -12,13 +12,14 @@
 	
 
 		
-	<jsp:body>		
+	<jsp:body>
 	<div class="col-md-4">
 	<form method="post">
 		<h2>Meine Daten</h2>
 		<fieldset id="MeineDaten">
+
 		<input type="hidden" name="id" value="${personform.id}">
-		<input type="hidden" name="admin" value="${personform.admin}">
+		<input type="hidden" name="admin" id="admin" value="${personform.admin}">
 		<p><label for="anrede">Anrede</label> <input type="text" name="anrede" id = "anrede" value="${personform.anrede}"><br/><p>
 		<p><label for="vorname">Vorname</label> <input type="text" name="vorname" id = "vorname" value="${personform.vorname}"><br/></p>
 		<p><label for="nachname">Nachname</label> <input type="text" name="nachname" id = "nachname" value="${personform.nachname}"><br/><p>
@@ -28,14 +29,32 @@
 		<p><label for="plz">PLZ</label> <input type="text" name="plz" id = "plz" value="${personform.plz}"><br/>
 		<p><label for="ort">Ort</label> <input type="text" name="ort" id = "ort" value="${personform.ort}"><br/><p>
 		<p><label for="email">E-Mail</label> <input type="email" name="email" id = "email" value="${personform.email}"><br/></p>
-		<p><label for="land">Land></label> <input type="text" name="land" id = "land" value="${personform.land}"><br/></p>
-
-  
-  
+		<p><label for="land">Land</label> <input type="text" name="land" id = "land" value="${personform.land}"><br/></p>
 		</fieldset>
-		<input type="submit" class="btn btn-default" value="Ändern" name="MeineDatenÄndern" onclick="ändern();">
-		<input type="submit" class="btn btn-default" value="Speichern" name="Speichern">
+		<input type="submit" class="btn btn-default" value="Ändern" name="MeineDatenÄndern" id="MeineDatenÄndern" onclick="ändern();">
+		<input type="submit" class="btn btn-default" value="Speichern" name="Speichern" id="Speichern">
+		<script>
+			//alert("test");
+ 		    var e = ${personform.changemode};
+  			if (e==true){
+ 	 			document.getElementById("MeineDaten").removeAttribute('disabled');
+ 	 			document.getElementById("Speichern").style.visibility="visible";
+ 	 			document.getElementById("MeineDatenÄndern").style.visibility="hidden";
+  			}else{
+ 	 			document.getElementById("MeineDaten").setAttribute('disabled','disabled')
+ 				document.getElementById("Speichern").style.visibility="hidden";
+ 	 			document.getElementById("MeineDatenÄndern").style.visibility="visible";
+  			}
+		</script>
+	    <script type="text/javascript">
+		function ändern(){
+			document.getElementById("MeineDaten").removeAttribute('disabled');
+			document.getElementById("Speichern").style.visibility="visible";
+			document.getElementById("MeineDatenÄndern").style.visibility="hidden";
+		}
+		</script>
 		</form>
+		
 	</div>
 	<div class="col-md-8">
 		<h2>Meine Entnahmestellen</h2>
