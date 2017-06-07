@@ -45,4 +45,10 @@ public class TestEntnahmestelleDao implements EntnahmestelleDao {
 		return null;
 	}
 
+	@Override
+	public List<Entnahmestelle> listByPerson(Integer id) throws DaoException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

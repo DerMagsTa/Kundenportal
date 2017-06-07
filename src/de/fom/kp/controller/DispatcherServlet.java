@@ -49,12 +49,15 @@ public class DispatcherServlet extends HttpServlet {
 		//Locale locale = request.getLocale();
 			ResourceBundle bundle = ResourceBundle.getBundle("MessageResources",locale);
 			String pattern =  bundle.getString("i18n.datepattern");
+			
+			
 			request.setAttribute("datepattern", pattern);
 			request.setAttribute("flag", "/images/flag_"+locale.getLanguage()+".png");
-			DateFormat df = new SimpleDateFormat(pattern);
+			//Testweise hart auf dieses Format!
+			DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+			//DateFormat df = new SimpleDateFormat(pattern);
 			df.setLenient(false);
 			NumberFormat d = NumberFormat.getNumberInstance(locale);
-			//DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
 			//System.out.println(request.getRequestURI());
 			String[] sa = StringUtils.split(request.getServletPath(), "/.\\");
 			String forward = null;
@@ -117,9 +120,24 @@ public class DispatcherServlet extends HttpServlet {
 			case "welcome":
 				forward = "welcome";
 				if(request.getParameter("MeineDatenÄndern")!=null){
+					PersonForm pf = new PersonForm(request,df,d);
+					pf.setChangemode(true);
+					request.setAttribute("personform",pf);
+				}else if(request.getParameter("Speichern")!=null){	
+					PersonForm pf = new PersonForm(request,df,d);
+					Person u  = pf.getPerson();
+					personDao.save(u);
+					request.getSession().setAttribute("user",u);
+					pf = new PersonForm(u, df, d);
+					request.setAttribute("personform",pf);
 					
+				}else {
+				Person p = (Person) request.getSession().getAttribute("user");
+				PersonForm pf = new PersonForm(p, df, d);
+				request.setAttribute("personform",pf);
 				}
 				break;
+				
 			case "logout":
 				request.getSession().invalidate();
 				response.sendRedirect(request.getContextPath()+"/login.jsp");
