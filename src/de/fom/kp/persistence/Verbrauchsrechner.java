@@ -23,6 +23,37 @@ public class Verbrauchsrechner {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public Zaehler getZ() {
+		return z;
+	}
+
+	public void setZ(Zaehler z) {
+		this.z = z;
+	}
+
+	public Date getFrom() {
+		return from;
+	}
+
+	public void setFrom(Date from) {
+		this.from = from;
+	}
+
+	public Date getTo() {
+		return to;
+	}
+
+	public void setTo(Date to) {
+		this.to = to;
+	}
+
+	public Verbrauchsrechner(Zaehler z, Date from, Date to, String u) {
+		this.z = z;
+		this.from = from;
+		this.to = to;
+		this.u = u;
+	}
+
 	public List<Verbrauchswert> ListVerbrauch(String mode){
 		List<Verbrauchswert> vList = new ArrayList<Verbrauchswert>();
 		List<Messwert> mList = z.getmList(this.from, this.to);
