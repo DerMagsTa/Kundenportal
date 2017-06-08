@@ -1,11 +1,16 @@
 package de.fom.kp.persistence;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 public class Zaehler {
 
 	private Integer id;
 	private String zaehlerNr;
 	private String energieArt;
 	private Integer entnahmestelleId;
+	private List<Messwert> mList;
 	
 	
 	public Zaehler() {
@@ -47,5 +52,25 @@ public class Zaehler {
 	}
 	public void setEntnahmestelleId(Integer entnahmestelleId) {
 		this.entnahmestelleId = entnahmestelleId;
-	}	
+	}
+
+	public List<Messwert> getmList() {
+		return mList;
+	}
+
+	public List<Messwert> getmList(Date from, Date to) {
+		//Liefert Messwerte die zwischen Date from und to liegen
+		List<Messwert> mList_date = new ArrayList<Messwert>();
+		for (Messwert m : mList) {
+			if ((m.getAblesedatum().before(from))==false && (m.getAblesedatum().after(to)==false)){
+				mList_date.add(m);
+			}	
+		}
+		return mList_date;
+	}
+	
+	public void setmList(List<Messwert> mList) {
+		this.mList = mList;
+	}
+	
 }
