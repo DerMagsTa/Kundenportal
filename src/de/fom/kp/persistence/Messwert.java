@@ -14,6 +14,13 @@ public class Messwert {
 	
 	}
 
+	public Messwert( Integer zaehlerId,Date ablesedatum, double messwert) {
+		super();
+		this.zaehlerId = zaehlerId;
+		this.ablesedatum = ablesedatum;
+		this.messwert = messwert;
+	}
+	
 	public Messwert(Integer id, Integer zaehlerId, Date ablesedatum, double messwert) {
 		super();
 		this.id = id;

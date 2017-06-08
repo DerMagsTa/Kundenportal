@@ -1,6 +1,7 @@
 package de.fom.kp.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -44,7 +45,28 @@ public class JdbcMesswertDao extends JdbcDao implements MesswertDao {
 
 	@Override
 	public void save(Messwert m) throws DaoException {
-		// TODO Auto-generated method stub
+		try (Connection c = ds.getConnection()) {
+			PreparedStatement pst = null;
+			
+			if (m.getId() == null) {
+				pst = c.prepareStatement("INSERT INTO kundenportal.messwerte VALUES(NULL, ?, ?, ?)");
+				pst.setInt(1, m.getZaehlerId());
+				pst.setObject(2, m.getAblesedatum());
+				pst.setDouble(3, m.getMesswert());
+			} 
+			
+			else {
+				//!TODO SQL Text und pst Nummern
+				pst = c.prepareStatement(
+						"UPDATE person set Vorname=?, Nachname=?, EMail=?, Geburtstag=?, Anrede=?, Straﬂe=?, HausNr=?, PLZ=?, Ort=?, Land=?, Adminrechte=? WHERE (id=?)");
+				pst.setInt(1, m.getId());
+			}
+			
+			pst.executeUpdate();			
+			
+		} catch (SQLException e) {
+			throw new DaoException(e.getMessage(), e);
+		}
 
 	}
 
