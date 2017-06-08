@@ -159,8 +159,8 @@ public class Verbrauchsrechner {
 		default:
 			break;
 		}
-		}
 		this.u = unit;
+		}
 	return u;
 	}
 	

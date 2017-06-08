@@ -120,12 +120,15 @@ public class DispatcherServlet extends HttpServlet {
 				forward = "zaehlerliste";
 				break;
 			case "verbrauch":
+				forward = "verbrauch";
+				//Testweise für zähler 5 Verbräuche anzeigen!
 				Verbrauchsrechner vr = new Verbrauchsrechner();
-				vr.setFrom(new Date(2016+1990,0,31));
-				vr.setFrom(new Date(2016+1990,11,31));
+				vr.setFrom(new Date(2016-1900,0,1));
+				vr.setTo(new Date(2016-1900,11,31));
 				vr.setZ(zDao.read(5));
 				vr.getZ().setmList(mDao.listByZaehler(5));
 				request.setAttribute("verbrauchsListe",vr.ListVerbrauch(Verbrauchsrechner.con_mode_for_each));
+				break;
 			case "welcome":
 				forward = "welcome";
 				if(request.getParameter("MeineDatenÄndern")!=null){
