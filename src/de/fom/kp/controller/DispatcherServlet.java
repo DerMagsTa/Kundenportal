@@ -23,6 +23,7 @@ public class DispatcherServlet extends HttpServlet {
 	private PersonDao personDao;
 	private EntnahmestelleDao eDao;
 	private ZaehlerDao zDao;
+	private MesswertDao mDao;
 	
 	private static final long serialVersionUID = 1L;
 
@@ -36,12 +37,14 @@ public class DispatcherServlet extends HttpServlet {
 			personDao = new JdbcPersonDao(kp);
 			eDao = new JdbcEntnahmestelleDao(kp);
 			zDao = new JdbcZaehlerDao(kp);
+			mDao = new JdbcMesswertDao(kp);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
@@ -116,7 +119,13 @@ public class DispatcherServlet extends HttpServlet {
 				request.setAttribute("zaehlerliste",zDao.list());
 				forward = "zaehlerliste";
 				break;
-				
+			case "verbrauch":
+				Verbrauchsrechner vr = new Verbrauchsrechner();
+				vr.setFrom(new Date(2016+1990,0,31));
+				vr.setFrom(new Date(2016+1990,11,31));
+				vr.setZ(zDao.read(5));
+				vr.getZ().setmList(mDao.listByZaehler(5));
+				request.setAttribute("verbrauchsListe",vr.ListVerbrauch(Verbrauchsrechner.con_mode_for_each));
 			case "welcome":
 				forward = "welcome";
 				if(request.getParameter("MeineDatenÄndern")!=null){

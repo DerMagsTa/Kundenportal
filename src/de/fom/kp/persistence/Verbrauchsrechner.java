@@ -2,6 +2,7 @@ package de.fom.kp.persistence;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -22,15 +23,48 @@ public class Verbrauchsrechner {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public Zaehler getZ() {
+		return z;
+	}
+
+	public void setZ(Zaehler z) {
+		this.z = z;
+	}
+
+	public Date getFrom() {
+		return from;
+	}
+
+	public void setFrom(Date from) {
+		this.from = from;
+	}
+
+	public Date getTo() {
+		return to;
+	}
+
+	public void setTo(Date to) {
+		this.to = to;
+	}
+
+	public Verbrauchsrechner(Zaehler z, Date from, Date to, String u) {
+		this.z = z;
+		this.from = from;
+		this.to = to;
+		this.u = u;
+	}
+
 	public List<Verbrauchswert> ListVerbrauch(String mode){
 		List<Verbrauchswert> vList = new ArrayList<Verbrauchswert>();
-				
+		List<Messwert> mList = z.getmList(this.from, this.to);
+		Collections.sort(mList, new MesswertAblesdatumComparator());
+		
 		switch (mode) {	
 		case  con_mode_month:
-			vList = this.calc_by_month();
+			vList = this.calc_by_month(mList);
 			break;
 		case  con_mode_for_each:
-			vList = this.calc_for_each();
+			vList = this.calc_for_each(mList);
 			break;
 		default:
 			break;
@@ -40,9 +74,8 @@ public class Verbrauchsrechner {
 	}
 	
 	@SuppressWarnings("deprecation")
-	private List<Verbrauchswert> calc_by_month(){
+	private List<Verbrauchswert> calc_by_month(List<Messwert> mList){
 		List<Verbrauchswert> vList = new ArrayList<Verbrauchswert>();
-		List<Messwert> mList = z.getmList(this.from, this.to);
 		List<Integer> monate = new ArrayList<Integer>();
 		
 		//Welche Monate gibt es im Zeitraum?
@@ -88,9 +121,8 @@ public class Verbrauchsrechner {
 		return vList;
 	}
 	
-	private List<Verbrauchswert> calc_for_each(){
+	private List<Verbrauchswert> calc_for_each(List<Messwert> mList){
 		List<Verbrauchswert> vList = new ArrayList<Verbrauchswert>();
-		List<Messwert> mList = z.getmList(this.from, this.to);
 		Messwert last = null;		
 		for (Messwert m : mList) {
 			if (last != null){
