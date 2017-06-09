@@ -39,7 +39,7 @@ public class ApiServlet extends HttpServlet {
 	//@Inject 
 	private PersonDao dao;
 	private MesswertDao mDao;
-	private DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");;
+	private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");;
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
