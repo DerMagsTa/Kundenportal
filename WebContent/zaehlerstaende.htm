@@ -22,8 +22,9 @@
 					<input type="text" class="form-control" id="ablesedatum" size="30" placeholder="TT.MM.JJJJ">
 				</div>
 			</form>
-			<button id="speichern" class="btn btn-primary">Zählerstand speichern</button>
+			<p> </p><button id="speichern" class="btn btn-primary">Zählerstand speichern</button>
 	</div>
+	
 	<table id="Messwerte" class="table table-hover">
 		<thead>
 			<tr>
@@ -35,8 +36,6 @@
 
 		</tbody>
 	</table>
-
-
 
 	<script type="text/javascript">
 		var getUrlParameter = function getUrlParameter(sParam) {
@@ -72,6 +71,7 @@
 
 			$("#ablesedatum").datepicker();
 			$("#ablesedatum").datepicker( "option", "dateFormat", "yy-mm-dd");
+			
 			// bisherige Zählerstände anzeigen
 			getMesswerte();
 

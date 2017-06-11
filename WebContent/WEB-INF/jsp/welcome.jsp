@@ -19,16 +19,16 @@
 
 		<input type="hidden" name="id" value="${personform.id}">
 		<input type="hidden" name="admin" id="admin" value="${personform.admin}">
-		<p><label for="anrede">Anrede</label> <input type="text" name="anrede" id = "anrede" value="${personform.anrede}"><br/><p>
-		<p><label for="vorname">Vorname</label> <input type="text" name="vorname" id = "vorname" value="${personform.vorname}"><br/></p>
-		<p><label for="nachname">Nachname</label> <input type="text" name="nachname" id = "nachname" value="${personform.nachname}"><br/><p>
-		<p><label for="geburtstag">Geburtsdatum</label> <input type="date" name="geburtstag" id = "geburtstag" value="${personform.geburtsdatum}"><br/><p>	
-		<p><label for="strasse">Straﬂe</label> <input type="text" name="strasse" id = "strasse" value="${personform.straﬂe}"><br/><p>
-		<p><label for="hausnr">HausNr.</label> <input type="text" name="hausnr" id = "hausnr" value="${personform.hausNr }"><br/></p>
-		<p><label for="plz">PLZ</label> <input type="text" name="plz" id = "plz" value="${personform.plz}"><br/>
-		<p><label for="ort">Ort</label> <input type="text" name="ort" id = "ort" value="${personform.ort}"><br/><p>
-		<p><label for="email">E-Mail</label> <input type="email" name="email" id = "email" value="${personform.email}"><br/></p>
-		<p><label for="land">Land</label> <input type="text" name="land" id = "land" value="${personform.land}"><br/></p>
+		<p><label for="anrede" class="col-md-6">Anrede </label> <input type="text" name="anrede" id = "anrede" class="col-md-6" value="${personform.anrede}"><br/><p>
+		<p><label for="vorname" class="col-md-6">Vorname</label> <input type="text" name="vorname" id = "vorname" class="col-md-6" value="${personform.vorname}"><br/></p>
+		<p><label for="nachname" class="col-md-6">Nachname</label> <input type="text" name="nachname" id = "nachname" class="col-md-6" value="${personform.nachname}"><br/><p>
+		<p><label for="geburtstag" class="col-md-6">Geburtsdatum</label> <input type="date" name="geburtstag" id = "geburtstag" class="col-md-6" value="${personform.geburtsdatum}"><br/><p>	
+		<p><label for="strasse" class="col-md-6">Straﬂe</label> <input type="text" name="strasse" id = "strasse" class="col-md-6" value="${personform.straﬂe}"><br/><p>
+		<p><label for="hausnr" class="col-md-6">HausNr.</label> <input type="text" name="hausnr" id = "hausnr" class="col-md-6" value="${personform.hausNr }"><br/></p>
+		<p><label for="plz" class="col-md-6">PLZ</label> <input type="text" name="plz" id = "plz" class="col-md-6" value="${personform.plz}"><br/>
+		<p><label for="ort" class="col-md-6">Ort</label> <input type="text" name="ort" id = "ort" class="col-md-6" value="${personform.ort}"><br/><p>
+		<p><label for="email" class="col-md-6">E-Mail</label> <input type="email" name="email" id = "email" class="col-md-6" value="${personform.email}"><br/></p>
+		<p><label for="land" class="col-md-6">Land</label> <input type="text" name="land" id = "land" class="col-md-6" value="${personform.land}"><br/></p>
 		</fieldset>
 		<input type="submit" class="btn btn-default" value="ƒndern" name="MeineDatenƒndern" id="MeineDatenƒndern" onclick="‰ndern();">
 		<input type="submit" class="btn btn-default" value="Speichern" name="Speichern" id="Speichern">
@@ -57,7 +57,26 @@
 	</div>
 	<div class="col-md-8">
 		<h2>Meine Entnahmestellen</h2>
-		<table class="table table-hover">
+		<ul>
+			<c:forEach items="${entnahmestellen}" var="e">
+				<li><p>${e.straﬂe} ${e.hausNr}, ${e.plz} ${e.ort} ${e.land}</p>
+				<p>${e.hinweis}</p></li>
+				<table class="table table-condensed">
+				<tbody>
+				<c:forEach items="${e.zaehler}" var="z">
+					<tr>
+						<td>${z.energieArt}:</td>
+						<td>Nr. ${z.zaehlerNr}</td>
+						<td style="width: 100px"><a href="<c:url value="/zaehlerstaende.htm?id=${z.id}"/>"><button type="button" class="btn btn-primary btn-xs"><fmt:message key="i18n.Z‰hlerst‰nde"/></button></a></td>
+						<td style="width: 100px"><a href="<c:url value="/verbrauch.html?id=${z.id}"/>"><button type="button" class="btn btn-primary btn-xs"><fmt:message key="i18n.Verbrauch"/></button></a></td>
+					<tr>
+					</c:forEach>
+				</tbody>
+				</table>
+			</c:forEach>
+		</ul>
+		
+		<%-- <table class="table table-hover">
 		<thead>
 			<tr>
 				<th><fmt:message key="i18n.Straﬂe"/></th>
@@ -80,24 +99,21 @@
 				</tr>
 				<tr>
 					<th></th>
-					<th><fmt:message key="i18n.Z-ID"/></th>
-					<th><fmt:message key="i18n.E-ID"/></th>
 					<th><fmt:message key="i18n.E-Art"/></th>
 					<th><fmt:message key="i18n.Z‰hlerNr"/></th>
 				</tr>
 					<c:forEach items="${e.zaehler}" var="z">
 						<tr>
 							<td></td>
-							<td>${z.id}</td>
-							<td>${z.entnahmestelleId}</td>
 							<td>${z.energieArt}</td>
 							<td>${z.zaehlerNr}</td>
 							<td><a href="<c:url value="/zaehlerstaende.htm?id=${z.id}"/>"><button type="button" class="btn btn-primary btn-xs"><fmt:message key="i18n.Z‰hlerst‰nde"/></button></a></td>
+							<td><a href="<c:url value="/zaehlerstaende.htm?id=${z.id}"/>"><button type="button" class="btn btn-primary btn-xs"><fmt:message key="i18n.Verbrauch"/></button></a></td>
 						</tr>
 					</c:forEach>
  			</c:forEach>
 		</tbody>
-		</table>
+		</table> --%>
 	</div>
 
 		
