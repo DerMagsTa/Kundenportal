@@ -67,7 +67,7 @@
 					<tr>
 						<td>${z.energieArt}:</td>
 						<td>Nr. ${z.zaehlerNr}</td>
-						<td style="width: 100px"><a href="<c:url value="/zaehlerstaende.htm?id=${z.id}"/>"><button type="button" class="btn btn-primary btn-xs"><fmt:message key="i18n.Zählerstände"/></button></a></td>
+						<td style="width: 100px"><a href="<c:url value="/zaehlerstaende.html?id=${z.id}"/>"><button type="button" class="btn btn-primary btn-xs"><fmt:message key="i18n.Zählerstände"/></button></a></td>
 						<td style="width: 100px"><a href="<c:url value="/verbrauch.html?id=${z.id}"/>"><button type="button" class="btn btn-primary btn-xs"><fmt:message key="i18n.Verbrauch"/></button></a></td>
 					<tr>
 					</c:forEach>

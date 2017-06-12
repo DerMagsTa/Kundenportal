@@ -31,8 +31,8 @@
     <script src="<c:url value="/js/jquery.js"/>"></script>
 
 	<!-- jQuery UI -->
-	<!-- <script src="<c:url value="/js/jquery-ui.min.js"/>"></script>
- 	<link href="<c:url value="/css/jquery-ui.min.css"/>" rel="stylesheet">-->
+	<script src="<c:url value="/js/jquery-ui.min.js"/>"></script>
+ 	<link href="<c:url value="/css/jquery-ui.min.css"/>" rel="stylesheet">
 
   </head>
 

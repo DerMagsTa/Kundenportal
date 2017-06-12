@@ -119,6 +119,12 @@ public class DispatcherServlet extends HttpServlet {
 				request.setAttribute("zaehlerliste",zDao.list());
 				forward = "zaehlerliste";
 				break;
+				
+			case "zaehlerstaende":		
+				request.setAttribute("zaehler",zDao.read(Integer.parseInt(request.getParameter("id"))));
+				forward = "zaehlerstaende";
+				break;
+				
 			case "verbrauch":
 				forward = "verbrauch";
 				Verbrauchsrechner vr = new Verbrauchsrechner();
@@ -128,6 +134,7 @@ public class DispatcherServlet extends HttpServlet {
 				vr.getZ().setmList(mDao.listByZaehler(Integer.parseInt( request.getParameter("id"))));
 				request.setAttribute("verbrauchsListe",vr.ListVerbrauch(Verbrauchsrechner.con_mode_for_each));
 				break;
+				
 			case "welcome":
 				forward = "welcome";
 				if(request.getParameter("MeineDatenÄndern")!=null){
@@ -153,6 +160,7 @@ public class DispatcherServlet extends HttpServlet {
 				request.getSession().invalidate();
 				response.sendRedirect(request.getContextPath()+"/login.jsp");
 				break;
+				
 			default:
 				break;
 			}
