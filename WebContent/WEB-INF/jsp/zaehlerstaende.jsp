@@ -6,7 +6,8 @@
 	Zählerstände
 	</jsp:attribute>
 	<jsp:attribute name="headline">
-	
+	Zählerstände für ${zaehler.energieArt}zähler: ${zaehler.zaehlerNr} <br>
+	auf Entnahmestelle: ${entnahmestelle.straße} ${entnahmestelle.hausNr}, ${entnahmestelle.plz} ${entnahmestelle.ort}
 	</jsp:attribute>
 	<jsp:body>
 	<script type="text/javascript">
@@ -26,7 +27,7 @@
 
 		function getMesswerte() {
 			$.ajax({
-				url : "${pageContext.request.contextPath}/api/zaehlerstaende?id=" + getUrlParameter("id"),
+				url : "${pageContext.request.contextPath}/api/zaehlerstaende?id=" + getUrlParameter("zid"),
 				context : document.body
 			}).done(function(data) {
 				$("#Messwerte > tbody").empty();
@@ -50,7 +51,7 @@
 			// neuen Zählerstand abspeichern und Tabelle neu laden
 			$("#speichern").click(function() {
 				$.ajax({
-					url : "${pageContext.request.contextPath}/api/zaehlerstand?id="+ getUrlParameter("id")+ "&ablesedatum="+ $("#ablesedatum").val()+ "&messwert="+ $("#messwert").val()
+					url : "${pageContext.request.contextPath}/api/zaehlerstand?id="+ getUrlParameter("zid")+ "&ablesedatum="+ $("#ablesedatum").val()+ "&messwert="+ $("#messwert").val()
 				}).done(function() {
 					getMesswerte();
 				});
@@ -62,17 +63,17 @@
 			<form class="form-inline" action="">
 				<div class="form-group">
 					<label for="ablesedatum"><fmt:message key="i18n.Ablesedatum" /></label> 
-					<input type="text" class="form-control" id="ablesedatum" size="30" placeholder="TT.MM.JJJJ">
+					<input type="text" class="form-control" id="ablesedatum" size="20" placeholder="TT.MM.JJJJ">
 				</div>
 				<div class="form-group">
 					<label for="messwert"><fmt:message key="i18n.Zählerstand" /></label> 
 					<input type="number" class="form-control" id="messwert">
 				</div>
-				<button id="speichern" class="btn btn-primary"><fmt:message key="i18n.ZSpeichern" /></button>
-			</form>			
+			</form>
+			<button id="speichern" class="btn btn-primary"><fmt:message key="i18n.ZSpeichern" /></button>
 		</div>
 	
-		<table id="Messwerte" class="table table-hover">
+		<table id="Messwerte" class="table table-hover" style="margin-top: 20px; max-width: 300px;">
 			<thead>
 				<tr>
 					<th><fmt:message key="i18n.Ablesedatum" /></th>

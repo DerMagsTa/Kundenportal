@@ -26,7 +26,7 @@ public class DispatcherServlet extends HttpServlet {
 	private MesswertDao mDao;
 	
 	private static final long serialVersionUID = 1L;
-
+	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		// DB Verbindungen zur Verfügung stellen
@@ -120,18 +120,40 @@ public class DispatcherServlet extends HttpServlet {
 				forward = "zaehlerliste";
 				break;
 				
-			case "zaehlerstaende":		
-				request.setAttribute("zaehler",zDao.read(Integer.parseInt(request.getParameter("id"))));
+			case "zaehlerstaende":
+				request.setAttribute("entnahmestelle",eDao.read(Integer.parseInt(request.getParameter("eid"))));
+				request.setAttribute("zaehler",zDao.read(Integer.parseInt(request.getParameter("zid"))));
 				forward = "zaehlerstaende";
 				break;
 				
 			case "verbrauch":
+				DateFormat datumsformat = new SimpleDateFormat("yyyy-MM-dd");
 				forward = "verbrauch";
 				Verbrauchsrechner vr = new Verbrauchsrechner();
-				vr.setFrom(new Date(2016-1900,0,1));
-				vr.setTo(new Date(2017-1900,11,31));
-				vr.setZ(zDao.read(Integer.parseInt( request.getParameter("id"))));
-				vr.getZ().setmList(mDao.listByZaehler(Integer.parseInt( request.getParameter("id"))));
+				if(request.getParameter("datumvon")!=null){
+					try {
+						Date from = datumsformat.parse(request.getParameter("datumvon"));
+						vr.setFrom(from);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}else {
+					vr.setFrom(new Date(1901-1900,0,1));
+				}
+				if(request.getParameter("datumbis")!=null){
+					try {
+						Date to = datumsformat.parse(request.getParameter("datumbis"));
+						vr.setTo(to);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}else {
+					vr.setTo(new Date(2017-1900,11,31));
+				}
+				vr.setZ(zDao.read(Integer.parseInt( request.getParameter("zid"))));
+				vr.getZ().setmList(mDao.listByZaehler(Integer.parseInt( request.getParameter("zid"))));
+				request.setAttribute("entnahmestelle",eDao.read(Integer.parseInt(request.getParameter("eid"))));
+				request.setAttribute("zaehler",zDao.read(Integer.parseInt(request.getParameter("zid"))));
 				request.setAttribute("verbrauchsListe",vr.ListVerbrauch(Verbrauchsrechner.con_mode_for_each));
 				break;
 				

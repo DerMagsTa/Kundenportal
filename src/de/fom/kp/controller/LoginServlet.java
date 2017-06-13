@@ -26,7 +26,7 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 
-		// DB Verbindungen zur Verfügung stellen
+		// DB Verbindungen zur Verfuegung stellen
 		try {
 			String s = config.getServletContext().getInitParameter("datasource");
 			InitialContext initialContext = new InitialContext();
