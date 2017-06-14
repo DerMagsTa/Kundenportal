@@ -15,37 +15,41 @@ import de.fom.kp.persistence.Messwert;
 import de.fom.kp.persistence.MesswertAblesdatumComparator;
 import de.fom.kp.view.Message;
 
-public class MesstellenForm {
+public class MesswerteForm {
 	
 	private DateFormat dateFormat;
 	private NumberFormat decimalFormat;
 	
 	private Integer id;
 	private Integer zaehlerId;
-	private String messwert;
+	private double messwert;
 	private String ablesedatum;
 	
 	
 	
-	public MesstellenForm(DateFormat dateFormat, NumberFormat decimalFormat) {
+	public MesswerteForm(DateFormat dateFormat, NumberFormat decimalFormat) {
 		this.dateFormat = dateFormat;
 		this.decimalFormat = decimalFormat;
+		this.id = null;
+		this.zaehlerId = null;
+		this.messwert = 0;
+		this.ablesedatum = null;
 	}
 	
-	public MesstellenForm(de.fom.kp.persistence.Messwert m, DateFormat dateFormat, NumberFormat decimalFormat) {
+	public MesswerteForm(de.fom.kp.persistence.Messwert m, DateFormat dateFormat, NumberFormat decimalFormat) {
 		this.dateFormat = dateFormat;
 		this.decimalFormat = decimalFormat;
 		
 		this.id = m.getId();
 		this.zaehlerId = m.getZaehlerId();
-		this.messwert = decimalFormat.format(m.getMesswert());
+		this.messwert = m.getMesswert();
 		this.ablesedatum = dateFormat.format(m.getAblesedatum());
 	}
 	
-	public MesstellenForm(HttpServletRequest request, DateFormat dateFormat, NumberFormat decimalFormat) {
+	public MesswerteForm(HttpServletRequest request, DateFormat dateFormat, NumberFormat decimalFormat) {
 		this.id = Integer.parseInt(request.getParameter("id"));
 		this.zaehlerId = Integer.parseInt(request.getParameter("zaehlerId"));
-		this.messwert = request.getParameter("messwert");
+		this.messwert = Double.parseDouble(request.getParameter("messwert"));
 		this.ablesedatum = request.getParameter("ablesedatum");
 	}
 	
@@ -59,13 +63,8 @@ public class MesstellenForm {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		m.setMesswert(this.messwert);
 		
-		try {
-			m.setMesswert((Double) decimalFormat.parse(this.messwert));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return m;
 		
 	}

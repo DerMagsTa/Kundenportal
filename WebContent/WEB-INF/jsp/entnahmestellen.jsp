@@ -6,7 +6,7 @@
 	Entnahmestelle
 	</jsp:attribute>
 	<jsp:attribute name="headline">
-	Hier wird testweise eine Entnahmestelle angezeigt
+	Hier wird testweise alle Entnahmestellen angezeigt
 	</jsp:attribute>
 	<jsp:body>
 		<table class="table table-hover">
@@ -23,7 +23,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${entnahmestelle}" var="e">
+			<c:forEach items="${entnahmestellen}" var="e">
 				<tr>
 					<td>${e.id}</td>
 					<td>${e.personId}</td>

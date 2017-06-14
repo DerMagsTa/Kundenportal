@@ -75,49 +75,6 @@
 				</table>
 			</c:forEach>
 		</ul>
-		
-		<%-- <table class="table table-hover">
-		<thead>
-			<tr>
-				<th><fmt:message key="i18n.Straﬂe"/></th>
-				<th><fmt:message key="i18n.Haus-Nr"/></th>
-				<th><fmt:message key="i18n.PLZ"/></th>
-				<th><fmt:message key="i18n.Ort"/></th>
-				<th class="hidden-xs"><fmt:message key="i18n.Land"/></th>
-				<th class="hidden-xs"><fmt:message key="i18n.Hinweis"/></th>
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach items="${entnahmestellen}" var="e">
-				<tr>
-					<td>${e.straﬂe}</td>
-					<td>${e.hausNr}</td>
-					<td>${e.plz}</td>
-					<td>${e.ort}</td>
-					<td class="hidden-xs">${e.land}</td>
-					<td class="hidden-xs">${e.hinweis}</td>
-				</tr>
-				<tr>
-					<th></th>
-					<th><fmt:message key="i18n.E-Art"/></th>
-					<th><fmt:message key="i18n.Z‰hlerNr"/></th>
-				</tr>
-					<c:forEach items="${e.zaehler}" var="z">
-						<tr>
-							<td></td>
-							<td>${z.energieArt}</td>
-							<td>${z.zaehlerNr}</td>
-							<td><a href="<c:url value="/zaehlerstaende.htm?id=${z.id}"/>"><button type="button" class="btn btn-primary btn-xs"><fmt:message key="i18n.Z‰hlerst‰nde"/></button></a></td>
-							<td><a href="<c:url value="/zaehlerstaende.htm?id=${z.id}"/>"><button type="button" class="btn btn-primary btn-xs"><fmt:message key="i18n.Verbrauch"/></button></a></td>
-						</tr>
-					</c:forEach>
- 			</c:forEach>
-		</tbody>
-		</table> --%>
 	</div>
-
-		
    </jsp:body>
-	
-	
 </my:base>

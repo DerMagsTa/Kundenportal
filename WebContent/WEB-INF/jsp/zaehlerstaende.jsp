@@ -34,7 +34,8 @@
 				var html = "";
 				$.each(data, function(i, m) {
 					html += "<tr><td>" + m.ablesedatum + "</td>";
-					html += "<td>" + m.messwert + "</td></tr>";
+					html += "<td>" + m.messwert + "</td>";
+					html += "<td>" + "<a href='${pageContext.request.contextPath}/zaehlerstaende.html?zid=" + getUrlParameter("zid") + "&eid=" + getUrlParameter("eid") +"&mid=" + m.id + "'><button type='button' class='btn btn-success btn-xs'>Ändern</button></a>" + "</td></tr>";
 				});
 				$("#Messwerte > tbody").append(html);
 			});
@@ -63,13 +64,14 @@
 			<form class="form-inline" action="">
 				<div class="form-group">
 					<label for="ablesedatum"><fmt:message key="i18n.Ablesedatum" /></label> 
-					<input type="text" class="form-control" id="ablesedatum" size="20" placeholder="TT.MM.JJJJ">
+					<input type="text" class="form-control" id="ablesedatum" size="20" placeholder="TT.MM.JJJJ" value="${mform.ablesedatum}">
 				</div>
 				<div class="form-group">
 					<label for="messwert"><fmt:message key="i18n.Zählerstand" /></label> 
-					<input type="number" class="form-control" id="messwert">
+					<input type="number" class="form-control" id="messwert" value="${mform.messwert}">
 				</div>
 			</form>
+			<br>
 			<button id="speichern" class="btn btn-primary"><fmt:message key="i18n.ZSpeichern" /></button>
 		</div>
 	
@@ -78,6 +80,7 @@
 				<tr>
 					<th><fmt:message key="i18n.Ablesedatum" /></th>
 					<th><fmt:message key="i18n.Zählerstand" /></th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>

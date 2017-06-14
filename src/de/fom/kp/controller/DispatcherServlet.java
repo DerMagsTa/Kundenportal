@@ -58,6 +58,7 @@ public class DispatcherServlet extends HttpServlet {
 			request.setAttribute("flag", "/images/flag_"+locale.getLanguage()+".png");
 			//Testweise hart auf dieses Format!
 			DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+			DateFormat datumsformat = new SimpleDateFormat("yyyy-MM-dd");			
 			//DateFormat df = new SimpleDateFormat(pattern);
 			df.setLenient(false);
 			NumberFormat d = NumberFormat.getNumberInstance(locale);
@@ -110,9 +111,9 @@ public class DispatcherServlet extends HttpServlet {
 // ---------- K U N D E N P O R T A L ----------		
 // ---------------------------------------------
 				
-			case "entnahmestelle":
-				request.setAttribute("entnahmestelle",eDao.list());
-				forward = "entnahmestelle";
+			case "entnahmestellen":
+				request.setAttribute("entnahmestellen",eDao.list());
+				forward = "entnahmestellen";
 				break;
 				
 			case "zaehlerliste":
@@ -121,13 +122,41 @@ public class DispatcherServlet extends HttpServlet {
 				break;
 				
 			case "zaehlerstaende":
+				
+				if(request.getParameter("mbearbeiten")!=null){
+					//abgeschicktes Formular
+					MesswerteForm mForm = new MesswerteForm(mDao.read(Integer.parseInt(request.getParameter("mid"))), datumsformat, d);
+					//validieren
+					List<Message> errors = new ArrayList<Message>();
+					List<Messwert> mList = mDao.listByZaehler(Integer.parseInt(request.getParameter("zid")) );
+					mForm.validate(errors, mList);
+					if(errors.size()!=0){
+						//error
+						request.setAttribute("mForm", mForm);
+						request.setAttribute("errors", errors);
+					}else{
+						//success
+						Messwert m = mForm.getMesswert();
+						mDao.save(m);
+						forward = list(request);
+					}
+				}else if(request.getParameter("mid")!=null){
+					//start edit
+					MesswerteForm mForm = new MesswerteForm(mDao.read(Integer.parseInt(request.getParameter("mid"))), datumsformat, d);
+					request.setAttribute("mForm",mForm);
+				}else{
+						//start new
+						MesswerteForm mForm = new MesswerteForm(datumsformat, d);
+						request.setAttribute("mForm",mForm);
+					 }
+				
 				request.setAttribute("entnahmestelle",eDao.read(Integer.parseInt(request.getParameter("eid"))));
 				request.setAttribute("zaehler",zDao.read(Integer.parseInt(request.getParameter("zid"))));
 				forward = "zaehlerstaende";
 				break;
 				
 			case "verbrauch":
-				DateFormat datumsformat = new SimpleDateFormat("yyyy-MM-dd");
+				
 				forward = "verbrauch";
 				Verbrauchsrechner vr = new Verbrauchsrechner();
 				if(request.getParameter("datumvon")!=null){
