@@ -43,8 +43,8 @@
 
 		$(function() {
 
-			$("#ablesedatum").datepicker();
-			$("#ablesedatum").datepicker( "option", "dateFormat", "yy-mm-dd");
+			//$("#ablesedatum").datepicker();
+			//$("#ablesedatum").datepicker( "option", "dateFormat", "yy-mm-dd");
 			
 			// bisherige Zählerstände anzeigen
 			getMesswerte();
@@ -52,7 +52,7 @@
 			// neuen Zählerstand abspeichern und Tabelle neu laden
 			$("#speichern").click(function() {
 				$.ajax({
-					url : "${pageContext.request.contextPath}/api/zaehlerstand?id="+ getUrlParameter("zid")+ "&ablesedatum="+ $("#ablesedatum").val()+ "&messwert="+ $("#messwert").val()
+					url : "${pageContext.request.contextPath}/api/zaehlerstand?zid="+ getUrlParameter("zid")+ "&ablesedatum="+ $("#ablesedatum").val()+ "&messwert="+ $("#messwert").val()
 				}).done(function() {
 					getMesswerte();
 				});
@@ -61,18 +61,24 @@
 		</script>
 				
 		<div class="container">
-			<form class="form-inline" action="">
+			<c:forEach items="${errors}" var="e">
+				${e.message }<br/>
+			</c:forEach>
+			<form class="form-inline" method="post">
+				<input type="hidden" name="id" value="${mform.id}">
+				<input type="hidden" name="zaehlerId" value="${mform.zaehlerId}">
 				<div class="form-group">
 					<label for="ablesedatum"><fmt:message key="i18n.Ablesedatum" /></label> 
-					<input type="text" class="form-control" id="ablesedatum" size="20" placeholder="TT.MM.JJJJ" value="${mform.ablesedatum}">
+					<input type="text" class="form-control" id="ablesedatum" name="ablesedatum" placeholder="yyyy-mm-dd" value="${mform.ablesedatum}">
 				</div>
 				<div class="form-group">
 					<label for="messwert"><fmt:message key="i18n.Zählerstand" /></label> 
-					<input type="number" class="form-control" id="messwert" value="${mform.messwert}">
+					<input type="number" class="form-control" id="messwert" name="messwert" value="${mform.messwert}">
 				</div>
+				<input type="submit" class="btn btn-default" value="save" name="zspeichern">
 			</form>
 			<br>
-			<button id="speichern" class="btn btn-primary"><fmt:message key="i18n.ZSpeichern" /></button>
+			<!-- <button id="speichern" class="btn btn-primary"><fmt:message key="i18n.ZSpeichern" /></button> -->
 		</div>
 	
 		<table id="Messwerte" class="table table-hover" style="margin-top: 20px; max-width: 300px;">
@@ -87,8 +93,5 @@
 	
 			</tbody>
 		</table>
-		
-		
-		<!--  -->
 	</jsp:body>
 </my:base>

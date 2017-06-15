@@ -123,31 +123,32 @@ public class DispatcherServlet extends HttpServlet {
 				
 			case "zaehlerstaende":
 				
-				if(request.getParameter("mbearbeiten")!=null){
-					//abgeschicktes Formular
-					MesswerteForm mForm = new MesswerteForm(mDao.read(Integer.parseInt(request.getParameter("mid"))), datumsformat, d);
-					//validieren
+				if(request.getParameter("zspeichern")!=null){
+					//ein Zählerstand soll gespeichert werden (Klick auf Save)
+					MesswerteForm mForm = new MesswerteForm(request, datumsformat, d);
 					List<Message> errors = new ArrayList<Message>();
 					List<Messwert> mList = mDao.listByZaehler(Integer.parseInt(request.getParameter("zid")) );
+					Collections.sort(mList, new MesswertAblesdatumComparator());
 					mForm.validate(errors, mList);
 					if(errors.size()!=0){
 						//error
-						request.setAttribute("mForm", mForm);
+						request.setAttribute("mform", mForm);
 						request.setAttribute("errors", errors);
 					}else{
 						//success
-						Messwert m = mForm.getMesswert();
+						Messwert m = mForm.getMesswertClass();
 						mDao.save(m);
 						forward = list(request);
 					}
 				}else if(request.getParameter("mid")!=null){
-					//start edit
+					//vorhandener Zählerstand soll geändert werden
 					MesswerteForm mForm = new MesswerteForm(mDao.read(Integer.parseInt(request.getParameter("mid"))), datumsformat, d);
-					request.setAttribute("mForm",mForm);
+					request.setAttribute("mform",mForm);
 				}else{
-						//start new
+						//neuer Zählerstand soll angegeben werden (default - beim Aufruf der Seite)
 						MesswerteForm mForm = new MesswerteForm(datumsformat, d);
-						request.setAttribute("mForm",mForm);
+						mForm.setZaehlerId(Integer.parseInt(request.getParameter("zid")));
+						request.setAttribute("mform",mForm);
 					 }
 				
 				request.setAttribute("entnahmestelle",eDao.read(Integer.parseInt(request.getParameter("eid"))));

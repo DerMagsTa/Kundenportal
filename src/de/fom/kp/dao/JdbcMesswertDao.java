@@ -56,10 +56,11 @@ public class JdbcMesswertDao extends JdbcDao implements MesswertDao {
 			} 
 			
 			else {
-				//!TODO SQL Text und pst Nummern
 				pst = c.prepareStatement(
-						"UPDATE person set Vorname=?, Nachname=?, EMail=?, Geburtstag=?, Anrede=?, Straﬂe=?, HausNr=?, PLZ=?, Ort=?, Land=?, Adminrechte=? WHERE (id=?)");
-				pst.setInt(1, m.getId());
+						"UPDATE kundenportal.messwerte set Messwert=?, Ablesedatum=? WHERE (ID=?)");
+				pst.setDouble(1, m.getMesswert());
+				pst.setObject(2, m.getAblesedatum());
+				pst.setInt(3, m.getId());
 			}
 			
 			pst.executeUpdate();			

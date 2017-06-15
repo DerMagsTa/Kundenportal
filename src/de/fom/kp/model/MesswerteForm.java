@@ -6,9 +6,12 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.StringUtils;
 
 import de.fom.kp.persistence.Entnahmestelle;
 import de.fom.kp.persistence.Messwert;
@@ -23,7 +26,7 @@ public class MesswerteForm {
 	private Integer id;
 	private Integer zaehlerId;
 	private double messwert;
-	private String ablesedatum;
+	private Date ablesedatum;
 	
 	
 	
@@ -43,34 +46,69 @@ public class MesswerteForm {
 		this.id = m.getId();
 		this.zaehlerId = m.getZaehlerId();
 		this.messwert = m.getMesswert();
-		this.ablesedatum = dateFormat.format(m.getAblesedatum());
+		this.ablesedatum = m.getAblesedatum();
 	}
 	
 	public MesswerteForm(HttpServletRequest request, DateFormat dateFormat, NumberFormat decimalFormat) {
-		this.id = Integer.parseInt(request.getParameter("id"));
+		if(StringUtils.isNotBlank(request.getParameter("id"))){
+			this.id = Integer.parseInt(request.getParameter("id"));
+		} else {
+			this.id = null;
+		}
 		this.zaehlerId = Integer.parseInt(request.getParameter("zaehlerId"));
 		this.messwert = Double.parseDouble(request.getParameter("messwert"));
-		this.ablesedatum = request.getParameter("ablesedatum");
+		try {
+			this.ablesedatum = dateFormat.parse(request.getParameter("ablesedatum"));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public Messwert getMesswert(){
+	public Messwert getMesswertClass(){
 		Messwert m = new Messwert();
 		m.setId(id);
 		m.setZaehlerId(zaehlerId);
-		try {
-			m.setAblesedatum(dateFormat.parse(this.ablesedatum));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		m.setAblesedatum(this.ablesedatum);
 		m.setMesswert(this.messwert);
 		
 		return m;
 		
 	}
 	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getZaehlerId() {
+		return zaehlerId;
+	}
+
+	public void setZaehlerId(Integer zaehlerId) {
+		this.zaehlerId = zaehlerId;
+	}
+
+	public Date getAblesedatum() {
+		return ablesedatum;
+	}
+
+	public void setAblesedatum(Date ablesedatum) {
+		this.ablesedatum = ablesedatum;
+	}
+
+	public double getMesswert () {
+		return messwert;
+	}
+	
+	public void setMesswert(double messwert) {
+		this.messwert = messwert;
+	}
+
 	public void validate(List<Message> errors, List<Messwert> mList){ 
-		Messwert w = this.getMesswert();
+		Messwert w = this.getMesswertClass();
 		// die Liste der Messwerte ist erforderlich, da wir nur im Kontext mit den anderen Werten validierne können
 		Collections.sort(mList, new MesswertAblesdatumComparator());
 		//nachst älteren und jüngeren Messwert ermitteln und prüfen, ob der Eingegeben Messwert zwischen den beiden liegt
@@ -96,7 +134,7 @@ public class MesswerteForm {
 				errors.add(new Message("messwert", "Der angegebene Messwert ist kleiner dem vorherigen"));
 			}
 		}
-		if(next!=null){
+		if(next.getId()!=null){
 			if (next.getMesswert() < w.getMesswert()){
 				errors.add(new Message("messwert", "Der angegebene Messwert ist größer dem nachfolgenden"));
 			}

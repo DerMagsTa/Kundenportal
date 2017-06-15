@@ -69,19 +69,6 @@ public class ApiServlet extends HttpServlet {
 			response.setContentType("application/json");
 			gson.toJson(mDao.listByZaehler( Integer.parseInt(request.getParameter("id"))), response.getWriter());
 			break;
-		case "/zaehlerstand":
-			Messwert m = new Messwert();
-			try {
-				m.setZaehlerId( Integer.parseInt(request.getParameter("id")));
-				m.setAblesedatum(dateFormat.parse(request.getParameter("ablesedatum")));
-				m.setMesswert(Double.parseDouble( request.getParameter("messwert")));
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			mDao.save(m);
-			break;
 		default:
 			break;
 		}
