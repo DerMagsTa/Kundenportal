@@ -133,6 +133,10 @@ public class DispatcherServlet extends HttpServlet {
 						Entnahmestelle e = eForm.getEntnahmestelle();
 						eDao.save(e);
 						request.getSession().setAttribute("entnahmestellen",eDao.listByPerson(((Person) request.getSession().getAttribute("user")).getId()));
+						Person p = (Person) request.getSession().getAttribute("user");
+						PersonForm pf = new PersonForm(p, df, d);
+						pf.setChangemode(false);
+						request.setAttribute("personform",pf);
 						forward = "welcome";
 					}
 				}else if(request.getParameter("eid")!=null){

@@ -120,7 +120,7 @@ public class MesswerteForm {
 				last = m;
 			}
 			if (m.getAblesedatum().after(w.getAblesedatum())){
-				if (next == null ){
+				if (next.getId() == null ){
 					next = m;
 				}
 			}

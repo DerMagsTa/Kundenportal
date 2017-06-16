@@ -113,7 +113,7 @@ public class Verbrauchsrechner {
 			e.setFrom(min.getAblesedatum());
 			e.setTo(max.getAblesedatum());
 			e.setVerbrauch(this.berechneVerbrauch(max.getMesswert(), min.getMesswert()));
-			e.setUnit(this.getUnit());
+			e.setUnit(EnergieArt.getEnergieArt(this.z.getEnergieArt()).getUnitVerbrauch());
 			vList.add(e);
 		}
 		
@@ -131,7 +131,7 @@ public class Verbrauchsrechner {
 				e.setFrom(last.getAblesedatum());
 				e.setTo(m.getAblesedatum());
 				e.setVerbrauch(this.berechneVerbrauch(m.getMesswert(), last.getMesswert()));
-				e.setUnit(this.getUnit());
+				e.setUnit(EnergieArt.getEnergieArt(this.z.getEnergieArt()).getUnitVerbrauch());
 				vList.add(e);
 				last = m;
 			}else{ // beim 1. Messwert kann noch kein Verbrauch berechnet werden
@@ -141,33 +141,11 @@ public class Verbrauchsrechner {
 		
 		return vList;
 	}
-
-	private String getUnit(){
-		String unit = null;
-		if (u == null){
-
-		switch (z.getEnergieArt()){
-		case "Strom":
-			unit = "kWh";
-			break;
-		case "Gas":
-			unit = "kWh"; //Messwerte für Gas werden m3 angegeben aber der Verbrauch in kWh umgerechnet.
-			break;
-		case "Wasser":
-			unit = "m3";
-			break;
-		default:
-			break;
-		}
-		this.u = unit;
-		}
-	return u;
-	}
 	
 	private Double berechneVerbrauch(Double high, Double low){
 		Double verbrauch = null;
 		verbrauch = high - low;
-		if (this.z.getEnergieArt()=="Gas"){
+		if (this.z.getEnergieArt()==EnergieArt.eart_gas){
 			verbrauch = verbrauch * con_brennwert * con_zustandszahl;
 		}
 		return verbrauch;

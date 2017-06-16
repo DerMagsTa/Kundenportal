@@ -12,6 +12,9 @@ public class Zaehler {
 	private Integer entnahmestelleId;
 	private List<Messwert> mList;
 	
+	public static final String eart_strom= "Strom";
+	public static final String eart_gas= "Gas";
+	public static final String eart_wasser= "Wasser";
 	
 	public Zaehler() {
 	}
