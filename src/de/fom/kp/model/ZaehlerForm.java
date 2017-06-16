@@ -19,6 +19,38 @@ public class ZaehlerForm {
 	
 	
 	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getEntnahmestellenId() {
+		return entnahmestellenId;
+	}
+
+	public void setEntnahmestellenId(Integer entnahmestellenId) {
+		this.entnahmestellenId = entnahmestellenId;
+	}
+
+	public String getEnergieArt() {
+		return energieArt;
+	}
+
+	public void setEnergieArt(String energieArt) {
+		this.energieArt = energieArt;
+	}
+
+	public String getZaehlerNr() {
+		return zaehlerNr;
+	}
+
+	public void setZaehlerNr(String zaehlerNr) {
+		this.zaehlerNr = zaehlerNr;
+	}
+
 	public ZaehlerForm() {
 		// TODO Auto-generated constructor stub
 	}

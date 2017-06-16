@@ -19,7 +19,7 @@
 			<p><label for="gender">gender</label><br/>
 				<c:set var="enumValues" value="<%=Gender.values()%>"/>
 				<c:forEach items="${enumValues}" var="g">
-					<input type="radio" name="gender" id="gender.${g}" value="${g}"
+					<input		 type="radio" name="gender" id="gender.${g}" value="${g}"
 					<c:if test="${form.gender eq g}"> checked="checked"</c:if>
 					> <label for="gender.${g}">${g}</label>
 				</c:forEach>

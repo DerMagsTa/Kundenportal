@@ -61,7 +61,8 @@
 			<c:forEach items="${entnahmestellen}" var="e">
 				<li><h4>${e.straﬂe} ${e.hausNr}, ${e.plz} ${e.ort} ${e.land}</h4>
 				<p>${e.hinweis}</p></li>
-				<p><a href="<c:url value="/entnahmestelle.html?eid=${e.id}"/>"><button type="button" class="btn btn-warning btn-xs"><fmt:message key="i18n.Entnahmestelle-‰ndern"/></button></a></p>
+				<p><a href="<c:url value="/entnahmestelle.html?eid=${e.id}"/>"><button type="button" class="btn btn-warning btn-xs"><fmt:message key="i18n.Entnahmestelle-‰ndern"/></button></a>
+					<a href="<c:url value="/zaehler.html"/>"><button type="button" class="btn btn-success btn-xs" onclick=submit_zaehler();><fmt:message key="i18n.Zaehler-hinzuf¸gen"/></button></a></p>
 				<table class="table table-condensed">
 				<tbody>
 				<c:forEach items="${e.zaehler}" var="z">
@@ -74,9 +75,17 @@
 					</c:forEach>
 				</tbody>
 				</table>
+				
 			</c:forEach>
 			<li><a href="<c:url value="/entnahmestelle.html"/>"><button type="button" class="btn btn-success btn-xs"><fmt:message key="i18n.Entnahmestelle-hinzuf¸gen"/></button></a>
 		</ul>
 	</div>
+	  <script>
+  function submit_zaheler(){
+	  reqeust.setParameter("eid",e.id);
+	  
+  }
+  </script>
    </jsp:body>
+
 </my:base>

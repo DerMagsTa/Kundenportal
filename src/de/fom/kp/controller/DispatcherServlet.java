@@ -151,6 +151,25 @@ public class DispatcherServlet extends HttpServlet {
 					 }
 				break;
 				
+			case "zaehler":
+				request.getSession().setAttribute("EnergieArten", EnergieArt.getEnergieArten());
+				ZaehlerForm zf = new ZaehlerForm();
+				zf.setEntnahmestellenId(Integer.parseInt(request.getParameter("eid")));
+				
+				if(request.getParameter("zspeichern")!=null){
+					zf = new ZaehlerForm(request);
+					List<Message> errors = new ArrayList<Message>();
+					zf.validate(errors);
+					if(errors.size()!=0){
+						request.setAttribute("zform", zf);
+						request.setAttribute("errors", errors);
+					}else{
+						Zaehler z = zf.getZaehler();
+						zDao.save(z);
+					}
+				}
+				forward = "zaehler";
+				break;
 			case "zaehlerliste":
 				//Testseite - später löschen?
 				request.setAttribute("zaehlerliste",zDao.list());
