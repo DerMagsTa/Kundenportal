@@ -129,7 +129,7 @@ public class MesswerteForm {
 				errors.add(new Message("ablesedatum", "Zum angegebene Datum ist bereits ein Messwert gepflegt"));
 			}
 		}
-		if(last!=null){
+		if(last.getId()!=null){
 			if (last.getMesswert() > w.getMesswert()){
 				errors.add(new Message("messwert", "Der angegebene Messwert ist kleiner dem vorherigen"));
 			}

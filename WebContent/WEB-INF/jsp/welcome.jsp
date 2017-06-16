@@ -59,8 +59,9 @@
 		<h2>Meine Entnahmestellen</h2>
 		<ul>
 			<c:forEach items="${entnahmestellen}" var="e">
-				<li><p>${e.straﬂe} ${e.hausNr}, ${e.plz} ${e.ort} ${e.land}</p>
+				<li><h4>${e.straﬂe} ${e.hausNr}, ${e.plz} ${e.ort} ${e.land}</h4>
 				<p>${e.hinweis}</p></li>
+				<p><a href="<c:url value="/entnahmestelle.html?eid=${e.id}"/>"><button type="button" class="btn btn-warning btn-xs"><fmt:message key="i18n.Entnahmestelle-‰ndern"/></button></a></p>
 				<table class="table table-condensed">
 				<tbody>
 				<c:forEach items="${e.zaehler}" var="z">
@@ -74,6 +75,7 @@
 				</tbody>
 				</table>
 			</c:forEach>
+			<li><a href="<c:url value="/entnahmestelle.html"/>"><button type="button" class="btn btn-success btn-xs"><fmt:message key="i18n.Entnahmestelle-hinzuf¸gen"/></button></a>
 		</ul>
 	</div>
    </jsp:body>

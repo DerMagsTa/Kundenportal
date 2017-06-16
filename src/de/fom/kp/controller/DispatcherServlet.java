@@ -112,17 +112,48 @@ public class DispatcherServlet extends HttpServlet {
 // ---------------------------------------------
 				
 			case "entnahmestellen":
+				//Testseite - später löschen?
 				request.setAttribute("entnahmestellen",eDao.list());
 				forward = "entnahmestellen";
 				break;
+			
+			case "entnahmestelle":
+				forward = "entnahmestelle";
+				if(request.getParameter("espeichern")!=null){
+					//eine Entnahmestelle soll gespeichert werden (Klick auf Save)
+					EStellenForm eForm = new EStellenForm(request);
+					List<Message> errors = new ArrayList<Message>();
+					eForm.validate(errors);
+					if(errors.size()!=0){
+						//error
+						request.setAttribute("eform", eForm);
+						request.setAttribute("errors", errors);
+					}else{
+						//success
+						Entnahmestelle e = eForm.getEntnahmestelle();
+						eDao.save(e);
+						forward = "welcome";
+					}
+				}else if(request.getParameter("eid")!=null){
+					//vorhandene Entnahmestelle soll geändert werden
+					EStellenForm eForm = new EStellenForm(eDao.read(Integer.parseInt(request.getParameter("eid"))));
+					request.setAttribute("eform",eForm);
+				}else{
+						//neue Entnahmestelle soll angegeben werden
+						EStellenForm eForm = new EStellenForm();
+						eForm.setPersonId((Integer) request.getSession().getAttribute("user.id"));
+						request.setAttribute("eform",eForm);
+					 }
+				break;
 				
 			case "zaehlerliste":
+				//Testseite - später löschen?
 				request.setAttribute("zaehlerliste",zDao.list());
 				forward = "zaehlerliste";
 				break;
 				
 			case "zaehlerstaende":
-				
+				forward = "zaehlerstaende";
 				if(request.getParameter("zspeichern")!=null){
 					//ein Zählerstand soll gespeichert werden (Klick auf Save)
 					MesswerteForm mForm = new MesswerteForm(request, datumsformat, d);
@@ -138,7 +169,6 @@ public class DispatcherServlet extends HttpServlet {
 						//success
 						Messwert m = mForm.getMesswertClass();
 						mDao.save(m);
-						forward = list(request);
 					}
 				}else if(request.getParameter("mid")!=null){
 					//vorhandener Zählerstand soll geändert werden
@@ -150,10 +180,8 @@ public class DispatcherServlet extends HttpServlet {
 						mForm.setZaehlerId(Integer.parseInt(request.getParameter("zid")));
 						request.setAttribute("mform",mForm);
 					 }
-				
 				request.setAttribute("entnahmestelle",eDao.read(Integer.parseInt(request.getParameter("eid"))));
 				request.setAttribute("zaehler",zDao.read(Integer.parseInt(request.getParameter("zid"))));
-				forward = "zaehlerstaende";
 				break;
 				
 			case "verbrauch":
