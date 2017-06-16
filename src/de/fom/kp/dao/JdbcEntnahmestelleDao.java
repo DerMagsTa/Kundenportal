@@ -44,8 +44,35 @@ public class JdbcEntnahmestelleDao extends JdbcDao implements EntnahmestelleDao 
 
 	@Override
 	public void save(Entnahmestelle e) throws DaoException {
-		// TODO Auto-generated method stub
-
+		try (Connection c = ds.getConnection()) {
+			PreparedStatement pst = null;
+			
+			if (e.getId() == null) {
+				pst = c.prepareStatement("INSERT INTO kundenportal.entnahmestelle VALUES(NULL, ?, ?, ?, ?, ?, ?, ?)");
+				pst.setInt(1, e.getPersonId());
+				pst.setString(2, e.getStraﬂe());
+				pst.setString(3, e.getHausNr());
+				pst.setInt(4, e.getPlz());
+				pst.setString(5, e.getOrt());
+				pst.setString(6, e.getLand());
+				pst.setString(7, e.getHinweis());
+			} 
+			else {
+				pst = c.prepareStatement(
+						"UPDATE kundenportal.entnahmestelle set PersonId=?, Straﬂe=?, HausNr=?, Plz=?, Ort=?, Land=?, Hinweis=? WHERE (ID=?)");
+				pst.setInt(1, e.getPersonId());
+				pst.setString(2, e.getStraﬂe());
+				pst.setString(3, e.getHausNr());
+				pst.setInt(4, e.getPlz());
+				pst.setString(5, e.getOrt());
+				pst.setString(6, e.getLand());
+				pst.setString(7, e.getHinweis());
+				pst.setInt(8, e.getId());
+			} 
+			pst.executeUpdate();	
+		} catch (SQLException error) {
+			throw new DaoException(error.getMessage(), error);
+		}
 	}
 
 	@Override

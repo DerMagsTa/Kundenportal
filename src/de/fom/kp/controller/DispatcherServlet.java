@@ -132,6 +132,7 @@ public class DispatcherServlet extends HttpServlet {
 						//success
 						Entnahmestelle e = eForm.getEntnahmestelle();
 						eDao.save(e);
+						request.getSession().setAttribute("entnahmestellen",eDao.listByPerson(((Person) request.getSession().getAttribute("user")).getId()));
 						forward = "welcome";
 					}
 				}else if(request.getParameter("eid")!=null){
@@ -141,7 +142,7 @@ public class DispatcherServlet extends HttpServlet {
 				}else{
 						//neue Entnahmestelle soll angegeben werden
 						EStellenForm eForm = new EStellenForm();
-						eForm.setPersonId((Integer) request.getSession().getAttribute("user.id"));
+						eForm.setPersonId(((Person) request.getSession().getAttribute("user")).getId());
 						request.setAttribute("eform",eForm);
 					 }
 				break;

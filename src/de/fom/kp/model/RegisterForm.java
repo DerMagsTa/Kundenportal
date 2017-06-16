@@ -218,23 +218,7 @@ public class RegisterForm {
 	}
 
 	public void validate(List<Message> errors) {
-		if(StringUtils.isBlank(email)){
-			errors.add(new Message("email", "Email required"));
-		}
-		try {
-			if(StringUtils.isNotBlank(birthday)){
-				dateFormat.parse(birthday);
-			}
-		} catch (ParseException e) {
-			errors.add(new Message("birthday", "Birthday is not a Date"));
-		}
-		try {
-			if(StringUtils.isNotBlank(height)){
-				decimalFormat.parse(height);
-			}
-		} catch (ParseException e) {
-			errors.add(new Message("height", "Height is not a Number"));
-		}
+
 	}
 	
 	

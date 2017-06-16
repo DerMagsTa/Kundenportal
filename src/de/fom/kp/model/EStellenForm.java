@@ -48,7 +48,7 @@ public class EStellenForm {
 		}
 		this.personId = Integer.parseInt(request.getParameter("personId"));
 		this.straﬂe = request.getParameter("straﬂe");
-		this.hausNr =  request.getParameter("hausnr");
+		this.hausNr =  request.getParameter("hausNr");
 		this.plz = request.getParameter("plz");
 		this.ort = request.getParameter("ort");
 		this.land = request.getParameter("land");
