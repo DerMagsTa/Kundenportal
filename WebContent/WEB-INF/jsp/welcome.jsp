@@ -58,17 +58,19 @@
 	<div class="col-md-8">
 		<h2>Meine Entnahmestellen</h2>
 		<ul>
-			<c:forEach items="${entnahmestellen}" var="e">
+			<c:forEach items="${pdbuffer.es}" var="e">
 				<li><h4>${e.straﬂe} ${e.hausNr}, ${e.plz} ${e.ort} ${e.land}</h4>
 				<p>${e.hinweis}</p></li>
 				<p><a href="<c:url value="/entnahmestelle.html?eid=${e.id}"/>"><button type="button" class="btn btn-warning btn-xs"><fmt:message key="i18n.Entnahmestelle-‰ndern"/></button></a>
-					<a href="<c:url value="/zaehler.html"/>"><button type="button" class="btn btn-success btn-xs" onclick=submit_zaehler();><fmt:message key="i18n.Zaehler-hinzuf¸gen"/></button></a></p>
+					<a href="<c:url value="/zaehler.html?eid=${e.id}"/>"><button type="button" class="btn btn-success btn-xs"><fmt:message key="i18n.Zaehler-hinzuf¸gen"/></button></a>
+					</p>
 				<table class="table table-condensed">
 				<tbody>
 				<c:forEach items="${e.zaehler}" var="z">
 					<tr>
 						<td>${z.energieArt}:</td>
 						<td>Nr. ${z.zaehlerNr}</td>
+						<td style="width: 50px"><a href="<c:url value="/zaehler.html?zid=${z.id}"/>"><button type="button" class="btn btn-warning btn-xs"><fmt:message key="i18n.‰ndern"/></button></a></td>
 						<td style="width: 100px"><a href="<c:url value="/zaehlerstaende.html?zid=${z.id}&eid=${e.id}"/>"><button type="button" class="btn btn-primary btn-xs"><fmt:message key="i18n.Z‰hlerst‰nde"/></button></a></td>
 						<td style="width: 100px"><a href="<c:url value="/verbrauch.html?zid=${z.id}&eid=${e.id}"/>"><button type="button" class="btn btn-primary btn-xs"><fmt:message key="i18n.Verbrauch"/></button></a></td>
 					<tr>
@@ -80,12 +82,6 @@
 			<li><a href="<c:url value="/entnahmestelle.html"/>"><button type="button" class="btn btn-success btn-xs"><fmt:message key="i18n.Entnahmestelle-hinzuf¸gen"/></button></a>
 		</ul>
 	</div>
-	  <script>
-  function submit_zaheler(){
-	  reqeust.setParameter("eid",e.id);
-	  
-  }
-  </script>
    </jsp:body>
 
 </my:base>

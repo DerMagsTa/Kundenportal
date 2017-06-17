@@ -2,6 +2,7 @@ package de.fom.kp.controller;
 
 import java.io.*;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.naming.*;
@@ -41,16 +42,24 @@ public class LoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+			PersonDataBuffer pdbuffer = new PersonDataBuffer();
 			Person user = personDao.login(request.getParameter("j_username"), request.getParameter("j_password"));
 			if (user != null) {
+				
 				request.getSession().setAttribute("user", user);
-
+				
+				pdbuffer.setP(user);
+				pdbuffer.setZs(new ArrayList<Zaehler>());
+				
 				List<Entnahmestelle> entnahmestellen = eDao.listByPerson(user.getId());
 				for (Entnahmestelle e : entnahmestellen) {
 					List<Zaehler> zaehler = zDao.listByEStelle(e.getId());
 					e.setZaehler(zaehler);
+					pdbuffer.getZs().addAll(zaehler);
 				}
 				
+				pdbuffer.setEs(entnahmestellen);
+				request.getSession().setAttribute("pdbuffer", pdbuffer);
 				request.getSession().setAttribute("entnahmestellen", entnahmestellen);
 
 				response.sendRedirect(request.getContextPath() + "/welcome.html");

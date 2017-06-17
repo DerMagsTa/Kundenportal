@@ -64,7 +64,12 @@ public class JdbcMesswertDao extends JdbcDao implements MesswertDao {
 			}
 			
 			pst.executeUpdate();			
-			
+			if(m.getId()==null){
+				// automatisch generierten Primärschlüssel von DB auslesen
+				ResultSet rs = pst.getGeneratedKeys();
+				rs.next();
+				m.setId(rs.getInt(1));
+			}
 		} catch (SQLException e) {
 			throw new DaoException(e.getMessage(), e);
 		}

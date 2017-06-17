@@ -47,7 +47,7 @@ public class DispatcherServlet extends HttpServlet {
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		PersonDataBuffer pdbuffer = (PersonDataBuffer)request.getSession().getAttribute("pdbuffer");
 		Locale locale = (Locale)request.getSession().getAttribute(LocaleFilter.KEY);
 		//Locale locale = request.getLocale();
 			ResourceBundle bundle = ResourceBundle.getBundle("MessageResources",locale);
@@ -132,16 +132,21 @@ public class DispatcherServlet extends HttpServlet {
 						//success
 						Entnahmestelle e = eForm.getEntnahmestelle();
 						eDao.save(e);
-						request.getSession().setAttribute("entnahmestellen",eDao.listByPerson(((Person) request.getSession().getAttribute("user")).getId()));
-						Person p = (Person) request.getSession().getAttribute("user");
-						PersonForm pf = new PersonForm(p, df, d);
-						pf.setChangemode(false);
-						request.setAttribute("personform",pf);
-						forward = "welcome";
+						if (request.getParameter("eid")==null){
+							//insert
+							pdbuffer.getEs().add(e);
+						}else{
+							//Update
+							e.setZaehler(pdbuffer.getEntnahmestelle(e.getId()).getZaehler());
+							pdbuffer.getEs().remove(pdbuffer.getEntnahmestelle(e.getId()));
+							pdbuffer.getEs().add(e);
+						}
+						response.sendRedirect(request.getContextPath() + "/welcome.html");
+						forward=null;
 					}
 				}else if(request.getParameter("eid")!=null){
 					//vorhandene Entnahmestelle soll geändert werden
-					EStellenForm eForm = new EStellenForm(eDao.read(Integer.parseInt(request.getParameter("eid"))));
+					EStellenForm eForm = new EStellenForm(pdbuffer.getEntnahmestelle(Integer.parseInt(request.getParameter("eid"))));
 					request.setAttribute("eform",eForm);
 				}else{
 						//neue Entnahmestelle soll angegeben werden
@@ -149,13 +154,41 @@ public class DispatcherServlet extends HttpServlet {
 						eForm.setPersonId(((Person) request.getSession().getAttribute("user")).getId());
 						request.setAttribute("eform",eForm);
 					 }
+				if(request.getParameter("edele")!=null){
+					if((pdbuffer.getEntnahmestelle(Integer.parseInt(request.getParameter("eid")))!=null)){
+						eDao.delete(Integer.parseInt(request.getParameter("eid")));
+						pdbuffer.getEs().remove(pdbuffer.getEntnahmestelle(Integer.parseInt(request.getParameter("eid"))));
+						response.sendRedirect(request.getContextPath() + "/welcome.html");
+						forward=null;
+					}
+				}
 				break;
 				
 			case "zaehler":
+				forward = "zaehler";
 				request.getSession().setAttribute("EnergieArten", EnergieArt.getEnergieArten());
-				ZaehlerForm zf = new ZaehlerForm();
-				zf.setEntnahmestellenId(Integer.parseInt(request.getParameter("eid")));
-				
+				ZaehlerForm zf = null;
+				if ((request.getParameter("zid")!=null)){
+					zf = new ZaehlerForm(pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))));
+					request.setAttribute("zform", zf);
+				}else{
+					zf = new ZaehlerForm();
+				}
+				if (request.getParameter("eid")==null){
+					if ((pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))))==null){
+						//di
+					}else{
+							zf.setEntnahmestellenId(pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))).getEntnahmestelleId());
+							request.setAttribute("zform", zf);
+					}
+				}else{
+				if ((pdbuffer.getEntnahmestelle(Integer.parseInt(request.getParameter("eid"))))==null){
+					//die angeforderte Entnahemstellen ID gehört nicht zum Kundenkonto!!!
+				}else{
+						zf.setEntnahmestellenId(Integer.parseInt(request.getParameter("eid")));
+						request.setAttribute("zform", zf);
+				}
+				}
 				if(request.getParameter("zspeichern")!=null){
 					zf = new ZaehlerForm(request);
 					List<Message> errors = new ArrayList<Message>();
@@ -166,9 +199,23 @@ public class DispatcherServlet extends HttpServlet {
 					}else{
 						Zaehler z = zf.getZaehler();
 						zDao.save(z);
+						if (request.getParameter("eid")!=null){
+							//insert
+							pdbuffer.getZs().add(z);
+							pdbuffer.getEntnahmestelle(z.getEntnahmestelleId()).getZaehler().add(z);
+						}else{
+							//Update
+							//alten zähler in der Puffer Klasse mit dem neuen ersetzen
+							pdbuffer.getEntnahmestelle(z.getEntnahmestelleId()).getZaehler().remove(pdbuffer.getZaehler(z.getId()));
+							pdbuffer.getEntnahmestelle(z.getEntnahmestelleId()).getZaehler().add(z);
+							pdbuffer.getZs().remove(pdbuffer.getZaehler(z.getId()));
+							pdbuffer.getZs().add(z);
+						}
+						request.getSession().setAttribute("pdbuffer", pdbuffer);
+						response.sendRedirect(request.getContextPath() + "/welcome.html");
+						forward=null;
 					}
-				}
-				forward = "zaehler";
+				}				
 				break;
 			case "zaehlerliste":
 				//Testseite - später löschen?

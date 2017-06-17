@@ -57,8 +57,12 @@ public class ZaehlerForm {
 
 	public ZaehlerForm(HttpServletRequest request) {
 		// TODO Auto-generated constructor stub
+		if(StringUtils.isNotBlank(request.getParameter("id"))){
 		id = Integer.parseInt(request.getParameter("id"));
-		entnahmestellenId = Integer.parseInt(request.getParameter("eid"));
+		}else{
+			id = null;
+		}
+		entnahmestellenId = Integer.parseInt(request.getParameter("entnahmestellenId"));
 		energieArt = request.getParameter("energieArt");
 		zaehlerNr =  request.getParameter("zaehlerNr");
 	}
@@ -76,7 +80,7 @@ public class ZaehlerForm {
 		z.setEntnahmestelleId(entnahmestellenId);
 		z.setEnergieArt(energieArt);
 		z.setZaehlerNr(zaehlerNr);
-		return null;	
+		return z;	
 	}
 	
 	public void validate(List<Message> errors){

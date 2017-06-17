@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class JdbcEntnahmestelleDao extends JdbcDao implements EntnahmestelleDao 
 			PreparedStatement pst = null;
 			
 			if (e.getId() == null) {
-				pst = c.prepareStatement("INSERT INTO kundenportal.entnahmestelle VALUES(NULL, ?, ?, ?, ?, ?, ?, ?)");
+				pst = c.prepareStatement("INSERT INTO kundenportal.entnahmestelle VALUES(NULL, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 				pst.setInt(1, e.getPersonId());
 				pst.setString(2, e.getStraße());
 				pst.setString(3, e.getHausNr());
@@ -70,6 +71,12 @@ public class JdbcEntnahmestelleDao extends JdbcDao implements EntnahmestelleDao 
 				pst.setInt(8, e.getId());
 			} 
 			pst.executeUpdate();	
+			if(e.getId()==null){
+				// automatisch generierten Primärschlüssel von DB auslesen
+				ResultSet rs = pst.getGeneratedKeys();
+				rs.next();
+				e.setId(rs.getInt(1));
+			}
 		} catch (SQLException error) {
 			throw new DaoException(error.getMessage(), error);
 		}
@@ -77,7 +84,16 @@ public class JdbcEntnahmestelleDao extends JdbcDao implements EntnahmestelleDao 
 
 	@Override
 	public Entnahmestelle delete(Integer id) throws DaoException {
-		// TODO Auto-generated method stub
+		try (Connection c = ds.getConnection()) {
+			PreparedStatement pst = null;
+			if (id != null) {
+				pst = c.prepareStatement("DELETE FROM kundenportal.entnahmestelle WHERE(ID=?)");
+				pst.setInt(1, id);
+				pst.executeUpdate();
+			}
+			} catch (SQLException error) {
+				throw new DaoException(error.getMessage(), error);
+			}
 		return null;
 	}
 

@@ -64,6 +64,7 @@
 			<div class="col-sm-offset-2 col-sm-10">
 				<p>* benötigt</p>
 				<input type="submit" class="btn btn-success" value="speichern" name="espeichern">
+				<input type="submit" class="btn btn-danger" value="löschen" name="edele">
 			</div>
 		</form>
 		</div>

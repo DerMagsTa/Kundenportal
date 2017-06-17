@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,9 +43,34 @@ public class JdbcZaehlerDao extends JdbcDao implements ZaehlerDao {
 	}
 
 	@Override
-	public void save(Zaehler e) throws DaoException {
-		// TODO Auto-generated method stub
-
+	public void save(Zaehler z) throws DaoException {
+		try (Connection c = ds.getConnection()) {
+			PreparedStatement pst = null;
+			
+			if (z.getId() == null) {
+				pst = c.prepareStatement("INSERT INTO kundenportal.zaehler VALUES(NULL, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+				pst.setInt(1,  z.getEntnahmestelleId());
+				pst.setString(2, z.getEnergieArt());
+				pst.setString(3, z.getZaehlerNr());
+			}				
+			else {
+				pst = c.prepareStatement(
+						"UPDATE kundenportal.zaehler set EntnahmestellenID=?, Energieart=?, ZaehlerNr=? WHERE (ID=?)");
+				pst.setInt(1,  z.getEntnahmestelleId());
+				pst.setString(2, z.getEnergieArt());
+				pst.setString(3, z.getZaehlerNr());
+				pst.setInt(4,  z.getId());
+			} 
+			pst.executeUpdate();
+			if(z.getId()==null){
+				// automatisch generierten Primärschlüssel von DB auslesen
+				ResultSet rs = pst.getGeneratedKeys();
+				rs.next();
+				z.setId(rs.getInt(1));
+			}
+		} catch (SQLException error) {
+			throw new DaoException(error.getMessage(), error);
+		}
 	}
 
 	@Override
