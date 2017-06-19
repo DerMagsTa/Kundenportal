@@ -39,8 +39,18 @@
 			</div>
 			<div class="col-sm-offset-2 col-sm-10">
 				<p>* benötigt</p>
-				<input type="submit" class="btn btn-success" value="zspeichern"
-						name="zspeichern"> 
+				<input type="submit" class="btn btn-success" value=<fmt:message key="i18n.save"/>
+						name="zspeichern" id="zsave"> 
+				<input type="submit" class="btn btn-danger" value=<fmt:message key="i18n.dele"/>
+						name="zdele" id="zdele">
+				<script>
+				//wenn die ID nicht angegeben ist soll ein zähler angelegt werden, daher "löschen" Button ausbelden
+				//un den Text auf "anlegen" ändern!
+			    if ("${zform.id}" == "") {
+			    	 document.getElementById('zdele').style.visibility = 'hidden';
+			    	 document.getElementById('zsave').setAttribute('value','<fmt:message key="i18n.create"/>');
+			    }
+				</script>
 			</div>
 		</form>
 		</div>

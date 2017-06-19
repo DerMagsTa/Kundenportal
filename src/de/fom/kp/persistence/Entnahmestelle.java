@@ -1,5 +1,6 @@
 package de.fom.kp.persistence;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Entnahmestelle {
@@ -12,7 +13,7 @@ public class Entnahmestelle {
 	private String land;
 	private String hinweis;
 	private Integer PersonId;
-	private List<Zaehler> zaehler;
+	private List<Zaehler> zaehler = new ArrayList<Zaehler>();
 	
 	public Entnahmestelle() {
 	}

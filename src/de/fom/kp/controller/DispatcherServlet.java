@@ -24,9 +24,9 @@ public class DispatcherServlet extends HttpServlet {
 	private EntnahmestelleDao eDao;
 	private ZaehlerDao zDao;
 	private MesswertDao mDao;
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		// DB Verbindungen zur Verfügung stellen
@@ -43,7 +43,6 @@ public class DispatcherServlet extends HttpServlet {
 		}
 	}
 
-	
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -165,30 +164,28 @@ public class DispatcherServlet extends HttpServlet {
 				break;
 				
 			case "zaehler":
-				forward = "zaehler";
-				request.getSession().setAttribute("EnergieArten", EnergieArt.getEnergieArten());
-				ZaehlerForm zf = null;
-				if ((request.getParameter("zid")!=null)){
-					zf = new ZaehlerForm(pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))));
-					request.setAttribute("zform", zf);
+				//prüfen, ob die IDs in der URL zu den daten der Person passen. wenn nicht: redirect auf welcome!
+				if (((request.getParameter("zid")!=null && pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid")))==null))||
+					 (request.getParameter("eid")!=null && pdbuffer.getEntnahmestelle(Integer.parseInt(request.getParameter("eid")))==null)){
+					response.sendRedirect(request.getContextPath() + "/welcome.html");
+					forward=null;
 				}else{
+					forward = "zaehler";
+					request.getSession().setAttribute("EnergieArten", EnergieArt.getEnergieArten());
+					ZaehlerForm zf = null;
+					
+						//ein Zähler soll geändert werden
+					if ((request.getParameter("zid")!=null)){
+						zf = new ZaehlerForm(pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))));
+						zf.setEntnahmestellenId(pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))).getEntnahmestelleId());
+						request.setAttribute("zform", zf);
+					}if(request.getParameter("eid")!=null){
+					//ein neuer Zähler soll angelegt werden
 					zf = new ZaehlerForm();
-				}
-				if (request.getParameter("eid")==null){
-					if ((pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))))==null){
-						//di
-					}else{
-							zf.setEntnahmestellenId(pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))).getEntnahmestelleId());
+							zf.setEntnahmestellenId(Integer.parseInt(request.getParameter("eid")));
 							request.setAttribute("zform", zf);
 					}
-				}else{
-				if ((pdbuffer.getEntnahmestelle(Integer.parseInt(request.getParameter("eid"))))==null){
-					//die angeforderte Entnahemstellen ID gehört nicht zum Kundenkonto!!!
-				}else{
-						zf.setEntnahmestellenId(Integer.parseInt(request.getParameter("eid")));
-						request.setAttribute("zform", zf);
-				}
-				}
+		
 				if(request.getParameter("zspeichern")!=null){
 					zf = new ZaehlerForm(request);
 					List<Message> errors = new ArrayList<Message>();
@@ -211,11 +208,22 @@ public class DispatcherServlet extends HttpServlet {
 							pdbuffer.getZs().remove(pdbuffer.getZaehler(z.getId()));
 							pdbuffer.getZs().add(z);
 						}
-						request.getSession().setAttribute("pdbuffer", pdbuffer);
+//						request.getSession().setAttribute("pdbuffer", pdbuffer);
 						response.sendRedirect(request.getContextPath() + "/welcome.html");
 						forward=null;
 					}
-				}				
+				}		
+				
+				if(request.getParameter("zdele")!=null){
+					zf = new ZaehlerForm(request);
+					Zaehler z = zf.getZaehler();
+					zDao.delete(z.getId());
+					pdbuffer.getEntnahmestelle(z.getEntnahmestelleId()).getZaehler().remove(pdbuffer.getZaehler((z.getId())));
+					pdbuffer.getZs().remove(pdbuffer.getZaehler(z.getId()));
+					response.sendRedirect(request.getContextPath() + "/welcome.html");
+					forward=null;					
+				}
+				}
 				break;
 			case "zaehlerliste":
 				//Testseite - später löschen?
@@ -324,7 +332,7 @@ public class DispatcherServlet extends HttpServlet {
 
 	private String list(HttpServletRequest request) throws DaoException {
 		String forward;
-		request.setAttribute("personlist",personDao.list());
+		request.setAttribute("personlist", personDao.list());
 		forward = "personlist";
 		return forward;
 	}

@@ -10,7 +10,7 @@ public class Zaehler {
 	private String zaehlerNr;
 	private String energieArt;
 	private Integer entnahmestelleId;
-	private List<Messwert> mList;
+	private List<Messwert> mList = new ArrayList<Messwert>();
 	
 	public Zaehler() {
 	}
