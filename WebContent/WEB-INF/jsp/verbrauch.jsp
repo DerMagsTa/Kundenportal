@@ -2,6 +2,13 @@
 <%@page import="de.fom.kp.persistence.Gender"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="my" tagdir="/WEB-INF/tags" %>
+
+
+<script type="text/javascript">
+  
+ 
+</script>
+  
 <my:base>
 	<jsp:attribute name="title">
 	Test Verbrauch
@@ -99,5 +106,40 @@
 			</c:forEach>
 		</tbody>
 		</table>
-	</jsp:body>
+		<div id="chart_div"></div>
+		<script>
+		google.charts.load('current', {packages: ['corechart']});
+		  google.charts.setOnLoadCallback(drawColColors);
+		  
+function drawColColors() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Zeitraum');
+      data.addColumn('number', 'Verbrauch');
+
+
+      <c:forEach items="${verbrauchsListe}" var="v">
+      data.addRow(['${v.from}-${v.to}',${v.verbrauch}])
+      </c:forEach>
+
+      var options = {
+        title: 'Verbrauch',
+        colors: ['#9575cd', '#33ac71'],
+        hAxis: {
+          title: 'Zeitraum',
+          //format: 'h:mm a',
+          viewWindow: {
+            min: [100, 300, 0],
+            max: [100, 300, 0]
+          }
+        },
+        vAxis: {
+          title: 'Verbrauch'
+        }
+      };
+
+      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+}
+      </script>
+      </jsp:body>
 </my:base>

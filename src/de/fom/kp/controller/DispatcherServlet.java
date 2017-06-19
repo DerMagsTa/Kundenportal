@@ -248,6 +248,8 @@ public class DispatcherServlet extends HttpServlet {
 						//success
 						Messwert m = mForm.getMesswertClass();
 						mDao.save(m);
+						mForm.setZaehlerId(Integer.parseInt(request.getParameter("zid")));
+						request.setAttribute("mform",mForm);
 					}
 				}else if(request.getParameter("mid")!=null){
 					//vorhandener Zählerstand soll geändert werden

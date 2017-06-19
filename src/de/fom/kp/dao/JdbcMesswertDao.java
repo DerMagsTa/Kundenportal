@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class JdbcMesswertDao extends JdbcDao implements MesswertDao {
 			PreparedStatement pst = null;
 			
 			if (m.getId() == null) {
-				pst = c.prepareStatement("INSERT INTO kundenportal.messwerte VALUES(NULL, ?, ?, ?)");
+				pst = c.prepareStatement("INSERT INTO kundenportal.messwerte VALUES(NULL, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 				pst.setInt(1, m.getZaehlerId());
 				pst.setObject(2, m.getAblesedatum());
 				pst.setDouble(3, m.getMesswert());

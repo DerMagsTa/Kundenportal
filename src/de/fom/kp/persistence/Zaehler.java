@@ -61,9 +61,23 @@ public class Zaehler {
 		//Liefert Messwerte die zwischen Date from und to liegen
 		List<Messwert> mList_date = new ArrayList<Messwert>();
 		for (Messwert m : mList) {
-			if (((m.getAblesedatum().before(from))==false) && (m.getAblesedatum().after(to)==false)){
+			if (from==null&&to==null){
 				mList_date.add(m);
-			}	
+			}else{
+				if (to == null){
+					if ((m.getAblesedatum().before(from))==false){
+						mList_date.add(m);
+					}
+			} if (from == null){
+				if ((m.getAblesedatum().after(to)==false)){
+					mList_date.add(m);
+				}
+			} if(to!=null&&from!=null){
+				if (((m.getAblesedatum().before(from))==false) && (m.getAblesedatum().after(to)==false)){
+					mList_date.add(m);
+				}	 
+			}
+			}
 		}
 		return mList_date;
 	}
