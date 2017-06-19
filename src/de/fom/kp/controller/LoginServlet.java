@@ -13,16 +13,13 @@ import javax.sql.*;
 import de.fom.kp.dao.*;
 import de.fom.kp.persistence.*;
 
-//@WebServlet("/j_security_check")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private PersonDao personDao;
 	private EntnahmestelleDao eDao;
 	private ZaehlerDao zDao;
-	
-	// private static final String loginsql = "select * from wp.person p where
-	// p.email = ? and p.passphrase_sha2_salted = sha2(CONCAT(?, salt), 512)";
+
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {

@@ -1,6 +1,6 @@
 -- CREATE DATABASE `kundenportal` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
--- USE `kundenportal`;
+USE `kundenportal`;
 
 DROP TABLE IF EXISTS Messwerte;
 DROP TABLE IF EXISTS Zaehler ;
@@ -12,7 +12,8 @@ DROP TABLE IF EXISTS Person;
 CREATE TABLE `person` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `EMail` varchar(255) NOT NULL,
-  `Passwort` varchar(40) NOT NULL,
+  `Passwort` char(128) NOT NULL,
+  `salt` varchar(255) NOT NULL,
   `Vorname` varchar(255) DEFAULT NULL,
   `Nachname` varchar(255) DEFAULT NULL,
   `Anrede` enum('Herr','Frau','Kunde') DEFAULT "Kunde",
@@ -68,8 +69,8 @@ CREATE TABLE `messwerte` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-Insert Into Person VALUES (NULL,"test@test.de","passwort" ,"Max" ,"Mustermann" ,"Herr" ,"1990-12-24" ,
-"Teststr." ,1 ,"12345" ,"Testort" , "DE" , "1");
+Insert Into Person VALUES (NULL,"test@test.de","4bb8ebf3d2bb879a2fe8efdd72b9597dbe1a93f5b56f1eeb4edd9cd52b0dac4f83340f2b75510fd9db1d3cbfb41a45eb9898ec68c1371d05efcc7ea9291b25b3" ,"8wk8Sr5Pd98B6yLwyzSK9qEe0EAEQ4AjogY1YE1OPbs",
+"Max" ,"Mustermann" ,"Herr" ,"1990-12-24" ,"Teststr." ,1 ,"12345" ,"Testort" , "DE" , "1");
 
 Insert Into Entnahmestelle VALUES (NULL, 1, "Ortsstr." ,"1a" , 10115 ,"Ortsort" ,"DE" ,"steht leer.");
 Insert Into Entnahmestelle VALUES (NULL, 1, "Zweitstr." ,"2a" , 10115 ,"Ortsort" ,"DE" ,"steht voll.");
@@ -96,8 +97,8 @@ INSERT INTO Messwerte VALUES(NULL, 4, "2017-01-01", 123);
 INSERT INTO Messwerte VALUES(NULL, 4, "2017-02-01", 124);
 INSERT INTO Messwerte VALUES(NULL, 4, "2017-03-01", 125);
 
-Insert Into Person VALUES (NULL,"test2@test.de","passwort" ,"Andi" ,"Mustermann" ,"Herr" ,"1990-12-24" ,
-"Teststr." ,"2a" ,12345 ,"Testort" , "DE" , "1");
+Insert Into Person VALUES (NULL,"test2@test.de","4bb8ebf3d2bb879a2fe8efdd72b9597dbe1a93f5b56f1eeb4edd9cd52b0dac4f83340f2b75510fd9db1d3cbfb41a45eb9898ec68c1371d05efcc7ea9291b25b3" ,"8wk8Sr5Pd98B6yLwyzSK9qEe0EAEQ4AjogY1YE1OPbs",
+"Andi" ,"Mustermann" ,"Herr" ,"1990-12-24" ,"Teststr." ,"2a" ,12345 ,"Testort" , "DE" , "1");
 
 Insert Into Entnahmestelle VALUES (NULL, 2, "Ortsstr." ,"1a" , 10115 ,"Ortsort" ,"DE" ,"Andi wohnt hier");
 
