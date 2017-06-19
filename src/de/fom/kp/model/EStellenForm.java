@@ -22,7 +22,10 @@ public class EStellenForm {
 	private String land;
 	private String hinweis;
 	
-	private String plzRegex = "\\^([0]{1}[1-9]{1}|[1-9]{1}[0-9]{1})[0-9]{3}$\\";
+	//Regex für: 0 darf nur im ersten Zeichen ODER im zweiten Zeichen vorkommen (00123 ist keine PLZ 01234 schon und 10234 auch)
+	private String plzRegex = "^([0]{1}[1-9]{1}|[1-9]{1}[0-9]{1})[0-9]{3}$";
+	//Regex für: Am Anfang muss eine Zahl stehen, rest beliebige Zeichen
+	private String hausNrRegex = "^[\\d].*";
 	
 	
 	public EStellenForm() {
@@ -75,6 +78,9 @@ public class EStellenForm {
 		if(StringUtils.isBlank(hausNr)){
 			errors.add(new Message("hausNr", "Haus-Nr nicht angegeben"));
 		}
+		if(!hausNr.matches(hausNrRegex)){
+			errors.add(new Message("hausNr", "Haus-Nr nicht gültig"));
+		}
 		if(StringUtils.isBlank(plz)){
 			errors.add(new Message("plz", "PLZ nicht angegeben"));
 		}
@@ -91,9 +97,9 @@ public class EStellenForm {
 		} catch (NumberFormatException e) {
 			errors.add(new Message("plz", "PLZ ist keine Zahl"));
 		}
-//		if(!plz.matches(plzRegex)){
-//			errors.add(new Message("plz", "PLZ ist keine gültige Zahl"));
-//		} 
+		if(!plz.matches(plzRegex)){
+			errors.add(new Message("plz", "PLZ ist keine gültige Zahl"));
+		} 
 	}
 
 	public Integer getId() {

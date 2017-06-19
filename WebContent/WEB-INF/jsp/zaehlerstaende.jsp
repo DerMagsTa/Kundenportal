@@ -69,11 +69,11 @@
 				<input type="hidden" name="zaehlerId" value="${mform.zaehlerId}">
 				<div class="form-group">
 					<label for="ablesedatum"><fmt:message key="i18n.Ablesedatum" /></label> 
-					<input type="text" class="form-control" id="ablesedatum" name="ablesedatum" placeholder="yyyy-mm-dd" value="${mform.ablesedatum}">
+					<input type="text" class="form-control" id="ablesedatum" name="ablesedatum" placeholder="${mform.dateFormatPattern}" value="${mform.ablesedatum}">
 				</div>
 				<div class="form-group">
 					<label for="messwert"><fmt:message key="i18n.Zählerstand" /></label> 
-					<input type="number" class="form-control" id="messwert" name="messwert" value="${mform.messwert}">
+					<input type="text" class="form-control" id="messwert" name="messwert" value="${mform.messwert}">
 				</div>
 				<input type="submit" class="btn btn-default" value="save" name="zspeichern">
 			</form>

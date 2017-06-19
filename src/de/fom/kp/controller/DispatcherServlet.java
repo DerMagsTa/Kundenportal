@@ -48,17 +48,11 @@ public class DispatcherServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PersonDataBuffer pdbuffer = (PersonDataBuffer)request.getSession().getAttribute("pdbuffer");
 		Locale locale = (Locale)request.getSession().getAttribute(LocaleFilter.KEY);
-		//Locale locale = request.getLocale();
 			ResourceBundle bundle = ResourceBundle.getBundle("MessageResources",locale);
 			String pattern =  bundle.getString("i18n.datepattern");
-			
-			
 			request.setAttribute("datepattern", pattern);
-			request.setAttribute("flag", "/images/flag_"+locale.getLanguage()+".png");
-			//Testweise hart auf dieses Format!
-			DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
-			DateFormat datumsformat = new SimpleDateFormat("yyyy-MM-dd");			
-			//DateFormat df = new SimpleDateFormat(pattern);
+			request.setAttribute("flag", "/images/flag_"+locale.getLanguage()+".png");	
+			SimpleDateFormat df = new SimpleDateFormat(pattern);
 			df.setLenient(false);
 			NumberFormat d = NumberFormat.getNumberInstance(locale);
 			//System.out.println(request.getRequestURI());
@@ -235,7 +229,7 @@ public class DispatcherServlet extends HttpServlet {
 				forward = "zaehlerstaende";
 				if(request.getParameter("zspeichern")!=null){
 					//ein Zählerstand soll gespeichert werden (Klick auf Save)
-					MesswerteForm mForm = new MesswerteForm(request, datumsformat, d);
+					MesswerteForm mForm = new MesswerteForm(request, df, d);
 					List<Message> errors = new ArrayList<Message>();
 					List<Messwert> mList = mDao.listByZaehler(Integer.parseInt(request.getParameter("zid")) );
 					Collections.sort(mList, new MesswertAblesdatumComparator());
@@ -253,11 +247,11 @@ public class DispatcherServlet extends HttpServlet {
 					}
 				}else if(request.getParameter("mid")!=null){
 					//vorhandener Zählerstand soll geändert werden
-					MesswerteForm mForm = new MesswerteForm(mDao.read(Integer.parseInt(request.getParameter("mid"))), datumsformat, d);
+					MesswerteForm mForm = new MesswerteForm(mDao.read(Integer.parseInt(request.getParameter("mid"))), df, d);
 					request.setAttribute("mform",mForm);
 				}else{
 						//neuer Zählerstand soll angegeben werden (default - beim Aufruf der Seite)
-						MesswerteForm mForm = new MesswerteForm(datumsformat, d);
+						MesswerteForm mForm = new MesswerteForm(df, d);
 						mForm.setZaehlerId(Integer.parseInt(request.getParameter("zid")));
 						request.setAttribute("mform",mForm);
 					 }
@@ -271,7 +265,7 @@ public class DispatcherServlet extends HttpServlet {
 				Verbrauchsrechner vr = new Verbrauchsrechner();
 				if(request.getParameter("datumvon")!=null){
 					try {
-						Date from = datumsformat.parse(request.getParameter("datumvon"));
+						Date from = df.parse(request.getParameter("datumvon"));
 						vr.setFrom(from);
 					} catch (ParseException e) {
 						e.printStackTrace();
@@ -281,7 +275,7 @@ public class DispatcherServlet extends HttpServlet {
 				}
 				if(request.getParameter("datumbis")!=null){
 					try {
-						Date to = datumsformat.parse(request.getParameter("datumbis"));
+						Date to = df.parse(request.getParameter("datumbis"));
 						vr.setTo(to);
 					} catch (ParseException e) {
 						e.printStackTrace();
