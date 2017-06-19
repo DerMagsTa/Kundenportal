@@ -118,7 +118,7 @@ function drawColColors() {
 
 
       <c:forEach items="${verbrauchsListe}" var="v">
-      data.addRow(['${v.from}-${v.to}',${v.verbrauch}])
+      data.addRow(['${v.from}-${v.to}',${v.verbrauch}]);
       </c:forEach>
 
       var options = {
