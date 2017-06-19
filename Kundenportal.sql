@@ -69,7 +69,7 @@ CREATE TABLE `messwerte` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-Insert Into Person VALUES (NULL,"test@test.de","4bb8ebf3d2bb879a2fe8efdd72b9597dbe1a93f5b56f1eeb4edd9cd52b0dac4f83340f2b75510fd9db1d3cbfb41a45eb9898ec68c1371d05efcc7ea9291b25b3" ,"8wk8Sr5Pd98B6yLwyzSK9qEe0EAEQ4AjogY1YE1OPbs",
+Insert Into Person VALUES (NULL,"test@test.de","3aaa73fbc8ebdd728463b8480ad091508dc5af7a8f39ed73d6192316def8727164530ec357e69ae0631a11b98f128a1b909c674ced22535126a74bf8aa97dea4" ,"8wk8Sr5Pd98B6yLwyzSK9qEe0EAEQ4AjogY1YE1OPbs",
 "Max" ,"Mustermann" ,"Herr" ,"1990-12-24" ,"Teststr." ,1 ,"12345" ,"Testort" , "DE" , "1");
 
 Insert Into Entnahmestelle VALUES (NULL, 1, "Ortsstr." ,"1a" , 10115 ,"Ortsort" ,"DE" ,"steht leer.");
@@ -97,7 +97,7 @@ INSERT INTO Messwerte VALUES(NULL, 4, "2017-01-01", 123);
 INSERT INTO Messwerte VALUES(NULL, 4, "2017-02-01", 124);
 INSERT INTO Messwerte VALUES(NULL, 4, "2017-03-01", 125);
 
-Insert Into Person VALUES (NULL,"test2@test.de","4bb8ebf3d2bb879a2fe8efdd72b9597dbe1a93f5b56f1eeb4edd9cd52b0dac4f83340f2b75510fd9db1d3cbfb41a45eb9898ec68c1371d05efcc7ea9291b25b3" ,"8wk8Sr5Pd98B6yLwyzSK9qEe0EAEQ4AjogY1YE1OPbs",
+Insert Into Person VALUES (NULL,"test2@test.de","3aaa73fbc8ebdd728463b8480ad091508dc5af7a8f39ed73d6192316def8727164530ec357e69ae0631a11b98f128a1b909c674ced22535126a74bf8aa97dea4" ,"8wk8Sr5Pd98B6yLwyzSK9qEe0EAEQ4AjogY1YE1OPbs",
 "Andi" ,"Mustermann" ,"Herr" ,"1990-12-24" ,"Teststr." ,"2a" ,12345 ,"Testort" , "DE" , "1");
 
 Insert Into Entnahmestelle VALUES (NULL, 2, "Ortsstr." ,"1a" , 10115 ,"Ortsort" ,"DE" ,"Andi wohnt hier");
