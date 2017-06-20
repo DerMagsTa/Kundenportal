@@ -263,32 +263,26 @@ public class DispatcherServlet extends HttpServlet {
 			case "verbrauch":
 				
 				forward = "verbrauch";
-				Verbrauchsrechner vr = new Verbrauchsrechner();
-				if(request.getParameter("datumvon")!=null){
-					try {
-						Date from = df.parse(request.getParameter("datumvon"));
-						vr.setFrom(from);
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
-				}else {
-					vr.setFrom(new Date(1901-1900,0,1));
+				VerbrauchsRechnerForm vrform = new VerbrauchsRechnerForm(request, df, d);
+				Verbrauchsrechner vr = vrform.getVerbrauchsrechner();
+				if (pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid")))!=null){
+					//den Verbrauch nur berechenen, wenn der Zähler auch zur Person gehört!
+				vr.setZ(pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))));
+				//if (vr.getZ().getmList().size()==0){
+					//wenn die Messwerte leer sind dann von der DB lesen
+					// es kann auch sein, dass der Zähler keine Messwerte hat... aber warum dann Verbauch anzeigen?!
+				vr.getZ().setmList(mDao.listByZaehler(Integer.parseInt(request.getParameter("zid"))));
+			//	}
+				//hier wird der Verbauch berechnet auf basis der Parameter aus der VerbrauchsForm und an diese Übergeben.
+				vrform.setVl(vr.ListVerbrauch());
+				request.setAttribute("verbrauchsForm", vrform);
+				request.setAttribute("entnahmestelle",pdbuffer.getEntnahmestelle(Integer.parseInt(request.getParameter("eid"))));
+				request.setAttribute("zaehler",pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))));
+				}else{
+					//sonst Redirect auf Welcome!
+					response.sendRedirect(request.getContextPath() + "/welcome.html");
+					forward=null;
 				}
-				if(request.getParameter("datumbis")!=null){
-					try {
-						Date to = df.parse(request.getParameter("datumbis"));
-						vr.setTo(to);
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
-				}else {
-					vr.setTo(new Date(2099-1900,11,31));
-				}
-				vr.setZ(zDao.read(Integer.parseInt( request.getParameter("zid"))));
-				vr.getZ().setmList(mDao.listByZaehler(Integer.parseInt( request.getParameter("zid"))));
-				request.setAttribute("entnahmestelle",eDao.read(Integer.parseInt(request.getParameter("eid"))));
-				request.setAttribute("zaehler",zDao.read(Integer.parseInt(request.getParameter("zid"))));
-				request.setAttribute("verbrauchsListe",vr.ListVerbrauch(Verbrauchsrechner.con_mode_for_each));
 				break;
 				
 			case "welcome":

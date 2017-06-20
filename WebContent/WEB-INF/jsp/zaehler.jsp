@@ -35,6 +35,20 @@
     					<option>${ea}</option>;
     				</c:forEach>
     			</select>
+    			<script>
+    			
+//     			var searchTerm = "${zform.energieArt}",
+//     		    index = -1;
+//     			var myArray = "${EnergieArten}";
+//     		for(var i = 0, len = myArray.length; i < len; i++) {
+//     		    if (myArray[i] == searchTerm) {
+//     		    	document.getElementById("energieArt").options[i].selected = true;
+//     		    	index = i;
+//     		        break;
+//     		    }
+//     		}
+			
+		</script>
 			</div>
 			</div>
 			<div class="col-sm-offset-2 col-sm-10">

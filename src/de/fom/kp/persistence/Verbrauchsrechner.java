@@ -18,6 +18,7 @@ public class Verbrauchsrechner {
 	private Date from;
 	private Date to;
 	private String u;
+	private String mode;
 	
 	public Verbrauchsrechner() {
 		// TODO Auto-generated constructor stub
@@ -72,6 +73,37 @@ public class Verbrauchsrechner {
 		return vList;
 		
 	}
+	
+	public String getMode() {
+		return mode;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
+	}
+
+	public List<Verbrauchswert> ListVerbrauch(){
+		List<Verbrauchswert> vList = new ArrayList<Verbrauchswert>();
+		List<Messwert> mList = z.getmList(this.from, this.to);
+		Collections.sort(mList, new MesswertAblesdatumComparator());
+		
+		if (this.mode == null){
+			this.mode = con_mode_for_each;
+		}
+		switch (mode) {	
+		case  con_mode_month:
+			vList = this.calc_by_month(mList);
+			break;
+		case  con_mode_for_each:
+			vList = this.calc_for_each(mList);
+			break;
+		default:
+			break;
+		}
+		return vList;
+		
+	}
+	
 	
 	@SuppressWarnings("deprecation")
 	private List<Verbrauchswert> calc_by_month(List<Messwert> mList){

@@ -54,56 +54,48 @@
 			});
 		}; */
 
+		
+
 		$(document).ready(function() {
-
-			$("#Datumvon").datepicker();
-			$("#Datumvon").datepicker( "option", "dateFormat", "yy-mm-dd");
-			$("#Datumbis").datepicker();
-			$("#Datumbis").datepicker( "option", "dateFormat", "yy-mm-dd");
-			// bisherige Zählerstände anzeigen
-			//getMesswerte();
-
+			
+			$("#Datumvon").datepicker({ dateFormat: "<fmt:message key="i18n.datepatternpicker"/>" });
+			$("#Datumbis").datepicker({ dateFormat: "<fmt:message key="i18n.datepatternpicker"/>" });
 			// neuen Zählerstand abspeichern und Tabelle neu laden
 			$("#anzeigen").click(function() {
 				var url = "${pageContext.request.contextPath}/verbrauch.html?zid="+ getUrlParameter("zid")+"&eid=" + getUrlParameter("eid")+ "&datumvon="+ $("#Datumvon").val()+ "&datumbis="+ $("#Datumbis").val();
 				window.location = url;
 			}); 
-		});
+			});
+		
 		</script>
 		<div class="container">
 			<form class="form-inline" action="">
 				<div class="form-group">
 					<label for="Datumvon"><fmt:message key="i18n.DatumVon" /></label> 
-					<input type="text" class="form-control" id="Datumvon" size="20" placeholder="TT.MM.JJJJ">
+					<input type="text" class="form-control" id="Datumvon" size="20" value="${verbrauchsForm.from}" placeholder="<fmt:message key="i18n.datepattern"/>">
 				</div>
 				<div class="form-group">
 					<label for="Datumbis"><fmt:message key="i18n.DatumBis" /></label> 
-					<input type="text" class="form-control" id="Datumbis" size="20" placeholder="TT.MM.JJJJ">
+					<input type="text" class="form-control" id="Datumbis" size="20" value="${verbrauchsForm.to}" placeholder="<fmt:message key="i18n.datepattern"/>">
 				</div>
-			</form>			
+			</form>	
+
 			<button id="anzeigen" class="btn btn-primary"><fmt:message key="i18n.Anzeigen" /></button>
 		</div>
 		
 		<table class="table table-hover" style="margin-top: 20px; max-width: 500px;">
 		<thead>
 			<tr>
-<%-- 				<th class="hidden-xs"><fmt:message key="i18n.gender"/></th> --%>
-<%-- 				<th><fmt:message key="i18n.firstname"/></th> --%>
-<%-- 				<th><fmt:message key="i18n.lastname"/></th> --%>
-<%-- 				<th><fmt:message key="i18n.email"/></th> --%>
-<%-- 				<th class="hidden-xs"><fmt:message key="i18n.birthday"/></th> --%>
-				<th>ZählerId</th>
-				<th>Datum von</th>
-				<th>Datum bis</th>
-				<th>Verbrauch</th>
-				<th>Einheit</th>
+				<th><fmt:message key="i18n.DatumVon" /></th>
+				<th><fmt:message key="i18n.DatumBis" /></th>
+				<th><fmt:message key="i18n.Verbrauch" /></th>
+				<th><fmt:message key="i18n.Einheit" /></th>
 				
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${verbrauchsListe}" var="v">
+			<c:forEach items="${verbrauchsForm.vl}" var="v">
 				<tr>
-					<td>${v.zId}</td>
 					<td>${v.from}</td>
 					<td>${v.to}</td>
 					<td>${v.verbrauch}</td>
@@ -112,26 +104,29 @@
 			</c:forEach>
 		</tbody>
 		</table>
+	      		<aside>
 		<div id="chart_div"></div>
+		</aside>
 		<script>
 		google.charts.load('current', {packages: ['corechart']});
 		  google.charts.setOnLoadCallback(drawColColors);
 		  
 function drawColColors() {
       var data = new google.visualization.DataTable();
-      data.addColumn('string', 'Zeitraum');
-      data.addColumn('number', 'Verbrauch');
+      data.addColumn('string', '<fmt:message key="i18n.Zeitraum" />');
+      data.addColumn('number', '<fmt:message key="i18n.Verbrauch" />');
 
 
-      <c:forEach items="${verbrauchsListe}" var="v">
-      data.addRow(['${v.from}-${v.to}',${v.verbrauch}]);
+      <c:forEach items="${verbrauchsForm.vl}" var="v">
+      var num = parseFloat('${v.verbrauch}'.replace(",", "."));
+      data.addRow(['${v.from}-${v.to}', num]);
       </c:forEach>
 
       var options = {
-        title: 'Verbrauch',
+        title: '<fmt:message key="i18n.Verbrauch" />',
         colors: ['#9575cd', '#33ac71'],
         hAxis: {
-          title: 'Zeitraum',
+          title: '<fmt:message key="i18n.Zeitraum" />',
           //format: 'h:mm a',
           viewWindow: {
             min: [100, 300, 0],
@@ -139,13 +134,22 @@ function drawColColors() {
           }
         },
         vAxis: {
-          title: 'Verbrauch'
+         format:'#,###',
+          title: '<fmt:message key="i18n.Verbrauch" />',
+          viewWindow: {
+              min: [100, 300, 0],
+              max: [100, 300, 0]
+            }
         }
+        
       };
-
+      var formatter = new google.visualization.NumberFormat({decimalSymbol: '<fmt:message key="i18n.decimalSymbol" />', groupingSymbol: '<fmt:message key="i18n.groupingSymbol" />' });
+      formatter.format(data, 1);
+      
       var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
       chart.draw(data, options);
 }
       </script>
       </jsp:body>
+
 </my:base>
