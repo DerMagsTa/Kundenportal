@@ -2,6 +2,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@attribute name="title" fragment="true" %>
 <%@attribute name="headline" fragment="true" %>
+<%@attribute name="zusatz" fragment="true" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
@@ -34,10 +35,7 @@
 	<script src="<c:url value="/js/jquery-ui.min.js"/>"></script>
  	<link href="<c:url value="/css/jquery-ui.min.css"/>" rel="stylesheet">
 	
-	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-	<script type="text/javascript">
-		google.charts.load('current', {packages: ['corechart']});
-	</script>
+	<jsp:invoke fragment="zusatz"/>
   </head>
 
   <body>

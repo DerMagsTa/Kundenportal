@@ -17,7 +17,7 @@ import de.fom.kp.model.*;
 import de.fom.kp.persistence.*;
 import de.fom.kp.view.Message;
 
-//@WebServlet(urlPatterns="*.html")
+
 public class DispatcherServlet extends HttpServlet {
 
 	private PersonDao personDao;
@@ -55,12 +55,13 @@ public class DispatcherServlet extends HttpServlet {
 			SimpleDateFormat df = new SimpleDateFormat(pattern);
 			df.setLenient(false);
 			NumberFormat d = NumberFormat.getNumberInstance(locale);
+			d.setParseIntegerOnly(false);
 			//System.out.println(request.getRequestURI());
 			String[] sa = StringUtils.split(request.getServletPath(), "/.\\");
 			String forward = null;
 			switch (sa[0]) {
 			case "index":
-				forward = list(request);
+				forward = "welcome";
 				break;
 			case "personlist": 
 				forward = list(request);
@@ -281,7 +282,7 @@ public class DispatcherServlet extends HttpServlet {
 						e.printStackTrace();
 					}
 				}else {
-					vr.setTo(new Date(2017-1900,11,31));
+					vr.setTo(new Date(2099-1900,11,31));
 				}
 				vr.setZ(zDao.read(Integer.parseInt( request.getParameter("zid"))));
 				vr.getZ().setmList(mDao.listByZaehler(Integer.parseInt( request.getParameter("zid"))));

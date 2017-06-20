@@ -2,7 +2,7 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
   <display-name>kundenportal</display-name>
   <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
+    <welcome-file>welcome.html</welcome-file>
   </welcome-file-list>
   <context-param>
     <param-name>datasource</param-name>
@@ -59,6 +59,14 @@
   <servlet-mapping>
     <servlet-name>login</servlet-name>
     <url-pattern>/j_security_check</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>api</servlet-name>
+    <servlet-class>de.fom.kp.controller.ApiServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>api</servlet-name>
+    <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>dispatcher</servlet-name>

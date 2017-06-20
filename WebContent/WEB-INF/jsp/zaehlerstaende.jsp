@@ -34,8 +34,8 @@
 				var html = "";
 				$.each(data, function(i, m) {
 					html += "<tr><td>" + m.ablesedatum + "</td>";
-					html += "<td>" + m.messwert + "</td>";
-					html += "<td>" + "<a href='${pageContext.request.contextPath}/zaehlerstaende.html?zid=" + getUrlParameter("zid") + "&eid=" + getUrlParameter("eid") +"&mid=" + m.id + "'><button type='button' class='btn btn-success btn-xs'>Ändern</button></a>" + "</td></tr>";
+					html += "<td style='text-align: right;'>" + m.messwert + "</td>";
+					html += "<td>" + "<a href='${pageContext.request.contextPath}/zaehlerstaende.html?zid=" + getUrlParameter("zid") + "&eid=" + getUrlParameter("eid") +"&mid=" + m.id + "'><button type='button' class='btn btn-success btn-xs'><fmt:message key='i18n.ändern'/></button></a>" + "</td></tr>";
 				});
 				$("#Messwerte > tbody").append(html);
 			});

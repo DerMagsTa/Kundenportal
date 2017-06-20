@@ -62,7 +62,7 @@ CREATE TABLE `messwerte` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ZaehlerID` int(11) NOT NULL,
   `Ablesedatum` date NOT NULL,
-  `Messwert` int(11) NOT NULL,
+  `Messwert` Double NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `ZaehlerID` (`ZaehlerID`),
   CONSTRAINT `ZaehlerID` FOREIGN KEY (`ZaehlerID`) REFERENCES `zaehler` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE

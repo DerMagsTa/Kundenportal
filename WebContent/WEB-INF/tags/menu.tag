@@ -9,7 +9,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="<c:url value="/welcome.html"/>">FOM Webprogrammierung</a>
+          <a class="navbar-brand" href="<c:url value="/welcome.html"/>">Meine Übersicht</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
@@ -23,9 +23,8 @@
               <img src="<c:url value="${flag}"/>">
                Locale <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="<c:url value="/index.html?locale=de"/>"><img src="<c:url value="/images/flag_de.png"/>"> Deutsch</a></li>
-                <li><a href="<c:url value="/index.html?locale=en"/>"><img src="<c:url value="/images/flag_en.png"/>"> Englisch</a></li>
-                <li><a href="<c:url value="/index.html?locale=ko"/>"><img src="<c:url value="/images/flag_ko.png"/>"> Koreanisch</a></li>
+                <li><a href="<c:url value="/welcome.html?locale=de"/>"><img src="<c:url value="/images/flag_de.png"/>"> Deutsch</a></li>
+                <li><a href="<c:url value="/welcome.html?locale=en"/>"><img src="<c:url value="/images/flag_en.png"/>"> Englisch</a></li>
               </ul>
             </li>
             <li><a href="<c:url value="/logout.html"/>">Logout</a></li>

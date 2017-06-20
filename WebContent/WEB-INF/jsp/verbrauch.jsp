@@ -17,6 +17,12 @@
 	Verbrauch für ${zaehler.energieArt}zähler: ${zaehler.zaehlerNr} <br>
 	auf Entnahmestelle: ${entnahmestelle.straße} ${entnahmestelle.hausNr}, ${entnahmestelle.plz} ${entnahmestelle.ort}
 	</jsp:attribute>
+	<jsp:attribute name="zusatz">
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+		google.charts.load('current', {packages: ['corechart']});
+	</script>
+	</jsp:attribute>
 	<jsp:body>
 	<script type="text/javascript">
 		var getUrlParameter = function getUrlParameter(sParam) {

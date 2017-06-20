@@ -5,9 +5,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.inject.Inject;
 import javax.naming.InitialContext;
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,15 +34,12 @@ import de.fom.kp.dao.PersonDao;
 import de.fom.kp.persistence.Messwert;
 
 
-
-@WebServlet("/api/*")
 public class ApiServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	//@Inject 
 	private PersonDao dao;
 	private MesswertDao mDao;
-	private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	private SimpleDateFormat dateFormat;
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -57,7 +57,10 @@ public class ApiServlet extends HttpServlet {
 	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Gson gson = new GsonBuilder().create();
+		Locale locale = (Locale)request.getSession().getAttribute(LocaleFilter.KEY);
+		ResourceBundle bundle = ResourceBundle.getBundle("MessageResources",locale);
+		String pattern =  bundle.getString("i18n.datepattern");
+		Gson gson = new GsonBuilder().setDateFormat(pattern).create();
 		switch (request.getPathInfo()) {
 		case "/personsearch":
 			response.setCharacterEncoding("UTF-8");
@@ -75,7 +78,6 @@ public class ApiServlet extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
