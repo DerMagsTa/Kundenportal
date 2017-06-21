@@ -7,78 +7,119 @@
 	Registrieren
 	</jsp:attribute>
 	<jsp:attribute name="headline">
-	Registrierungsformular
+	Registrierung
 	</jsp:attribute>
 	<jsp:body>
-	<%-- <c:forEach items="${errors}" var="e">
-	${e.message }<br/>
-	</c:forEach> --%>
-		<form method="post">
+		<div class="container">
+		<form class="form-horizontal" method="post">
 			<input type="hidden" name="id" value="${form.id}">
 			
-			<p><label for="gender">gender</label><br/>
-				<c:set var="enumValues" value="<%=Gender.values()%>"/>
-				<c:forEach items="${enumValues}" var="g">
-					<input		 type="radio" name="gender" id="gender.${g}" value="${g}"
-					<c:if test="${form.gender eq g}"> checked="checked"</c:if>
-					> <label for="gender.${g}">${g}</label>
-				</c:forEach>
-			</p>
-			<p><label for="email">email*</label><br/>
-			<%-- <input type="text" name="email" id="email" value="${form.email}" onblur="checkemail(this.value, '${form.id}')"> --%>
-			<input type="text" name="email" id="email" value="${form.email}">
-			<img src="images/clear.gif" id="emailcheck"/>
-			<my:error field="email" errorlist="${errors}">Kritisch </my:error>
-			</p>
+			<div class="form-group">
+				<label for="straße" class="col-sm-2 control-label"><fmt:message key="i18n.Email" />*</label> 
+				<div class="col-sm-10">
+				<input type="text" class="form-control" id="email" name="email" placeholder="max@musterman.de" value="${form.email}">
+				</div>
+				<my:error field="email" errorlist="${errors}"></my:error>
+			</div>
 			
-			<p><label for="firstname">firstname</label><br/>
-			<input type="text" name="firstname" id="firstname" value="${form.firstname}"></p>
+			<div class="form-group">
+				<label for="straße" class="col-sm-2 control-label"><fmt:message key="i18n.Passwort" />*</label> 
+				<div class="col-sm-10">
+				<input type="password" class="form-control" id="passwort" name="passwort" value="${form.passwort}">
+				</div>
+				<my:error field="passwort" errorlist="${errors}"></my:error>
+			</div>
 			
-			<p><label for="lastname">lastname</label><br/>
-			<input type="text" name="lastname" id="lastname" value="${form.lastname}"></p>
+			<div class="form-group">
+				<label for="straße" class="col-sm-2 control-label"><fmt:message key="i18n.Anrede" />*</label> 
+				<div class="col-sm-10">
+				<input type="text" class="form-control" id="anrede" name="anrede" placeholder="Herr" value="${form.anrede}">
+				</div>
+				<my:error field="anrede" errorlist="${errors}"></my:error>
+			</div>
 			
-			<p><label for="birthday">birthday</label><br/>
-			<input type="text" name="birthday" id="birthday" value="${form.birthday}">
-			<my:error field="birthday" errorlist="${errors}"/>
+			<div class="form-group">
+				<label for="straße" class="col-sm-2 control-label"><fmt:message key="i18n.Vorname" />*</label> 
+				<div class="col-sm-10">
+				<input type="text" class="form-control" id="vorname" name="vorname" placeholder="Max" value="${form.vorname}">
+				</div>
+				<my:error field="vorname" errorlist="${errors}"></my:error>
+			</div>
 			
-			</p>
+			<div class="form-group">
+				<label for="straße" class="col-sm-2 control-label"><fmt:message key="i18n.Nachname" />*</label> 
+				<div class="col-sm-10">
+				<input type="text" class="form-control" id="nachname" name="nachname" placeholder="Mustermann" value="${form.nachname}">
+				</div>
+				<my:error field="nachname" errorlist="${errors}"></my:error>
+			</div>
 			
-			<p><label for="height">height</label><br/>
-			<input type="text" name="height" id="height" value="${form.height}"></p>
+			<div class="form-group">
+				<label for="straße" class="col-sm-2 control-label"><fmt:message key="i18n.Geburtsdatum" />*</label> 
+				<div class="col-sm-10">
+				<input type="text" class="form-control" id="geburtsdatum" name="geburtsdatum" placeholder="${form.dateFormatPattern}" value="${form.geburtsdatum}">
+				</div>
+				<my:error field="geburtsdatum" errorlist="${errors}"></my:error>
+			</div>
 			
-			<p><label for="companyid">select company</label><br/>
-			<select name="companyid" id="companyid">
-				<option value="">--select--</option>
-				<c:forEach items="${companylist}" var="company">
-					<option value="${company.id}"
-					<c:if test="${company.id eq form.companyid}"> selected="selected"</c:if>
-					>${company.name}</option>
-				</c:forEach>
-			</select></p>
+			<div class="form-group">
+				<label for="straße" class="col-sm-2 control-label"><fmt:message key="i18n.Straße" />*</label> 
+				<div class="col-sm-10">
+				<input type="text" class="form-control" id="straße" name="straße" placeholder="Musterstr." value="${form.straße}">
+				</div>
+				<my:error field="straße" errorlist="${errors}"></my:error>
+			</div>
 			
-			<p><label for="newcompany">or insert new company</label><br/>
-			<input type="text" name="newcompany" id="newcompany" value="${form.newcompany}"></p>
+			<div class="form-group">
+				<label for="hausNr" class="col-sm-2 control-label"><fmt:message key="i18n.Haus-Nr" />*</label> 
+				<div class="col-sm-10">
+				<input type="text" class="form-control" id="hausNr" name="hausNr" placeholder="1a-3b" value="${form.hausNr}">
+				</div>
+				<my:error field="hausNr" errorlist="${errors}"></my:error>
+			</div>
 			
-			<p><label for="interests">interests</label><br/>
-				<c:forEach items="${interestlist}" var="interest">
-					<input type="checkbox" name="interests" value="${interest.id}" id="interests${interest.id}"
-					<c:if test="${form.interests.contains(interest.id)}"> checked="checked"</c:if>
-					/> <label for="interests${interest.id}">${interest.name}</label>
-				</c:forEach>
-			</p>
+			<div class="form-group">
+				<label for="plz" class="col-sm-2 control-label"><fmt:message key="i18n.PLZ" />*</label> 
+				<div class="col-sm-10">
+				<input type="text" class="form-control" id="plz" name="plz" placeholder="01234" value="${form.plz}">
+				</div>
+				<my:error field="plz" errorlist="${errors}"></my:error>
+			</div>
 			
-			<p><label for="newsletter">newsletter</label><br/>
-				<input type="checkbox" name="newsletter" id="newsletter"
-				<c:if test="${form.newsletter}"> checked="checked"</c:if>
-				/> <label for="newsletter">subscribe newsletter</label>
-			</p>
+			<div class="form-group">
+				<label for="ort" class="col-sm-2 control-label"><fmt:message key="i18n.Ort" />*</label> 
+				<div class="col-sm-10">
+				<input type="text" class="form-control" id="ort" name="ort" placeholder="Musterort" value="${form.ort}">
+				</div>
+				<my:error field="ort" errorlist="${errors}"></my:error>
+			</div>
 			
-			<p><label for="comment">comment</label><br/>
-			<textarea rows="5" cols="50" name="comment">${form.comment}</textarea></p>
+			<div class="form-group">
+				<label for="land" class="col-sm-2 control-label"><fmt:message key="i18n.Land" />*</label> 
+				<div class="col-sm-10">
+				<input type="text" class="form-control" id="land" name="land" placeholder="DE" value="${form.land}">
+				</div>
+				<my:error field="land" errorlist="${errors}"></my:error>
+			</div>
 			
+			<div class="col-sm-offset-2 col-sm-10">
+				<p>* benötigt</p>
+				<input type="submit" class="btn btn-success" value=<fmt:message key="i18n.save"/> name="speichern" id="psave">
+				<input type="submit" class="btn btn-danger" value=<fmt:message key="i18n.dele"/> name="pdele" id="pdele">
+				<script>
+				//wenn die ID nicht angegeben ist soll ein zähler angelegt werden, daher "löschen" Button ausbelden
+				//un den Text auf "anlegen" ändern!
+			    if ("${form.id}" == "") {
+			    	 document.getElementById('pdele').style.visibility = 'hidden';
+			    	 document.getElementById('psave').setAttribute('value','<fmt:message key="i18n.create"/>');
+			    }
+				</script>
+			</div>
 			
-		<p>* required</p>
-		<input type="submit" class="btn btn-default" value="save" name="register">
+			<p>* required</p>
+			<input type="submit" class="btn btn-default" value="save" name="register">
 		</form>
+		</div>
+		
 	</jsp:body>
 </my:base>

@@ -43,7 +43,6 @@ public class DispatcherServlet extends HttpServlet {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PersonDataBuffer pdbuffer = (PersonDataBuffer)request.getSession().getAttribute("pdbuffer");
@@ -68,10 +67,9 @@ public class DispatcherServlet extends HttpServlet {
 				break;
 			case "register":
 				forward = "register";
-				if(request.getParameter("register")!=null){
+				if(request.getParameter("psave")!=null){
 					//abgeschicktes Formular
-					RegisterForm form = new RegisterForm(request, df, d);
-					//validieren
+					PersonForm form = new PersonForm(request, df, d);
 					List<Message> errors = new ArrayList<Message>();
 					form.validate(errors);
 					if(errors.size()!=0){
@@ -81,20 +79,17 @@ public class DispatcherServlet extends HttpServlet {
 					}else{
 						//success
 						Person p = form.getPerson();
-						if(form.getCompanyid()==null&&StringUtils.isNotBlank(form.getNewcompany())){
-							// Company abspeichern
-						}
 						personDao.save(p);
 						forward = list(request);
 					}
-				}else if(request.getParameter("id")!=null){
+				}else if(request.getParameter("id")!=null & StringUtils.isNotEmpty(request.getParameter("id"))){
 					//start edit
 					Person p = personDao.read(Integer.parseInt(request.getParameter("id")));
 					RegisterForm form = new RegisterForm(p, df,d);
 					request.setAttribute("form",form);
 				}else{
 					//start new
-					RegisterForm form = new RegisterForm(df,d);
+					PersonForm form = new PersonForm(df,d);
 					request.setAttribute("form",form);
 				}
 				break;

@@ -1,8 +1,8 @@
 package de.fom.kp.model;
 
-import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -12,13 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 
-import de.fom.kp.persistence.Gender;
-import de.fom.kp.persistence.Interest;
 import de.fom.kp.persistence.Person;
+import de.fom.kp.view.Message;
 
 public class PersonForm {
 	
-	private DateFormat dateFormat;
+	private SimpleDateFormat dateFormat;
 	private NumberFormat decimalFormat;
 	private Integer id;
 	private String anrede;
@@ -33,7 +32,7 @@ public class PersonForm {
 	private String land;
 	private Integer admin;
 	private boolean changemode = false;
-	
+	private String passwort;
 	
 	public Integer getAdmin() {
 		return admin;
@@ -44,42 +43,49 @@ public class PersonForm {
 	}
 
 	public PersonForm() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
-	public PersonForm(de.fom.kp.persistence.Person p, DateFormat dateFormat, NumberFormat decimalFormat) {
-		this.dateFormat = dateFormat;
-		this.decimalFormat = decimalFormat;
-		this.id =p.getId();
-		this.anrede = p.getAnrede();
-		this.vorname = p.getVorname();
-		this.nachname = p.getNachname();
-		this.email = p.getEmail();
-		this.straﬂe = p.getStraﬂe();
-		this.hausNr = p.getHausNr();
-		this.plz = p.getPlz();
-		this.ort = p.getOrt();
-		this.land = p.getLand();
-		this.geburtsdatum = dateFormat.format(p.getGeburtsdatum());
-		this.admin = p.isAdminrechte() == true ? 1 : 0;
+	public PersonForm(SimpleDateFormat dateFormat, NumberFormat decimalFormat) {
+		this.dateFormat 	= dateFormat;
+		this.decimalFormat 	= decimalFormat;
 	}
 	
-	public PersonForm(HttpServletRequest request, DateFormat dateFormat, NumberFormat decimalFormat) {
-		this.dateFormat = dateFormat;
-		this.decimalFormat = decimalFormat;
-		this.id = Integer.parseInt(request.getParameter("id"));
-		this.anrede = request.getParameter("anrede");
-		this.vorname = request.getParameter("vorname");
-		this.nachname = request.getParameter("nachname");
-		this.email = request.getParameter("email");
-		this.geburtsdatum = request.getParameter("geburtstag");
-		this.straﬂe = request.getParameter("strasse");
-		this.hausNr =  request.getParameter("hausnr");
-		this.plz = Integer.parseInt(request.getParameter("plz"));
-		this.ort = request.getParameter("ort");
-		this.land = request.getParameter("land");
-		this.admin = Integer.parseInt(request.getParameter("admin"));
-		this.changemode = Boolean.parseBoolean(request.getParameter("changemode"));
+	public PersonForm(de.fom.kp.persistence.Person p, SimpleDateFormat dateFormat, NumberFormat decimalFormat) {
+		this.dateFormat 	= dateFormat;
+		this.decimalFormat 	= decimalFormat;
+		this.id 			= p.getId();
+		this.anrede 		= p.getAnrede();
+		this.vorname 		= p.getVorname();
+		this.nachname 		= p.getNachname();
+		this.email 			= p.getEmail();
+		this.straﬂe 		= p.getStraﬂe();
+		this.hausNr 		= p.getHausNr();
+		this.plz 			= p.getPlz();
+		this.ort 			= p.getOrt();
+		this.land			= p.getLand();
+		this.geburtsdatum 	= dateFormat.format(p.getGeburtsdatum());
+		this.admin 			= p.isAdminrechte() == true ? 1 : 0;
+		this.passwort		= p.getPasswort();
+	}
+	
+	public PersonForm(HttpServletRequest request, SimpleDateFormat dateFormat, NumberFormat decimalFormat) {
+		this.dateFormat 	= dateFormat;
+		this.decimalFormat 	= decimalFormat;
+		this.id 			= Integer.parseInt(request.getParameter("id"));
+		this.anrede 		= request.getParameter("anrede");
+		this.vorname 		= request.getParameter("vorname");
+		this.nachname 		= request.getParameter("nachname");
+		this.email 			= request.getParameter("email");
+		this.geburtsdatum 	= request.getParameter("geburtstag");
+		this.straﬂe 		= request.getParameter("strasse");
+		this.hausNr 		= request.getParameter("hausnr");
+		this.plz 			= Integer.parseInt(request.getParameter("plz"));
+		this.ort 			= request.getParameter("ort");
+		this.land 			= request.getParameter("land");
+		this.admin 			= Integer.parseInt(request.getParameter("admin"));
+		this.changemode 	= Boolean.parseBoolean(request.getParameter("changemode"));
+		this.passwort		= request.getParameter("passwort");
 
 	}
 	
@@ -104,14 +110,19 @@ public class PersonForm {
 		p.setOrt(ort);
 		p.setLand(land);
 		p.setAdminrechte(admin == 1 ? true : false);
+		p.setPasswort(passwort);
 		return p;
 	}
 
-	public DateFormat getDateFormat() {
+	public SimpleDateFormat getDateFormat() {
 		return dateFormat;
 	}
+	
+	public String getDateFormatPattern() {
+		return dateFormat.toPattern();
+	}
 
-	public void setDateFormat(DateFormat dateFormat) {
+	public void setDateFormat(SimpleDateFormat dateFormat) {
 		this.dateFormat = dateFormat;
 	}
 
@@ -217,6 +228,19 @@ public class PersonForm {
 
 	public void setChangemode(boolean changemode) {
 		this.changemode = changemode;
+	}
+
+	public String getPasswort() {
+		return passwort;
+	}
+
+	public void setPasswort(String passwort) {
+		this.passwort = passwort;
+	}
+
+	public void validate(List<Message> errors) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
