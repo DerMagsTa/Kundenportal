@@ -78,6 +78,10 @@
 					<label for="Datumbis"><fmt:message key="i18n.DatumBis" /></label> 
 					<input type="text" class="form-control" id="Datumbis" size="20" value="${verbrauchsForm.to}" placeholder="<fmt:message key="i18n.datepattern"/>">
 				</div>
+								<div class="form-group">
+					<label for="mode"><fmt:message key="i18n.verbrauchmode" /></label> 
+					<input type="text" class="form-control" id="mode" size="20" value="${verbrauchsForm.to}" placeholder="<fmt:message key="i18n.datepattern"/>">
+				</div>
 			</form>	
 
 			<button id="anzeigen" class="btn btn-primary"><fmt:message key="i18n.Anzeigen" /></button>
