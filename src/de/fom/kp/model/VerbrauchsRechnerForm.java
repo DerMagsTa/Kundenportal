@@ -34,9 +34,10 @@ public class VerbrauchsRechnerForm {
 		// TODO Auto-generated constructor stub
 		this.d = d;
 		this.df = df;
-		this.from = request.getParameter("datumvon");
-		this.to = request.getParameter("datumbis");
+		this.from = request.getParameter("Datumvon");
+		this.to = request.getParameter("Datumbis");
 		this.mode = request.getParameter("mode");
+	
 	}
 	
 	public VerbrauchsRechnerForm(Verbrauchsrechner v) {

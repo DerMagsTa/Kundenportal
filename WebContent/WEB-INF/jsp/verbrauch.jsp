@@ -55,37 +55,47 @@
 		}; */
 
 		
-
+		
 		$(document).ready(function() {
 			
 			$("#Datumvon").datepicker({ dateFormat: "<fmt:message key="i18n.datepatternpicker"/>" });
 			$("#Datumbis").datepicker({ dateFormat: "<fmt:message key="i18n.datepatternpicker"/>" });
 			// neuen Zählerstand abspeichern und Tabelle neu laden
-			$("#anzeigen").click(function() {
-				var url = "${pageContext.request.contextPath}/verbrauch.html?zid="+ getUrlParameter("zid")+"&eid=" + getUrlParameter("eid")+ "&datumvon="+ $("#Datumvon").val()+ "&datumbis="+ $("#Datumbis").val();
-				window.location = url;
-			}); 
+// 			$("#anzeigen").click(function() {
+// 				var url = "${pageContext.request.contextPath}/verbrauch.html?zid="+ getUrlParameter("zid")+"&eid=" 
+// 						+ getUrlParameter("eid")+ "&datumvon="+ $("#Datumvon").val()+ 
+// 						"&datumbis="+ $("#Datumbis").val()+ "&mode="+ $("#mode").val();
+// 				window.location = url;
+// 			}); 
 			});
 		
 		</script>
+		<form method="post" class="form-inline">
 		<div class="container">
-			<form class="form-inline" action="">
 				<div class="form-group">
 					<label for="Datumvon"><fmt:message key="i18n.DatumVon" /></label> 
-					<input type="text" class="form-control" id="Datumvon" size="20" value="${verbrauchsForm.from}" placeholder="<fmt:message key="i18n.datepattern"/>">
+					<input type="text" class="form-control" id="Datumvon" name="Datumvon"size="20" value="${verbrauchsForm.from}" placeholder="<fmt:message key="i18n.datepattern"/>">
 				</div>
 				<div class="form-group">
 					<label for="Datumbis"><fmt:message key="i18n.DatumBis" /></label> 
-					<input type="text" class="form-control" id="Datumbis" size="20" value="${verbrauchsForm.to}" placeholder="<fmt:message key="i18n.datepattern"/>">
+					<input type="text" class="form-control" id="Datumbis" name="Datumbis" size="20" value="${verbrauchsForm.to}" placeholder="<fmt:message key="i18n.datepattern"/>">
 				</div>
-								<div class="form-group">
-					<label for="mode"><fmt:message key="i18n.verbrauchmode" /></label> 
-					<input type="text" class="form-control" id="mode" size="20" value="${verbrauchsForm.to}" placeholder="<fmt:message key="i18n.datepattern"/>">
+				<br>
+				<br>
+				<div class="form-group">
+					<label for="berechnungsmodus"><fmt:message key="i18n.BMode" /></label> <br>
+							 	<input type="radio"  name="mode" value="each"> 
+					 	<label for="mode_e"><fmt:message key="i18n.BMode_for_each" /></label> 
+					 	<input type="radio" name="mode" value="month"> 
+					 	<label for="mode_m"><fmt:message key="i18n.BMode_month" /></label>
+					 	<input type="radio"  name="mode" value="year"> 
+					 	<label for="mode_y"><fmt:message key="i18n.BMode_year" /></label> 
 				</div>
-			</form>	
-
-			<button id="anzeigen" class="btn btn-primary"><fmt:message key="i18n.Anzeigen" /></button>
+			<br>
+			<br>
+			<input type="submit" class="btn btn-success" id="anzeigen" value="<fmt:message key="i18n.Anzeigen"/>" name="anzeigen" />
 		</div>
+		</form>
 		
 		<table class="table table-hover" style="margin-top: 20px; max-width: 500px;">
 		<thead>
@@ -108,9 +118,7 @@
 			</c:forEach>
 		</tbody>
 		</table>
-	      		<aside>
 		<div id="chart_div"></div>
-		</aside>
 		<script>
 		google.charts.load('current', {packages: ['corechart']});
 		  google.charts.setOnLoadCallback(drawColColors);
@@ -122,8 +130,7 @@ function drawColColors() {
 
 
       <c:forEach items="${verbrauchsForm.vl}" var="v">
-      var num = parseFloat('${v.verbrauch}'.replace(",", "."));
-      data.addRow(['${v.from}-${v.to}', num]);
+      data.addRow(['${v.from}-${v.to}', ${v.verbrauchD} ]);
       </c:forEach>
 
       var options = {
@@ -131,14 +138,14 @@ function drawColColors() {
         colors: ['#9575cd', '#33ac71'],
         hAxis: {
           title: '<fmt:message key="i18n.Zeitraum" />',
-          //format: 'h:mm a',
+         
           viewWindow: {
             min: [100, 300, 0],
             max: [100, 300, 0]
           }
         },
         vAxis: {
-         format:'#,###',
+         
           title: '<fmt:message key="i18n.Verbrauch" />',
           viewWindow: {
               min: [100, 300, 0],

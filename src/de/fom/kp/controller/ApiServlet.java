@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -32,6 +34,7 @@ import de.fom.kp.dao.JdbcZaehlerDao;
 import de.fom.kp.dao.MesswertDao;
 import de.fom.kp.dao.PersonDao;
 import de.fom.kp.persistence.Messwert;
+import de.fom.kp.persistence.MesswertAblesdatumComparator;
 
 
 public class ApiServlet extends HttpServlet {
@@ -70,7 +73,9 @@ public class ApiServlet extends HttpServlet {
 		case "/zaehlerstaende":
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("application/json");
-			gson.toJson(mDao.listByZaehler( Integer.parseInt(request.getParameter("id"))), response.getWriter());
+			List<Messwert> mList = mDao.listByZaehler(Integer.parseInt(request.getParameter("id")) );
+			Collections.sort(mList, new MesswertAblesdatumComparator());
+			gson.toJson(mList, response.getWriter());
 			break;
 		default:
 			break;

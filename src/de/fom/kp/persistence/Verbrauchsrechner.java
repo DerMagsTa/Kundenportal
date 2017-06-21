@@ -10,6 +10,7 @@ public class Verbrauchsrechner {
 	
 	public static final String con_mode_month = "month"; //Berechne Verbauch je Monat 
 	public static final String con_mode_for_each = "each"; //Berechne Verbrauch zwischen den einzelnen Messwerten
+	public static final String con_mode_for_year = "year"; //Berechne Verbrauch zwischen den einzelnen Messwerten
 	
 	private static final Integer con_brennwert = 8;
 	private static final Double con_zustandszahl = 0.95;
