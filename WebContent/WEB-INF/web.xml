@@ -44,6 +44,10 @@
     <filter-name>security</filter-name>
     <url-pattern>/api/*</url-pattern>
   </filter-mapping>
+    <filter-mapping>
+    <filter-name>security</filter-name>
+    <url-pattern>/report/*</url-pattern>
+  </filter-mapping>
   <filter>
     <filter-name>locale</filter-name>
     <filter-class>de.fom.kp.controller.LocaleFilter</filter-class>
@@ -67,6 +71,14 @@
   <servlet-mapping>
     <servlet-name>api</servlet-name>
     <url-pattern>/api/*</url-pattern>
+  </servlet-mapping>
+    <servlet>
+    <servlet-name>report</servlet-name>
+    <servlet-class>de.fom.kp.controller.ReportServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>report</servlet-name>
+    <url-pattern>/report/*</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>dispatcher</servlet-name>

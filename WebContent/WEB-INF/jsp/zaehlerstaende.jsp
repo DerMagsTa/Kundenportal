@@ -93,5 +93,6 @@
 	
 			</tbody>
 		</table>
+		<a href="<c:url value="/report/zaehlerstaende?id=${zaehler.id}"/>"><button type="button" class="btn btn-warning btn-xs"><fmt:message key="i18n.exportieren"/></button></a>
 	</jsp:body>
 </my:base>

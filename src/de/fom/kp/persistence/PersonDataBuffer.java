@@ -82,5 +82,17 @@ public class PersonDataBuffer {
 			return false;
 	}
 	
-
+	public boolean checkZaehler(String id) {
+		try {
+			Integer.parseInt(id);
+		} catch (NumberFormatException e) {
+			return false;
+		}
+		if (this.zs == null) {
+			return false;
+		} else if ( getZaehler(Integer.parseInt(id)) != null  ){
+			return true;
+		} else
+			return false;
+	}
 }
