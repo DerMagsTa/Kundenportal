@@ -1,6 +1,9 @@
 package de.fom.kp.persistence;
 
+import java.text.ParseException;
 import java.util.List;
+
+import de.fom.kp.view.Message;
 
 public class PersonDataBuffer {
 	
@@ -63,6 +66,20 @@ public class PersonDataBuffer {
 			}
 		}
 		return z;
+	}
+	
+	public boolean checkPerson(String id) {
+		try {
+			Integer.parseInt(id);
+		} catch (NumberFormatException e) {
+			return false;
+		}
+		if (this.p == null) {
+			return false;
+		} else if (this.p.getId().equals(Integer.parseInt(id))){
+			return true;
+		} else
+			return false;
 	}
 	
 

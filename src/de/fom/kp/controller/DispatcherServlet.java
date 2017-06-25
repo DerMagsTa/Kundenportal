@@ -60,11 +60,18 @@ public class DispatcherServlet extends HttpServlet {
 			String forward = null;
 			switch (sa[0]) {
 			case "index":
+				
+			case "welcome":
 				forward = "welcome";
+				Person user = (Person) request.getSession().getAttribute("user");
+				PersonForm pf = new PersonForm(user, df, d);
+				request.setAttribute("personform",pf);
 				break;
+
 			case "personlist": 
 				forward = list(request);
 				break;
+				
 			case "register":
 				forward = "register";
 				if(request.getParameter("psave")!=null){
@@ -80,25 +87,28 @@ public class DispatcherServlet extends HttpServlet {
 						//success
 						Person p = form.getPerson();
 						personDao.save(p);
-						forward = list(request);
+						request.getSession().setAttribute("user", p);
+						updatePuffer(request);
+						response.sendRedirect(request.getContextPath() + "/welcome.html");
+						forward=null;
 					}
-				}else if(request.getParameter("id")!=null & StringUtils.isNotEmpty(request.getParameter("id"))){
-					//start edit
-					Person p = personDao.read(Integer.parseInt(request.getParameter("id")));
-					RegisterForm form = new RegisterForm(p, df,d);
-					request.setAttribute("form",form);
+				}else if(request.getParameter("id")!=null && StringUtils.isNotEmpty(request.getParameter("id"))){
+					if (pdbuffer.checkPerson(request.getParameter("id"))) {
+						//bestehende Person soll geändert werden
+						Person p = personDao.read(Integer.parseInt(request.getParameter("id")));
+						PersonForm form = new PersonForm(p, df,d);
+						request.setAttribute("form",form);
+					} else {
+						//nicht berechtigt
+						response.sendRedirect(request.getContextPath() + "/welcome.html");
+						forward=null;
+					}
 				}else{
 					//start new
 					PersonForm form = new PersonForm(df,d);
 					request.setAttribute("form",form);
 				}
 				break;
-			case "contact":
-				break;
-
-// ---------------------------------------------				
-// ---------- K U N D E N P O R T A L ----------		
-// ---------------------------------------------
 				
 			case "entnahmestellen":
 				//Testseite - später löschen?
@@ -215,6 +225,7 @@ public class DispatcherServlet extends HttpServlet {
 				}
 				}
 				break;
+				
 			case "zaehlerliste":
 				//Testseite - später löschen?
 				request.setAttribute("zaehlerliste",zDao.list());
@@ -256,7 +267,6 @@ public class DispatcherServlet extends HttpServlet {
 				break;
 				
 			case "verbrauch":
-				
 				forward = "verbrauch";
 				VerbrauchsRechnerForm vrform = new VerbrauchsRechnerForm(request, df, d);
 				Verbrauchsrechner vr = vrform.getVerbrauchsrechner();
@@ -280,25 +290,7 @@ public class DispatcherServlet extends HttpServlet {
 				}
 				break;
 				
-			case "welcome":
-				forward = "welcome";
-				if(request.getParameter("MeineDatenÄndern")!=null){
-					PersonForm pf = new PersonForm(request,df,d);
-					pf.setChangemode(true);
-					request.setAttribute("personform",pf);
-				}else if(request.getParameter("Speichern")!=null){	
-					PersonForm pf = new PersonForm(request,df,d);
-					Person u  = pf.getPerson();
-					personDao.save(u);
-					request.getSession().setAttribute("user",u);
-					pf = new PersonForm(u, df, d);
-					request.setAttribute("personform",pf);
-					
-				}else {
-				Person p = (Person) request.getSession().getAttribute("user");
-				PersonForm pf = new PersonForm(p, df, d);
-				request.setAttribute("personform",pf);
-				}
+			case "contact":
 				break;
 				
 			case "logout":
@@ -321,6 +313,30 @@ public class DispatcherServlet extends HttpServlet {
 		request.setAttribute("personlist", personDao.list());
 		forward = "personlist";
 		return forward;
+	}
+	
+	private void updatePuffer(HttpServletRequest request) throws DaoException {
+		Person user =  personDao.read(((Person) request.getSession().getAttribute("user")).getId());
+
+		request.getSession().setAttribute("user", user);
+		
+		PersonDataBuffer pdbuffer = new PersonDataBuffer();
+		
+		pdbuffer.setP(user);
+		pdbuffer.setZs(new ArrayList<Zaehler>());
+		
+		List<Entnahmestelle> entnahmestellen = eDao.listByPerson(user.getId());
+		for (Entnahmestelle e : entnahmestellen) {
+			List<Zaehler> zaehler = zDao.listByEStelle(e.getId());
+			e.setZaehler(zaehler);
+			pdbuffer.getZs().addAll(zaehler);
+		}
+		
+		pdbuffer.setEs(entnahmestellen);
+		request.getSession().setAttribute("pdbuffer", pdbuffer);
+		request.getSession().setAttribute("entnahmestellen", entnahmestellen);
+
+		return;
 	}
 
 	@Override

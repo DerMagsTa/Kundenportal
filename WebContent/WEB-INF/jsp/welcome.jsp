@@ -13,7 +13,7 @@
 		
 	<jsp:body>
 	<div class="col-md-4">
-	<form method="post">
+<%-- 	<form method="post">
 		<h2>Meine Daten</h2>
 		<fieldset id="MeineDaten">
 
@@ -22,9 +22,9 @@
 		<p><label for="anrede" class="col-md-6">Anrede </label> <input type="text" name="anrede" id = "anrede" class="col-md-6" value="${personform.anrede}"><br/><p>
 		<p><label for="vorname" class="col-md-6">Vorname</label> <input type="text" name="vorname" id = "vorname" class="col-md-6" value="${personform.vorname}"><br/></p>
 		<p><label for="nachname" class="col-md-6">Nachname</label> <input type="text" name="nachname" id = "nachname" class="col-md-6" value="${personform.nachname}"><br/><p>
-		<p><label for="geburtstag" class="col-md-6">Geburtsdatum</label> <input type="date" name="geburtstag" id = "geburtstag" class="col-md-6" value="${personform.geburtsdatum}"><br/><p>	
-		<p><label for="strasse" class="col-md-6">Straﬂe</label> <input type="text" name="strasse" id = "strasse" class="col-md-6" value="${personform.straﬂe}"><br/><p>
-		<p><label for="hausnr" class="col-md-6">HausNr.</label> <input type="text" name="hausnr" id = "hausnr" class="col-md-6" value="${personform.hausNr }"><br/></p>
+		<p><label for="geburtstag" class="col-md-6">Geburtsdatum</label> <input type="date" name="geburtsdatum" id = "geburtsdatum" class="col-md-6" value="${personform.geburtsdatum}"><br/><p>	
+		<p><label for="strasse" class="col-md-6">Straﬂe</label> <input type="text" name="straﬂe" id = "straﬂe" class="col-md-6" value="${personform.straﬂe}"><br/><p>
+		<p><label for="hausnr" class="col-md-6">HausNr.</label> <input type="text" name="hausNr" id = "hausNr" class="col-md-6" value="${personform.hausNr }"><br/></p>
 		<p><label for="plz" class="col-md-6">PLZ</label> <input type="text" name="plz" id = "plz" class="col-md-6" value="${personform.plz}"><br/>
 		<p><label for="ort" class="col-md-6">Ort</label> <input type="text" name="ort" id = "ort" class="col-md-6" value="${personform.ort}"><br/><p>
 		<p><label for="email" class="col-md-6">E-Mail</label> <input type="email" name="email" id = "email" class="col-md-6" value="${personform.email}"><br/></p>
@@ -52,9 +52,49 @@
 			document.getElementById("MeineDatenƒndern").style.visibility="hidden";
 		}
 		</script>
-		</form>
-		
+		</form> --%>
+		<h2>Meine Daten</h2>
+		<p>
+		<label class="col-md-6">Anrede </label> 	
+		<span class="col-md-6">${personform.anrede}</span><br/>
+		</p>
+		<p>
+		<label class="col-md-6">Vorname</label>  	
+		<span class="col-md-6">${personform.vorname}</span><br/>
+		</p>
+		<p>
+		<label class="col-md-6">Nachname</label>  
+		<span class="col-md-6">${personform.nachname}</span><br/>
+		</p>
+		<p>
+		<label class="col-md-6">E-Mail</label>  
+		<span class="col-md-6">${personform.email}</span><br/>
+		</p>
+		<p>
+		<label class="col-md-6">Geburtsdatum</label>  
+		<span class="col-md-6">${personform.geburtsdatum}</span><br/>
+		</p>
+		<p><label class="col-md-6">Straﬂe</label>  
+		<span class="col-md-6">${personform.straﬂe}</span><br/><p>
+		<p>
+		<label class="col-md-6">HausNr.</label>  
+		<span class="col-md-6">${personform.hausNr}</span><br/>
+		</p>
+		<p>
+		<label class="col-md-6">PLZ</label>  
+		<span class="col-md-6">${personform.plz}</span><br/>
+		</p>
+		<p>
+		<label class="col-md-6">Ort</label>  
+		<span class="col-md-6">${personform.ort}</span><br/>
+		</p>
+		<p>
+		<label class="col-md-6">Land</label>  
+		<span class="col-md-6">${personform.land}</span><br/>
+		</p>
+		<p class="col-md-6"><a href="<c:url value="/register.html?id=${personform.id}"/>"><button type="button" class="btn btn-warning btn-xs"><fmt:message key="i18n.‰ndern"/></button></a></p>
 	</div>
+	
 	<div class="col-md-8">
 		<h2>Meine Entnahmestellen</h2>
 		<ul>

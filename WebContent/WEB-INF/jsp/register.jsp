@@ -104,7 +104,7 @@
 			
 			<div class="col-sm-offset-2 col-sm-10">
 				<p>* benötigt</p>
-				<input type="submit" class="btn btn-success" value=<fmt:message key="i18n.save"/> name="speichern" id="psave">
+				<input type="submit" class="btn btn-success" value=<fmt:message key="i18n.save"/> name="psave" id="psave">
 				<input type="submit" class="btn btn-danger" value=<fmt:message key="i18n.dele"/> name="pdele" id="pdele">
 				<script>
 				//wenn die ID nicht angegeben ist soll ein zähler angelegt werden, daher "löschen" Button ausbelden
@@ -115,9 +115,7 @@
 			    }
 				</script>
 			</div>
-			
-			<p>* required</p>
-			<input type="submit" class="btn btn-default" value="save" name="register">
+
 		</form>
 		</div>
 		
