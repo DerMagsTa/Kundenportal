@@ -35,6 +35,7 @@ import de.fom.kp.dao.MesswertDao;
 import de.fom.kp.dao.PersonDao;
 import de.fom.kp.persistence.Messwert;
 import de.fom.kp.persistence.MesswertAblesdatumComparator;
+import de.fom.kp.persistence.PersonDataBuffer;
 
 
 public class ApiServlet extends HttpServlet {
@@ -73,9 +74,14 @@ public class ApiServlet extends HttpServlet {
 		case "/zaehlerstaende":
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("application/json");
+			PersonDataBuffer pdbuffer = (PersonDataBuffer) request.getSession().getAttribute("pdbuffer");
+			if (pdbuffer.checkZaehler(request.getParameter("id"))){
+			//Zählerstände nur lesen, wenn der Zähler zum user gehört.
 			List<Messwert> mList = mDao.listByZaehler(Integer.parseInt(request.getParameter("id")) );
 			Collections.sort(mList, new MesswertAblesdatumComparator());
+			pdbuffer.getZaehler(Integer.parseInt(request.getParameter("id"))).setmList(mList);
 			gson.toJson(mList, response.getWriter());
+			}
 			break;
 		default:
 			break;

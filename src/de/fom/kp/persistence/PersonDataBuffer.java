@@ -95,4 +95,39 @@ public class PersonDataBuffer {
 		} else
 			return false;
 	}
+	
+	public boolean checkEntnahmestelle(String id) {
+		try {
+			Integer.parseInt(id);
+		} catch (NumberFormatException e) {
+			return false;
+		}
+		if (this.es == null) {
+			return false;
+		} else if ( getEntnahmestelle(Integer.parseInt(id)) != null  ){
+			return true;
+		} else
+			return false;
+	}
+	
+	public boolean checkMesswert(String id, String zid) {
+		try {
+			Integer.parseInt(id);
+			Integer.parseInt(zid);
+		} catch (NumberFormatException e) {
+			return false;
+		}
+		if (this.zs == null) {
+			return false;
+		} else if ( getZaehler(Integer.parseInt(zid)) != null  ){
+			 for (Messwert m : getZaehler(Integer.parseInt(zid)).getmList()) {
+				if (m.getId() == Integer.parseInt(id)){
+					return true;
+				}
+			}
+		    return false;
+		} else
+			return false;
+	}
+	
 }

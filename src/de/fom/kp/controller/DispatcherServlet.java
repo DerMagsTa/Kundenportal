@@ -137,8 +137,7 @@ public class DispatcherServlet extends HttpServlet {
 						}else{
 							//Update
 							e.setZaehler(pdbuffer.getEntnahmestelle(e.getId()).getZaehler());
-							pdbuffer.getEs().remove(pdbuffer.getEntnahmestelle(e.getId()));
-							pdbuffer.getEs().add(e);
+							pdbuffer.getEs().set(pdbuffer.getEs().indexOf(pdbuffer.getEntnahmestelle(e.getId())), e);
 						}
 						response.sendRedirect(request.getContextPath() + "/welcome.html");
 						forward=null;
@@ -234,11 +233,23 @@ public class DispatcherServlet extends HttpServlet {
 				
 			case "zaehlerstaende":
 				forward = "zaehlerstaende";
+				MesswerteForm mForm;
+				if ( (pdbuffer.checkEntnahmestelle(request.getParameter("eid")) == false) || 
+			         (pdbuffer.checkZaehler(request.getParameter("zid")) == false) ||
+					(request.getParameter("mid") != null && pdbuffer.checkMesswert(request.getParameter("mid"), request.getParameter("zid")) == false)){
+					//Bei Zäherlständen haben wir im Request eid, zid und ggf mid bei Neuanlage eines Messwertes.
+					//Entnahmestelle und Zähler müssen zum user gehören
+					//ein gänderter Messwert muss zum User und zum angegebenen Zähler gehören
+					//ansonste: raus!
+					response.sendRedirect(request.getContextPath() + "/welcome.html");
+					forward=null;
+				}else{
 				if(request.getParameter("zspeichern")!=null){
 					//ein Zählerstand soll gespeichert werden (Klick auf Save)
-					MesswerteForm mForm = new MesswerteForm(request, df, d);
+					mForm = new MesswerteForm(request, df, d);
 					List<Message> errors = new ArrayList<Message>();
-					List<Messwert> mList = mDao.listByZaehler(Integer.parseInt(request.getParameter("zid")) );
+					//Die Messwerte sind im Puffer gepspeichert!
+					List<Messwert> mList = pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))).getmList();
 					Collections.sort(mList, new MesswertAblesdatumComparator());
 					mForm.validate(errors, mList);
 					if(errors.size()!=0){
@@ -250,46 +261,47 @@ public class DispatcherServlet extends HttpServlet {
 						Messwert m = mForm.getMesswertClass();
 						mDao.save(m);
 						mForm.setZaehlerId(Integer.parseInt(request.getParameter("zid")));
-						request.setAttribute("mform",mForm);
-					}
+					}		
 				}else if(request.getParameter("mid")!=null){
 					//vorhandener Zählerstand soll geändert werden
-					MesswerteForm mForm = new MesswerteForm(mDao.read(Integer.parseInt(request.getParameter("mid"))), df, d);
-					request.setAttribute("mform",mForm);
+					mForm = new MesswerteForm(mDao.read(Integer.parseInt(request.getParameter("mid"))), df, d);
 				}else{
 						//neuer Zählerstand soll angegeben werden (default - beim Aufruf der Seite)
-						MesswerteForm mForm = new MesswerteForm(df, d);
+						mForm = new MesswerteForm(df, d);
 						mForm.setZaehlerId(Integer.parseInt(request.getParameter("zid")));
-						request.setAttribute("mform",mForm);
 					 }
-				request.setAttribute("entnahmestelle",eDao.read(Integer.parseInt(request.getParameter("eid"))));
-				request.setAttribute("zaehler",zDao.read(Integer.parseInt(request.getParameter("zid"))));
+				request.setAttribute("mform",mForm);
+				request.setAttribute("entnahmestelle", pdbuffer.getEntnahmestelle(Integer.parseInt(request.getParameter("eid"))));
+				request.setAttribute("zaehler", pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))));
+					}
 				break;
 				
 			case "verbrauch":
 				forward = "verbrauch";
 				VerbrauchsRechnerForm vrform = new VerbrauchsRechnerForm(request, df, d);
 				Verbrauchsrechner vr = vrform.getVerbrauchsrechner();
-				if (pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid")))!=null){
-					//den Verbrauch nur berechenen, wenn der Zähler auch zur Person gehört!
-				vr.setZ(pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))));
-				//if (vr.getZ().getmList().size()==0){
-					//wenn die Messwerte leer sind dann von der DB lesen
-					// es kann auch sein, dass der Zähler keine Messwerte hat... aber warum dann Verbauch anzeigen?!
-				vr.getZ().setmList(mDao.listByZaehler(Integer.parseInt(request.getParameter("zid"))));
-			//	}
-				//hier wird der Verbauch berechnet auf basis der Parameter aus der VerbrauchsForm und an diese Übergeben.
-				vrform.setVl(vr.ListVerbrauch());
-				request.setAttribute("verbrauchsForm", vrform);
-				request.setAttribute("entnahmestelle",pdbuffer.getEntnahmestelle(Integer.parseInt(request.getParameter("eid"))));
-				request.setAttribute("zaehler",pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))));
+				
+				//den Verbrauch nur berechenen, wenn der Zähler und Entnahmetelle auch zur Person gehört!
+				if (pdbuffer.checkZaehler(request.getParameter("zid")) &&
+				    pdbuffer.checkEntnahmestelle(request.getParameter("eid"))){
+					//den Verbrauch nur berechenen, wenn der Zähler und Entnahmetelle auch zur Person gehört!
+					vr.setZ(pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))));
+					if (vr.getZ().getmList().size()==0){
+						//wenn die Messwerte leer sind dann von der DB lesen
+						// es kann auch sein, dass der Zähler keine Messwerte hat... aber warum dann Verbauch anzeigen?!
+						vr.getZ().setmList(mDao.listByZaehler(Integer.parseInt(request.getParameter("zid"))));
+					}
+					//hier wird der Verbauch berechnet auf basis der Parameter aus der VerbrauchsForm und an diese Übergeben.
+					vrform.setVl(vr.ListVerbrauch());
+					request.setAttribute("verbrauchsForm", vrform);
+					request.setAttribute("entnahmestelle",pdbuffer.getEntnahmestelle(Integer.parseInt(request.getParameter("eid"))));
+					request.setAttribute("zaehler",pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))));
+			    //sonst Redirect auf Welcome!
 				}else{
-					//sonst Redirect auf Welcome!
 					response.sendRedirect(request.getContextPath() + "/welcome.html");
 					forward=null;
 				}
 				break;
-				
 			case "contact":
 				break;
 				
