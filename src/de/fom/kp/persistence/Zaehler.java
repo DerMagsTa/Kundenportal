@@ -86,4 +86,14 @@ public class Zaehler {
 		this.mList = mList;
 	}
 	
+	public Messwert getMWert(Integer mid){
+		Messwert m = null;
+		for ( Messwert m1: this.mList) {
+			if (m1.getId()==mid){
+				m = m1;
+			}
+		}
+		return m;
+	}
+	
 }

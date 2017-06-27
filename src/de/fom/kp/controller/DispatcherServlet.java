@@ -164,8 +164,8 @@ public class DispatcherServlet extends HttpServlet {
 				
 			case "zaehler":
 				//prüfen, ob die IDs in der URL zu den daten der Person passen. wenn nicht: redirect auf welcome!
-				if (((request.getParameter("zid")!=null && pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid")))==null))||
-					 (request.getParameter("eid")!=null && pdbuffer.getEntnahmestelle(Integer.parseInt(request.getParameter("eid")))==null)){
+				if ((request.getParameter("zid")!=null &&pdbuffer.checkZaehler(request.getParameter("zid"))==false)||
+					(request.getParameter("eid") !=null && pdbuffer.checkEntnahmestelle(request.getParameter("eid"))== false)){
 					response.sendRedirect(request.getContextPath() + "/welcome.html");
 					forward=null;
 				}else{
@@ -173,7 +173,7 @@ public class DispatcherServlet extends HttpServlet {
 					request.getSession().setAttribute("EnergieArten", EnergieArt.getEnergieArten());
 					ZaehlerForm zf = null;
 					
-						//ein Zähler soll geändert werden
+					//ein Zähler soll geändert werden
 					if ((request.getParameter("zid")!=null)){
 						zf = new ZaehlerForm(pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))));
 						zf.setEntnahmestellenId(pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))).getEntnahmestelleId());
@@ -201,13 +201,11 @@ public class DispatcherServlet extends HttpServlet {
 							pdbuffer.getEntnahmestelle(z.getEntnahmestelleId()).getZaehler().add(z);
 						}else{
 							//Update
-							//alten zähler in der Puffer Klasse mit dem neuen ersetzen
-							pdbuffer.getEntnahmestelle(z.getEntnahmestelleId()).getZaehler().remove(pdbuffer.getZaehler(z.getId()));
-							pdbuffer.getEntnahmestelle(z.getEntnahmestelleId()).getZaehler().add(z);
-							pdbuffer.getZs().remove(pdbuffer.getZaehler(z.getId()));
-							pdbuffer.getZs().add(z);
+							//alten zähler in der Puffer Klasse mit dem neuen ersetzen;
+							pdbuffer.getEntnahmestelle(z.getEntnahmestelleId()).getZaehler().set(pdbuffer.getEntnahmestelle(z.getEntnahmestelleId()).getZaehler().indexOf(pdbuffer.getZaehler(z.getId())), z);
+							pdbuffer.getZs().set(pdbuffer.getZs().indexOf(pdbuffer.getZaehler(z.getId())), z);
 						}
-//						request.getSession().setAttribute("pdbuffer", pdbuffer);
+						//bei erfolgreichem Ändern/Anlegen zurücl auf welcome
 						response.sendRedirect(request.getContextPath() + "/welcome.html");
 						forward=null;
 					}
@@ -219,16 +217,10 @@ public class DispatcherServlet extends HttpServlet {
 					zDao.delete(z.getId());
 					pdbuffer.getEntnahmestelle(z.getEntnahmestelleId()).getZaehler().remove(pdbuffer.getZaehler((z.getId())));
 					pdbuffer.getZs().remove(pdbuffer.getZaehler(z.getId()));
+					//bei erfolgreichem Löschen zurück auf welcome
 					response.sendRedirect(request.getContextPath() + "/welcome.html");
 					forward=null;					
-				}
-				}
-				break;
-				
-			case "zaehlerliste":
-				//Testseite - später löschen?
-				request.setAttribute("zaehlerliste",zDao.list());
-				forward = "zaehlerliste";
+				}}
 				break;
 				
 			case "zaehlerstaende":
@@ -264,7 +256,8 @@ public class DispatcherServlet extends HttpServlet {
 					}		
 				}else if(request.getParameter("mid")!=null){
 					//vorhandener Zählerstand soll geändert werden
-					mForm = new MesswerteForm(mDao.read(Integer.parseInt(request.getParameter("mid"))), df, d);
+					//pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))).setmList(mDao.listByZaehler(Integer.parseInt(request.getParameter("zid"))));
+					mForm = new MesswerteForm(pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))).getMWert(Integer.parseInt(request.getParameter("mid"))), df, d);
 				}else{
 						//neuer Zählerstand soll angegeben werden (default - beim Aufruf der Seite)
 						mForm = new MesswerteForm(df, d);
@@ -279,6 +272,13 @@ public class DispatcherServlet extends HttpServlet {
 			case "verbrauch":
 				forward = "verbrauch";
 				VerbrauchsRechnerForm vrform = new VerbrauchsRechnerForm(request, df, d);
+				List<Message> errors = new ArrayList<Message>();
+				vrform.validate(errors);
+				if(errors.size()!=0){
+					//error
+					request.setAttribute("verbrauchsForm", vrform);
+					request.setAttribute("errors", errors);
+				}else{
 				Verbrauchsrechner vr = vrform.getVerbrauchsrechner();
 				
 				//den Verbrauch nur berechenen, wenn der Zähler und Entnahmetelle auch zur Person gehört!
@@ -300,7 +300,7 @@ public class DispatcherServlet extends HttpServlet {
 				}else{
 					response.sendRedirect(request.getContextPath() + "/welcome.html");
 					forward=null;
-				}
+				}}
 				break;
 			case "contact":
 				break;

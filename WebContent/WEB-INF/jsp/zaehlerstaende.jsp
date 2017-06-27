@@ -10,6 +10,7 @@
 	auf Entnahmestelle: ${entnahmestelle.straﬂe} ${entnahmestelle.hausNr}, ${entnahmestelle.plz} ${entnahmestelle.ort}
 	</jsp:attribute>
 	<jsp:body>
+	
 	<script type="text/javascript">
 		var getUrlParameter = function getUrlParameter(sParam) {
 			var sPageURL = decodeURIComponent(window.location.search
@@ -40,11 +41,29 @@
 				$("#Messwerte > tbody").append(html);
 			});
 		};
-
+		jQuery(function(jQuery)
+				{
+				 jQuery.datepicker.regional['de'] = {clearText: 'lˆschen', clearStatus: 'aktuelles Datum lˆschen',
+				            closeText: 'schlieﬂen', closeStatus: 'ohne ƒnderungen schlieﬂen',
+				            prevText: '          ',  nextText: 'Vor>', nextStatus: 'n‰chsten Monat zeigen',
+				            currentText: 'heute', currentStatus: '',
+				            monthNames: ['Januar','Februar','M‰rz','April','Mai','Juni',
+				            'Juli','August','September','Oktober','November','Dezember'],
+				            monthNamesShort: ['Jan','Feb','M‰r','Apr','Mai','Jun',
+				            'Jul','Aug','Sep','Okt','Nov','Dez'],
+				            monthStatus: 'anderen Monat anzeigen', yearStatus: 'anderes Jahr anzeigen',
+				            weekHeader: 'Wo', weekStatus: 'Woche des Monats',
+				            dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
+				            dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+				            dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+				            dayStatus: 'Setze DD als ersten Wochentag', dateStatus: 'W‰hle D, M d',
+				            dateFormat: 'dd.mm.yy', firstDay: 1, 
+				            initStatus: 'W‰hle ein Datum', isRTL: false};
+				// jQuery.datepicker.setDefaults(jQuery.datepicker.regional['de']);
+				});
+		
 		$(function() {
-
-			//$("#ablesedatum").datepicker();
-			//$("#ablesedatum").datepicker( "option", "dateFormat", "yy-mm-dd");
+			$("#ablesedatum").datepicker($.extend({}, $.datepicker.regional["<fmt:message key="i18n.datepickerregion"/>"], { dateFormat: "<fmt:message key="i18n.datepatternpicker"/>" }));
 			
 			// bisherige Z‰hlerst‰nde anzeigen
 			getMesswerte();

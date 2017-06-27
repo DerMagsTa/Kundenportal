@@ -11,10 +11,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.openejb.server.httpd.HttpRequest;
 
+import de.fom.kp.persistence.Messwert;
 import de.fom.kp.persistence.Verbrauchsrechner;
 import de.fom.kp.persistence.Verbrauchswert;
+import de.fom.kp.view.Message;
 
 public class VerbrauchsRechnerForm {
 	
@@ -117,6 +120,33 @@ public class VerbrauchsRechnerForm {
 		this.vl = new ArrayList<VerbrauchswertForm>();
 		for (Verbrauchswert verbrauchswert : vl) {
 			this.vl.add(new VerbrauchswertForm(verbrauchswert, df, d));
+		}
+	}
+	
+	public void validate(List<Message> errors){
+		//Bei der Verbrauchsanzeige muss das Von datum kleiner dem Bis Datum sein...
+		Date d_from = null;
+		Date d_to = null;
+		if (StringUtils.isNotBlank(from)){
+			try {
+				d_from = df.parse(from);
+			} catch (ParseException e) {
+				errors.add(new Message("Datumvon", "Datum von kein gültiges Datum"));
+			}
+		if(StringUtils.isNotBlank(to)){
+			try {
+				d_to = df.parse(to);
+			} catch (ParseException e) {
+				errors.add(new Message("Datumbis", "Datum bis kein gültiges Datum"));
+			}
+		}
+		}
+		if ((d_to != null && d_from != null)){
+			
+			if (d_to.compareTo(d_from) < 1){
+				//das to datum ist kleiner dem from datum!	
+				errors.add(new Message("Datumbis", "Datum bis muss größer Datum von sein"));
+					}
 		}
 	}
 	

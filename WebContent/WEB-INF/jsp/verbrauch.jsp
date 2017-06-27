@@ -38,40 +38,39 @@
 				}
 			}
 		};
-
-/* 		function getMesswerte() {
-			$.ajax({
-				url : "${pageContext.request.contextPath}/api/zaehlerstaende?id=" + getUrlParameter("zid"),
-				context : document.body
-			}).done(function(data) {
-				$("#Messwerte > tbody").empty();
-				var html = "";
-				$.each(data, function(i, m) {
-					html += "<tr><td>" + m.ablesedatum + "</td>";
-					html += "<td>" + m.messwert + "</td></tr>";
+		jQuery(function(jQuery)
+				{
+				 jQuery.datepicker.regional['de'] = {clearText: 'löschen', clearStatus: 'aktuelles Datum löschen',
+				            closeText: 'schließen', closeStatus: 'ohne Änderungen schließen',
+				            prevText: '          ',  nextText: 'Vor>', nextStatus: 'nächsten Monat zeigen',
+				            currentText: 'heute', currentStatus: '',
+				            monthNames: ['Januar','Februar','März','April','Mai','Juni',
+				            'Juli','August','September','Oktober','November','Dezember'],
+				            monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
+				            'Jul','Aug','Sep','Okt','Nov','Dez'],
+				            monthStatus: 'anderen Monat anzeigen', yearStatus: 'anderes Jahr anzeigen',
+				            weekHeader: 'Wo', weekStatus: 'Woche des Monats',
+				            dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
+				            dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+				            dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+				            dayStatus: 'Setze DD als ersten Wochentag', dateStatus: 'Wähle D, M d',
+				            dateFormat: 'dd.mm.yy', firstDay: 1, 
+				            initStatus: 'Wähle ein Datum', isRTL: false};
+				// jQuery.datepicker.setDefaults(jQuery.datepicker.regional['de']);
 				});
-				$("#Messwerte > tbody").append(html);
-			});
-		}; */
-
-		
 		
 		$(document).ready(function() {
 			
-			$("#Datumvon").datepicker({ dateFormat: "<fmt:message key="i18n.datepatternpicker"/>" });
-			$("#Datumbis").datepicker({ dateFormat: "<fmt:message key="i18n.datepatternpicker"/>" });
-			// neuen Zählerstand abspeichern und Tabelle neu laden
-// 			$("#anzeigen").click(function() {
-// 				var url = "${pageContext.request.contextPath}/verbrauch.html?zid="+ getUrlParameter("zid")+"&eid=" 
-// 						+ getUrlParameter("eid")+ "&datumvon="+ $("#Datumvon").val()+ 
-// 						"&datumbis="+ $("#Datumbis").val()+ "&mode="+ $("#mode").val();
-// 				window.location = url;
-// 			}); 
+			$("#Datumvon").datepicker($.extend({}, $.datepicker.regional["<fmt:message key="i18n.datepickerregion"/>"], { dateFormat: "<fmt:message key="i18n.datepatternpicker"/>" }));
+			$("#Datumbis").datepicker($.extend({}, $.datepicker.regional["<fmt:message key="i18n.datepickerregion"/>"], { dateFormat: "<fmt:message key="i18n.datepatternpicker"/>" }));
 			});
 		
 		</script>
 		<form method="post" class="form-inline">
 		<div class="container">
+			<c:forEach items="${errors}" var="e">
+				${e.message }<br/>
+			</c:forEach>
 				<div class="form-group">
 					<label for="Datumvon"><fmt:message key="i18n.DatumVon" /></label> 
 					<input type="text" class="form-control" id="Datumvon" name="Datumvon"size="20" value="${verbrauchsForm.from}" placeholder="<fmt:message key="i18n.datepattern"/>">
