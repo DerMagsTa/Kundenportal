@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,20 +18,20 @@ import de.fom.kp.persistence.Verbrauchswert;
 
 public class VerbrauchsRechnerForm {
 	
-	private DateFormat df;
+	private SimpleDateFormat df;
 	private NumberFormat d;
 	private String from;
 	private String to;
 	private String mode;
 	private List<VerbrauchswertForm> vl;
 	
-	public VerbrauchsRechnerForm(DateFormat df, DecimalFormat d) {
+	public VerbrauchsRechnerForm(SimpleDateFormat df, NumberFormat d) {
 		// TODO Auto-generated constructor stub
 		this.d = d;
 		this.df = df;
 	}
 
-	public VerbrauchsRechnerForm(HttpServletRequest request, DateFormat df, NumberFormat d) {
+	public VerbrauchsRechnerForm(HttpServletRequest request, SimpleDateFormat df, NumberFormat d) {
 		// TODO Auto-generated constructor stub
 		this.d = d;
 		this.df = df;
@@ -68,11 +69,11 @@ public class VerbrauchsRechnerForm {
 		return v;
 	}
 
-	public DateFormat getDf() {
+	public SimpleDateFormat getDf() {
 		return df;
 	}
 
-	public void setDf(DateFormat df) {
+	public void setDf(SimpleDateFormat df) {
 		this.df = df;
 	}
 

@@ -118,6 +118,7 @@
 			</c:forEach>
 		</tbody>
 		</table>
+		<a href="<c:url value="/report/verbrauch?id=${zaehler.id}"/>"><button type="button" class="btn btn-warning btn-xs"><fmt:message key="i18n.exportieren"/></button></a>
 		<div id="chart_div"></div>
 		<script>
 		google.charts.load('current', {packages: ['corechart']});
@@ -147,6 +148,7 @@ function drawColColors() {
         vAxis: {
          
           title: '<fmt:message key="i18n.Verbrauch" />',
+          minValue: 0,
           viewWindow: {
               min: [100, 300, 0],
               max: [100, 300, 0]
