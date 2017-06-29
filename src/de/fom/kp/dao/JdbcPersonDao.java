@@ -146,16 +146,18 @@ public class JdbcPersonDao implements PersonDao {
 
 	@Override
 	public int checkEmail(String value, Integer id) throws DaoException {
-		EmailValidator v = EmailValidator.getInstance();
-		if(v.isValid(value)){
-			try(Connection c = ds.getConnection()){
-				PreparedStatement pst = c.prepareStatement("select id from person where email = ?");
+		try(Connection c = ds.getConnection()){
+				PreparedStatement pst = c.prepareStatement("select id from kundenportal.person where email = ?");
 				pst.setString(1, value);
 				ResultSet rs = pst.executeQuery();
 				if(rs.next()){
 					Integer pid = rs.getInt("id");
-					if(pid.equals(id)){
-						return 200;
+					if (id!=null){
+						if(pid.equals(id)){
+							return 200;
+						}else{
+							return 406;
+						}
 					}else{
 						return 406;
 					}
@@ -165,10 +167,7 @@ public class JdbcPersonDao implements PersonDao {
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-		}else{
-			return 406;
-		}
-		return 404;
+		return 406;
 	}
 
 	// ----------- private Hilfsmethoden ----------------------------------

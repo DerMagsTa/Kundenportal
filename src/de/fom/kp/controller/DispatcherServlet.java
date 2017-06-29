@@ -78,7 +78,8 @@ public class DispatcherServlet extends HttpServlet {
 					//abgeschicktes Formular
 					PersonForm form = new PersonForm(request, df, d);
 					List<Message> errors = new ArrayList<Message>();
-					form.validate(errors);
+					//PersonDao wird benötigt, um Email prüfen zu können.
+					form.validate(errors, personDao);
 					if(errors.size()!=0){
 						//error
 						request.setAttribute("form", form);
@@ -88,7 +89,10 @@ public class DispatcherServlet extends HttpServlet {
 						Person p = form.getPerson();
 						personDao.save(p);
 						request.getSession().setAttribute("user", p);
-						updatePuffer(request);
+						if (pdbuffer==null){
+							pdbuffer = new PersonDataBuffer();
+						}
+						pdbuffer.setP(p);
 						response.sendRedirect(request.getContextPath() + "/welcome.html");
 						forward=null;
 					}
@@ -345,6 +349,9 @@ public class DispatcherServlet extends HttpServlet {
 			default:
 				break;
 			}
+			
+			request.getSession().setAttribute("pdbuffer",pdbuffer);
+			
 			if(forward!=null){
 				request.setAttribute("forward", forward);
 				request.getRequestDispatcher("/WEB-INF/jsp/"+forward+".jsp").forward(request, response);
@@ -357,30 +364,6 @@ public class DispatcherServlet extends HttpServlet {
 		request.setAttribute("personlist", personDao.list());
 		forward = "personlist";
 		return forward;
-	}
-	
-	private void updatePuffer(HttpServletRequest request) throws DaoException {
-		Person user =  personDao.read(((Person) request.getSession().getAttribute("user")).getId());
-
-		request.getSession().setAttribute("user", user);
-		
-		PersonDataBuffer pdbuffer = new PersonDataBuffer();
-		
-		pdbuffer.setP(user);
-		pdbuffer.setZs(new ArrayList<Zaehler>());
-		
-		List<Entnahmestelle> entnahmestellen = eDao.listByPerson(user.getId());
-		for (Entnahmestelle e : entnahmestellen) {
-			List<Zaehler> zaehler = zDao.listByEStelle(e.getId());
-			e.setZaehler(zaehler);
-			pdbuffer.getZs().addAll(zaehler);
-		}
-		
-		pdbuffer.setEs(entnahmestellen);
-		request.getSession().setAttribute("pdbuffer", pdbuffer);
-		request.getSession().setAttribute("entnahmestellen", entnahmestellen);
-
-		return;
 	}
 
 	@Override

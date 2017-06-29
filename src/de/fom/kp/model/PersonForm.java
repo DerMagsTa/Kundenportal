@@ -11,7 +11,10 @@ import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.EmailValidator;
 
+import de.fom.kp.controller.DaoException;
+import de.fom.kp.dao.PersonDao;
 import de.fom.kp.persistence.Person;
 import de.fom.kp.view.Message;
 
@@ -41,7 +44,7 @@ public class PersonForm {
 	//Regex für: E-Mail Adressen. Diese wird auch vom W3C in ihrem email Tag verwendet. 
 	//Damit aber alle Prüfungen an der selben Stelle erfolgen und alle Fehlermeldungen gleich aussehen
 	//verwenden wir diese hier erst im validate() 
-	private String emailRegex = "^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
+	private String emailRegex = "^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)+$";
 	
 	public PersonForm() {
 		
@@ -94,7 +97,7 @@ public class PersonForm {
 
 	}
 
-	public void validate(List<Message> errors) {
+	public void validate(List<Message> errors, PersonDao pDao) {
 		if(StringUtils.isBlank(anrede)){
 			errors.add(new Message("anrede", "Anrede nicht angegeben"));
 		}
@@ -106,10 +109,23 @@ public class PersonForm {
 		}
 		if(StringUtils.isBlank(email)){
 			errors.add(new Message("email", "Email nicht angegeben"));
+		}else{
+			EmailValidator v = EmailValidator.getInstance();
+			if(!v.isValid(email)){
+			//if(email.matches(emailRegex)==false){
+				errors.add(new Message("email", "Emailadresse nicht gültig"));
+			}else{
+				try {
+					if (pDao.checkEmail(email, id)>200){
+						errors.add(new Message("email", "Emailadresse wird bereits verwendet"));
+					}
+				} catch (DaoException e1) {
+					// TODO Auto-generated catch block
+					errors.add(new Message("email", "Fehler beim Prüfen der Emailadresse"));
+				}
+			}
 		}
-		if(!email.matches(emailRegex)){
-			errors.add(new Message("email", "Emailadresse nicht gültig"));
-		}
+		
 		if(StringUtils.isBlank(geburtsdatum)){
 			errors.add(new Message("geburtsdatum", "Geburtsdatum nicht angegeben"));
 		}
