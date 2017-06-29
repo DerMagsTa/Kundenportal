@@ -1,7 +1,10 @@
 package de.fom.kp.controller;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -26,6 +29,10 @@ import org.eclipse.jdt.internal.compiler.parser.ParserBasicInformation;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 import de.fom.kp.dao.JdbcEntnahmestelleDao;
 import de.fom.kp.dao.JdbcMesswertDao;
@@ -35,6 +42,7 @@ import de.fom.kp.dao.MesswertDao;
 import de.fom.kp.dao.PersonDao;
 import de.fom.kp.persistence.Messwert;
 import de.fom.kp.persistence.MesswertAblesdatumComparator;
+import de.fom.kp.persistence.MesswertJsonSerializer;
 import de.fom.kp.persistence.PersonDataBuffer;
 
 
@@ -43,7 +51,7 @@ public class ApiServlet extends HttpServlet {
 
 	private PersonDao dao;
 	private MesswertDao mDao;
-	private SimpleDateFormat dateFormat;
+	private SimpleDateFormat df;
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -62,9 +70,11 @@ public class ApiServlet extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Locale locale = (Locale)request.getSession().getAttribute(LocaleFilter.KEY);
+		NumberFormat d = NumberFormat.getNumberInstance(locale);
 		ResourceBundle bundle = ResourceBundle.getBundle("MessageResources",locale);
 		String pattern =  bundle.getString("i18n.datepattern");
-		Gson gson = new GsonBuilder().setDateFormat(pattern).create();
+		df = new SimpleDateFormat(pattern);
+		Gson gson = new GsonBuilder().registerTypeAdapter(Messwert.class, new MesswertJsonSerializer(df, d)).create();		
 		switch (request.getPathInfo()) {
 		case "/personsearch":
 			response.setCharacterEncoding("UTF-8");
@@ -72,15 +82,20 @@ public class ApiServlet extends HttpServlet {
 			gson.toJson(dao.list(), response.getWriter());
 			break;
 		case "/zaehlerstaende":
+			Integer zId = Integer.parseInt(request.getParameter("id"));
+			List<Messwert> mList;
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("application/json");
 			PersonDataBuffer pdbuffer = (PersonDataBuffer) request.getSession().getAttribute("pdbuffer");
 			if (pdbuffer.checkZaehler(request.getParameter("id"))){
 			//Zählerstände nur lesen, wenn der Zähler zum user gehört.
-			List<Messwert> mList = mDao.listByZaehler(Integer.parseInt(request.getParameter("id")) );
-			Collections.sort(mList, new MesswertAblesdatumComparator());
-			pdbuffer.getZaehler(Integer.parseInt(request.getParameter("id"))).setmList(mList);
-			gson.toJson(mList, response.getWriter());
+				if (pdbuffer.getZaehler(zId).getmList().size()==0){
+					pdbuffer.getZaehler(zId).setmList(mDao.listByZaehler(zId));
+				}
+				mList = pdbuffer.getZaehler(zId).getmList();
+				request.getSession().setAttribute("pdbuffer", pdbuffer);
+				Collections.sort(mList, new MesswertAblesdatumComparator(MesswertAblesdatumComparator.descending));
+				gson.toJson(mList, response.getWriter());
 			}
 			break;
 		default:

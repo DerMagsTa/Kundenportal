@@ -36,7 +36,8 @@
 				$.each(data, function(i, m) {
 					html += "<tr><td>" + m.ablesedatum + "</td>";
 					html += "<td style='text-align: right;'>" + m.messwert + "</td>";
-					html += "<td>" + "<a href='${pageContext.request.contextPath}/zaehlerstaende.html?zid=" + getUrlParameter("zid") + "&eid=" + getUrlParameter("eid") +"&mid=" + m.id + "'><button type='button' class='btn btn-success btn-xs'><fmt:message key='i18n.ändern'/></button></a>" + "</td></tr>";
+					html += "<td>" + "<a href='${pageContext.request.contextPath}/zaehlerstaende.html?zid=" + getUrlParameter("zid") + "&eid=" + getUrlParameter("eid") +"&mid=" + m.id + "'><button type='button' class='btn btn-success btn-xs'><fmt:message key='i18n.ändern'/></button></a>" + "</td>";
+					html += "<td>" + "<a href='${pageContext.request.contextPath}/zaehlerstaende.html?zid=" + getUrlParameter("zid") + "&eid=" + getUrlParameter("eid") +"&mid=" + m.id + "&del=true" + "'><button type='button' class='btn btn-danger btn-xs'><fmt:message key='i18n.dele'/></button></a>" + "</td></tr>";
 				});
 				$("#Messwerte > tbody").append(html);
 			});
@@ -91,7 +92,7 @@
 					<input type="text" class="form-control" id="ablesedatum" name="ablesedatum" placeholder="${mform.dateFormatPattern}" value="${mform.ablesedatum}">
 				</div>
 				<div class="form-group">
-					<label for="messwert"><fmt:message key="i18n.Zählerstand" /></label> 
+					<label for="messwert"><fmt:message key="i18n.Zählerstand" /> (<fmt:message key="i18n.ZählerstandUnit${unit}" />)</label> 
 					<input type="text" class="form-control" id="messwert" name="messwert" value="${mform.messwert}">
 				</div>
 				<input type="submit" class="btn btn-default" value="save" name="zspeichern">
@@ -100,11 +101,11 @@
 			<!-- <button id="speichern" class="btn btn-primary"><fmt:message key="i18n.ZSpeichern" /></button> -->
 		</div>
 	
-		<table id="Messwerte" class="table table-hover" style="margin-top: 20px; max-width: 300px;">
+		<table id="Messwerte" class="table table-hover" style="margin-top: 20px; max-width: 400px;">
 			<thead>
 				<tr>
 					<th><fmt:message key="i18n.Ablesedatum" /></th>
-					<th><fmt:message key="i18n.Zählerstand" /></th>
+					<th><fmt:message key="i18n.Zählerstand" /> (<fmt:message key="i18n.ZählerstandUnit${unit}" />)</th>
 					<th></th>
 				</tr>
 			</thead>

@@ -68,6 +68,8 @@ public class Verbrauchsrechner {
 		case  con_mode_for_each:
 			vList = this.calc_for_each(mList);
 			break;
+		case con_mode_for_year:
+			break;
 		default:
 			break;
 		}
@@ -98,6 +100,9 @@ public class Verbrauchsrechner {
 		case  con_mode_for_each:
 			vList = this.calc_for_each(mList);
 			break;
+		case  con_mode_for_year:
+			vList = this.calc_for_year(mList);
+			break;
 		default:
 			break;
 		}
@@ -106,6 +111,53 @@ public class Verbrauchsrechner {
 	}
 	
 	
+	private List<Verbrauchswert> calc_for_year(List<Messwert> mList) {
+		List<Verbrauchswert> vList = new ArrayList<Verbrauchswert>();
+		List<Integer> jahre = new ArrayList<Integer>();
+		
+		//Welche Jahre gibt es im Zeitraum?
+		for (Messwert m : mList) {
+			Integer year = (m.getAblesedatum().getYear()+1990); //Im Integer steht jetzt z.B: 201705
+			if (jahre.contains(year)==false){
+				jahre.add(year);
+			};
+		}
+		
+		//Für jedes Jahr den ältesten und jüngsten Messwert bestimmen und dazu den Verbrauch berechnen
+		for (Integer integer : jahre) {
+			Messwert min  = null;
+			Messwert max  = null;
+			//jüngsten und ältesten Messwert je Monat bestimmen
+			for (Messwert m : mList) {
+				//Wenn der Messwert zum aktuellen Monat gehört
+				if ((m.getAblesedatum().getYear()+1990) == integer){
+					if ((min==null)||(max==null)){
+						min = m;
+						max= m;
+					}else{
+						if (min.getAblesedatum().after(m.getAblesedatum())==true){
+							min = m;
+						}
+						if (max.getAblesedatum().before(m.getAblesedatum())==true){
+							max = m;
+						}
+					}
+				}
+			}
+			//Verbrauchswert berechnen
+			Verbrauchswert e = new Verbrauchswert();
+			e.setzId(this.z.getId());
+			e.setFrom(min.getAblesedatum());
+			e.setTo(max.getAblesedatum());
+			e.setVerbrauch(this.berechneVerbrauch(max.getMesswert(), min.getMesswert()));
+			e.setUnit(EnergieArt.getEnergieArt(this.z.getEnergieArt()).getUnitVerbrauch());
+			vList.add(e);
+		}
+		
+		
+		return vList;
+	}
+
 	@SuppressWarnings("deprecation")
 	private List<Verbrauchswert> calc_by_month(List<Messwert> mList){
 		List<Verbrauchswert> vList = new ArrayList<Verbrauchswert>();

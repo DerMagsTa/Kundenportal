@@ -226,6 +226,11 @@ public class DispatcherServlet extends HttpServlet {
 			case "zaehlerstaende":
 				forward = "zaehlerstaende";
 				MesswerteForm mForm;
+				Integer mId;
+				Integer zId;
+				Integer eId;
+				Zaehler z;
+				Messwert m;
 				if ( (pdbuffer.checkEntnahmestelle(request.getParameter("eid")) == false) || 
 			         (pdbuffer.checkZaehler(request.getParameter("zid")) == false) ||
 					(request.getParameter("mid") != null && pdbuffer.checkMesswert(request.getParameter("mid"), request.getParameter("zid")) == false)){
@@ -236,12 +241,15 @@ public class DispatcherServlet extends HttpServlet {
 					response.sendRedirect(request.getContextPath() + "/welcome.html");
 					forward=null;
 				}else{
+					zId = Integer.parseInt(request.getParameter("zid"));
+					eId = Integer.parseInt(request.getParameter("eid"));
+					z = pdbuffer.getZaehler(zId);
 				if(request.getParameter("zspeichern")!=null){
 					//ein Zählerstand soll gespeichert werden (Klick auf Save)
 					mForm = new MesswerteForm(request, df, d);
 					List<Message> errors = new ArrayList<Message>();
 					//Die Messwerte sind im Puffer gepspeichert!
-					List<Messwert> mList = pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))).getmList();
+					List<Messwert> mList = z.getmList();
 					Collections.sort(mList, new MesswertAblesdatumComparator());
 					mForm.validate(errors, mList);
 					if(errors.size()!=0){
@@ -250,22 +258,42 @@ public class DispatcherServlet extends HttpServlet {
 						request.setAttribute("errors", errors);
 					}else{
 						//success
-						Messwert m = mForm.getMesswertClass();
+						m = mForm.getMesswertClass();
 						mDao.save(m);
-						mForm.setZaehlerId(Integer.parseInt(request.getParameter("zid")));
+						
+						if (mForm.getId()==null){
+							z.getmList().add(m);
+						}else{
+							Messwert alt = z.getMWert(m.getId());
+							Integer index = z.getmList().indexOf(alt);
+							z.getmList().set(index, m);
+						}
+						request.getSession().setAttribute("pdbuffer", pdbuffer);
+						mForm = new MesswerteForm(df, d);
 					}		
 				}else if(request.getParameter("mid")!=null){
+					mId = Integer.parseInt(request.getParameter("mid"));
+					if(request.getParameter("del")!=null){
+						//ein Zählerstand soll gelöscht werden
+						m = pdbuffer.getZaehler(zId).getMWert(mId);
+						mDao.delete(mId);
+						pdbuffer.getZaehler(zId).getmList().remove(m);
+						mForm = new MesswerteForm(df, d);
+					}else{
 					//vorhandener Zählerstand soll geändert werden
-					//pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))).setmList(mDao.listByZaehler(Integer.parseInt(request.getParameter("zid"))));
-					mForm = new MesswerteForm(pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))).getMWert(Integer.parseInt(request.getParameter("mid"))), df, d);
+					mForm = new MesswerteForm(z.getMWert(mId), df, d);
+					}
+					
 				}else{
 						//neuer Zählerstand soll angegeben werden (default - beim Aufruf der Seite)
 						mForm = new MesswerteForm(df, d);
-						mForm.setZaehlerId(Integer.parseInt(request.getParameter("zid")));
+						
 					 }
+				mForm.setZaehlerId(z.getId());
 				request.setAttribute("mform",mForm);
-				request.setAttribute("entnahmestelle", pdbuffer.getEntnahmestelle(Integer.parseInt(request.getParameter("eid"))));
-				request.setAttribute("zaehler", pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))));
+				request.setAttribute("entnahmestelle", pdbuffer.getEntnahmestelle(eId));
+				request.setAttribute("zaehler", z);
+				request.setAttribute("unit", EnergieArt.getEnergieArt(z.getEnergieArt()).getUnitMesswert());
 					}
 				break;
 				
@@ -292,7 +320,11 @@ public class DispatcherServlet extends HttpServlet {
 						vr.getZ().setmList(mDao.listByZaehler(Integer.parseInt(request.getParameter("zid"))));
 					}
 					//hier wird der Verbauch berechnet auf basis der Parameter aus der VerbrauchsForm und an diese Übergeben.
-					vrform.setVl(vr.ListVerbrauch());
+					List<Verbrauchswert> vlsort = vr.ListVerbrauch();
+					Collections.sort(vlsort, new VerbrauchswertComparator(VerbrauchswertComparator.descending, VerbrauchswertComparator.field_date_from));
+					vrform.setVl(vlsort);
+					Collections.sort(vlsort, new VerbrauchswertComparator(VerbrauchswertComparator.ascending, VerbrauchswertComparator.field_date_from));
+					vrform.setVlchart(vlsort);
 					request.setAttribute("verbrauchsForm", vrform);
 					request.setAttribute("entnahmestelle",pdbuffer.getEntnahmestelle(Integer.parseInt(request.getParameter("eid"))));
 					request.setAttribute("zaehler",pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))));

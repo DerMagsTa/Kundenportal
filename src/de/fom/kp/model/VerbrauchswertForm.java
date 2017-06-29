@@ -3,8 +3,11 @@ package de.fom.kp.model;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.eclipse.persistence.internal.helper.SimpleDatabaseType;
 
 import de.fom.kp.persistence.Verbrauchswert;
 
@@ -18,9 +21,13 @@ public class VerbrauchswertForm {
 
 	
 	public VerbrauchswertForm(Verbrauchswert v, DateFormat df, NumberFormat d) {
-		this.from = df.format(v.getFrom());
-		this.to   = df.format(v.getTo());
-		this.verbrauch = d.format(v.getVerbrauch());
+		NumberFormat nf = (NumberFormat) d.clone();
+		SimpleDateFormat sdf = (SimpleDateFormat) df.clone();
+		nf.setMaximumFractionDigits(2);
+		nf.setMinimumFractionDigits(2);
+		this.from = sdf.format(v.getFrom());
+		this.to   = sdf.format(v.getTo());
+		this.verbrauch = nf.format(v.getVerbrauch());
 		this.unit = v.getUnit();
 		this.verbrauchD = v.getVerbrauch();
 	}

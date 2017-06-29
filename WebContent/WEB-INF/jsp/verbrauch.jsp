@@ -96,7 +96,7 @@
 		</div>
 		</form>
 		
-		<table class="table table-hover" style="margin-top: 20px; max-width: 500px;">
+		<table class="table table-hover" style="margin-top: 20px; max-width: 450px;">
 		<thead>
 			<tr>
 				<th><fmt:message key="i18n.DatumVon" /></th>
@@ -111,7 +111,7 @@
 				<tr>
 					<td>${v.from}</td>
 					<td>${v.to}</td>
-					<td>${v.verbrauch}</td>
+					<td style='text-align: right;'>${v.verbrauch}</td>
 					<td>${v.unit}</td>
 				</tr>
 			</c:forEach>
@@ -129,7 +129,7 @@ function drawColColors() {
       data.addColumn('number', '<fmt:message key="i18n.Verbrauch" />');
 
 
-      <c:forEach items="${verbrauchsForm.vl}" var="v">
+      <c:forEach items="${verbrauchsForm.vlchart}" var="v">
       data.addRow(['${v.from}-${v.to}', ${v.verbrauchD} ]);
       </c:forEach>
 

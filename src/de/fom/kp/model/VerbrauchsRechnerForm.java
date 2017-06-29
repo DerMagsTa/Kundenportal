@@ -27,7 +27,12 @@ public class VerbrauchsRechnerForm {
 	private String to;
 	private String mode;
 	private List<VerbrauchswertForm> vl;
+	private List<VerbrauchswertForm> vlchart;
 	
+	public List<VerbrauchswertForm> getVlchart() {
+		return vlchart;
+	}
+
 	public VerbrauchsRechnerForm(SimpleDateFormat df, NumberFormat d) {
 		// TODO Auto-generated constructor stub
 		this.d = d;
@@ -36,8 +41,8 @@ public class VerbrauchsRechnerForm {
 
 	public VerbrauchsRechnerForm(HttpServletRequest request, SimpleDateFormat df, NumberFormat d) {
 		// TODO Auto-generated constructor stub
-		this.d = d;
-		this.df = df;
+		this.d = (NumberFormat) d.clone();
+		this.df = (SimpleDateFormat) df.clone();
 		this.from = request.getParameter("Datumvon");
 		this.to = request.getParameter("Datumbis");
 		this.mode = request.getParameter("mode");
@@ -77,7 +82,7 @@ public class VerbrauchsRechnerForm {
 	}
 
 	public void setDf(SimpleDateFormat df) {
-		this.df = df;
+		this.df = (SimpleDateFormat) df.clone();
 	}
 
 	public NumberFormat getD() {
@@ -85,7 +90,7 @@ public class VerbrauchsRechnerForm {
 	}
 
 	public void setD(NumberFormat d) {
-		this.d = d;
+		this.d = (NumberFormat) d.clone();
 	}
 
 	public String getFrom() {
@@ -123,6 +128,13 @@ public class VerbrauchsRechnerForm {
 		}
 	}
 	
+	public void setVlchart(List<Verbrauchswert> vl) {
+		this.vlchart = new ArrayList<VerbrauchswertForm>();
+		for (Verbrauchswert verbrauchswert : vl) {
+			this.vlchart.add(new VerbrauchswertForm(verbrauchswert, df, d));
+		}
+	}
+
 	public void validate(List<Message> errors){
 		//Bei der Verbrauchsanzeige muss das Von datum kleiner dem Bis Datum sein...
 		Date d_from = null;

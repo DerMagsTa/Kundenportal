@@ -79,7 +79,16 @@ public class JdbcMesswertDao extends JdbcDao implements MesswertDao {
 
 	@Override
 	public Messwert delete(Integer id) throws DaoException {
-		// TODO Auto-generated method stub
+		try (Connection c = ds.getConnection()) {
+			PreparedStatement pst = null;
+			if (id != null) {
+				pst = c.prepareStatement("DELETE FROM kundenportal.messwerte WHERE(ID=?)");
+				pst.setInt(1, id);
+				pst.executeUpdate();
+			}
+			} catch (SQLException error) {
+				throw new DaoException(error.getMessage(), error);
+			}
 		return null;
 	}
 
