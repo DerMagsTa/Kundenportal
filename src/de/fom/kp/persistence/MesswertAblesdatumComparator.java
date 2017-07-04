@@ -10,18 +10,15 @@ public class MesswertAblesdatumComparator implements Comparator<Messwert> {
 	private String aufab;
 	
 	public MesswertAblesdatumComparator(String aufab) {
-		// TODO Auto-generated constructor stub
 		this.aufab = aufab;
 	}
 	
 	public MesswertAblesdatumComparator( ) {
-		// TODO Auto-generated constructor stub
 		this.aufab = ascending;
 	}
 
 	@Override
 	public int compare(Messwert arg0, Messwert arg1) {
-		// TODO Auto-generated method stub
 		Integer comp;
 		switch (aufab) {
 		case ascending:

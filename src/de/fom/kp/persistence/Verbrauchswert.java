@@ -1,6 +1,5 @@
 package de.fom.kp.persistence;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 public class Verbrauchswert {
@@ -12,7 +11,7 @@ public class Verbrauchswert {
 	private String Unit;
 
 	public Verbrauchswert() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	public Integer getzId() {
@@ -63,6 +62,4 @@ public class Verbrauchswert {
 		Unit = unit;
 	}
 	
-	
-
 }

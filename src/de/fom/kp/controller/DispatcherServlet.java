@@ -8,7 +8,6 @@ import javax.naming.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.sql.DataSource;
-import javax.xml.registry.infomodel.User;
 
 import org.apache.commons.lang3.*;
 
@@ -46,19 +45,23 @@ public class DispatcherServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PersonDataBuffer pdbuffer = (PersonDataBuffer)request.getSession().getAttribute("pdbuffer");
+		
 		Locale locale = (Locale)request.getSession().getAttribute(LocaleFilter.KEY);
-			ResourceBundle bundle = ResourceBundle.getBundle("MessageResources",locale);
-			String pattern =  bundle.getString("i18n.datepattern");
-			request.setAttribute("datepattern", pattern);
-			request.setAttribute("flag", "/images/flag_"+locale.getLanguage()+".png");	
-			SimpleDateFormat df = new SimpleDateFormat(pattern);
-			df.setLenient(false);
-			NumberFormat d = NumberFormat.getNumberInstance(locale);
-			d.setParseIntegerOnly(false);
-			//System.out.println(request.getRequestURI());
-			String[] sa = StringUtils.split(request.getServletPath(), "/.\\");
-			String forward = null;
-			switch (sa[0]) {
+		ResourceBundle bundle = ResourceBundle.getBundle("MessageResources",locale);
+		String pattern =  bundle.getString("i18n.datepattern");
+		request.setAttribute("datepattern", pattern);
+		request.setAttribute("flag", "/images/flag_"+locale.getLanguage()+".png");	
+		
+		SimpleDateFormat df = new SimpleDateFormat(pattern);
+		df.setLenient(false);
+		
+		NumberFormat d = NumberFormat.getNumberInstance(locale);
+		d.setParseIntegerOnly(false);
+		
+		String[] sa = StringUtils.split(request.getServletPath(), "/.\\");
+		String forward = null;
+		Boolean logout = false;
+		switch (sa[0]) {
 			case "index":
 				
 			case "welcome":
@@ -66,10 +69,6 @@ public class DispatcherServlet extends HttpServlet {
 				Person user = (Person) request.getSession().getAttribute("user");
 				PersonForm pf = new PersonForm(user, df, d);
 				request.setAttribute("personform",pf);
-				break;
-
-			case "personlist": 
-				forward = list(request);
 				break;
 				
 			case "register":
@@ -113,12 +112,6 @@ public class DispatcherServlet extends HttpServlet {
 					request.setAttribute("form",form);
 				}
 				break;
-				
-			case "entnahmestellen":
-				//Testseite - später löschen?
-				request.setAttribute("entnahmestellen",eDao.list());
-				forward = "entnahmestellen";
-				break;
 			
 			case "entnahmestelle":
 				forward = "entnahmestelle";
@@ -148,8 +141,14 @@ public class DispatcherServlet extends HttpServlet {
 					}
 				}else if(request.getParameter("eid")!=null){
 					//vorhandene Entnahmestelle soll geändert werden
-					EStellenForm eForm = new EStellenForm(pdbuffer.getEntnahmestelle(Integer.parseInt(request.getParameter("eid"))));
-					request.setAttribute("eform",eForm);
+					//-> Berechtigung prüfen
+					if ( pdbuffer.checkEntnahmestelle(request.getParameter("eid"))== false){
+							response.sendRedirect(request.getContextPath() + "/welcome.html");
+							forward=null;
+						}else{
+							EStellenForm eForm = new EStellenForm(pdbuffer.getEntnahmestelle(Integer.parseInt(request.getParameter("eid"))));
+							request.setAttribute("eform",eForm);
+						}
 				}else{
 						//neue Entnahmestelle soll angegeben werden
 						EStellenForm eForm = new EStellenForm();
@@ -183,48 +182,48 @@ public class DispatcherServlet extends HttpServlet {
 						zf.setEntnahmestellenId(pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))).getEntnahmestelleId());
 						request.setAttribute("zform", zf);
 					}if(request.getParameter("eid")!=null){
-					//ein neuer Zähler soll angelegt werden
-					zf = new ZaehlerForm();
-							zf.setEntnahmestellenId(Integer.parseInt(request.getParameter("eid")));
-							request.setAttribute("zform", zf);
+						//ein neuer Zähler soll angelegt werden
+						zf = new ZaehlerForm();
+						zf.setEntnahmestellenId(Integer.parseInt(request.getParameter("eid")));
+						request.setAttribute("zform", zf);
 					}
 		
-				if(request.getParameter("zspeichern")!=null){
-					zf = new ZaehlerForm(request);
-					List<Message> errors = new ArrayList<Message>();
-					zf.validate(errors);
-					if(errors.size()!=0){
-						request.setAttribute("zform", zf);
-						request.setAttribute("errors", errors);
-					}else{
-						Zaehler z = zf.getZaehler();
-						zDao.save(z);
-						if (request.getParameter("eid")!=null){
-							//insert
-							pdbuffer.getZs().add(z);
-							pdbuffer.getEntnahmestelle(z.getEntnahmestelleId()).getZaehler().add(z);
+					if(request.getParameter("zspeichern")!=null){
+						zf = new ZaehlerForm(request);
+						List<Message> errors = new ArrayList<Message>();
+						zf.validate(errors);
+						if(errors.size()!=0){
+							request.setAttribute("zform", zf);
+							request.setAttribute("errors", errors);
 						}else{
-							//Update
-							//alten zähler in der Puffer Klasse mit dem neuen ersetzen;
-							pdbuffer.getEntnahmestelle(z.getEntnahmestelleId()).getZaehler().set(pdbuffer.getEntnahmestelle(z.getEntnahmestelleId()).getZaehler().indexOf(pdbuffer.getZaehler(z.getId())), z);
-							pdbuffer.getZs().set(pdbuffer.getZs().indexOf(pdbuffer.getZaehler(z.getId())), z);
+							Zaehler z = zf.getZaehler();
+							zDao.save(z);
+							if (request.getParameter("eid")!=null){
+								//insert
+								pdbuffer.getZs().add(z);
+								pdbuffer.getEntnahmestelle(z.getEntnahmestelleId()).getZaehler().add(z);
+							}else{
+								//Update
+								//alten zähler in der Puffer Klasse mit dem neuen ersetzen;
+								pdbuffer.getEntnahmestelle(z.getEntnahmestelleId()).getZaehler().set(pdbuffer.getEntnahmestelle(z.getEntnahmestelleId()).getZaehler().indexOf(pdbuffer.getZaehler(z.getId())), z);
+								pdbuffer.getZs().set(pdbuffer.getZs().indexOf(pdbuffer.getZaehler(z.getId())), z);
+							}
+							//bei erfolgreichem Ändern/Anlegen zurücl auf welcome
+							response.sendRedirect(request.getContextPath() + "/welcome.html");
+							forward=null;
 						}
-						//bei erfolgreichem Ändern/Anlegen zurücl auf welcome
-						response.sendRedirect(request.getContextPath() + "/welcome.html");
-						forward=null;
 					}
-				}		
-				
-				if(request.getParameter("zdele")!=null){
-					zf = new ZaehlerForm(request);
-					Zaehler z = zf.getZaehler();
-					zDao.delete(z.getId());
-					pdbuffer.getEntnahmestelle(z.getEntnahmestelleId()).getZaehler().remove(pdbuffer.getZaehler((z.getId())));
-					pdbuffer.getZs().remove(pdbuffer.getZaehler(z.getId()));
-					//bei erfolgreichem Löschen zurück auf welcome
-					response.sendRedirect(request.getContextPath() + "/welcome.html");
-					forward=null;					
-				}}
+					if(request.getParameter("zdele")!=null){
+						zf = new ZaehlerForm(request);
+						Zaehler z = zf.getZaehler();
+						zDao.delete(z.getId());
+						pdbuffer.getEntnahmestelle(z.getEntnahmestelleId()).getZaehler().remove(pdbuffer.getZaehler((z.getId())));
+						pdbuffer.getZs().remove(pdbuffer.getZaehler(z.getId()));
+						//bei erfolgreichem Löschen zurück auf welcome
+						response.sendRedirect(request.getContextPath() + "/welcome.html");
+						forward=null;					
+					}
+				}
 				break;
 				
 			case "zaehlerstaende":
@@ -235,8 +234,8 @@ public class DispatcherServlet extends HttpServlet {
 				Integer eId;
 				Zaehler z;
 				Messwert m;
-				if ( (pdbuffer.checkEntnahmestelle(request.getParameter("eid")) == false) || 
-			         (pdbuffer.checkZaehler(request.getParameter("zid")) == false) ||
+				if ((pdbuffer.checkEntnahmestelle(request.getParameter("eid")) == false) || 
+			        (pdbuffer.checkZaehler(request.getParameter("zid")) == false) ||
 					(request.getParameter("mid") != null && pdbuffer.checkMesswert(request.getParameter("mid"), request.getParameter("zid")) == false)){
 					//Bei Zäherlständen haben wir im Request eid, zid und ggf mid bei Neuanlage eines Messwertes.
 					//Entnahmestelle und Zähler müssen zum user gehören
@@ -248,57 +247,57 @@ public class DispatcherServlet extends HttpServlet {
 					zId = Integer.parseInt(request.getParameter("zid"));
 					eId = Integer.parseInt(request.getParameter("eid"));
 					z = pdbuffer.getZaehler(zId);
-				if(request.getParameter("zspeichern")!=null){
-					//ein Zählerstand soll gespeichert werden (Klick auf Save)
-					mForm = new MesswerteForm(request, df, d);
-					List<Message> errors = new ArrayList<Message>();
-					//Die Messwerte sind im Puffer gepspeichert!
-					List<Messwert> mList = z.getmList();
-					Collections.sort(mList, new MesswertAblesdatumComparator());
-					mForm.validate(errors, mList);
-					if(errors.size()!=0){
-						//error
-						request.setAttribute("mform", mForm);
-						request.setAttribute("errors", errors);
-					}else{
-						//success
-						m = mForm.getMesswertClass();
-						mDao.save(m);
-						
-						if (mForm.getId()==null){
-							z.getmList().add(m);
+					if(request.getParameter("zspeichern")!=null){
+						//ein Zählerstand soll gespeichert werden (Klick auf Save)
+						mForm = new MesswerteForm(request, df, d);
+						List<Message> errors = new ArrayList<Message>();
+						//Die Messwerte sind im Puffer gepspeichert!
+						List<Messwert> mList = z.getmList();
+						Collections.sort(mList, new MesswertAblesdatumComparator());
+						mForm.validate(errors, mList);
+						if(errors.size()!=0){
+							//error
+							request.setAttribute("mform", mForm);
+							request.setAttribute("errors", errors);
 						}else{
-							Messwert alt = z.getMWert(m.getId());
-							Integer index = z.getmList().indexOf(alt);
-							z.getmList().set(index, m);
+							//success
+							m = mForm.getMesswertClass();
+							mDao.save(m);
+							
+							if (mForm.getId()==null){
+								z.getmList().add(m);
+							}else{
+								Messwert alt = z.getMWert(m.getId());
+								Integer index = z.getmList().indexOf(alt);
+								z.getmList().set(index, m);
+							}
+							request.getSession().setAttribute("pdbuffer", pdbuffer);
+							mForm = new MesswerteForm(df, d);
 						}
-						request.getSession().setAttribute("pdbuffer", pdbuffer);
-						mForm = new MesswerteForm(df, d);
-					}		
-				}else if(request.getParameter("mid")!=null){
-					mId = Integer.parseInt(request.getParameter("mid"));
-					if(request.getParameter("del")!=null){
-						//ein Zählerstand soll gelöscht werden
-						m = pdbuffer.getZaehler(zId).getMWert(mId);
-						mDao.delete(mId);
-						pdbuffer.getZaehler(zId).getmList().remove(m);
-						mForm = new MesswerteForm(df, d);
-					}else{
-					//vorhandener Zählerstand soll geändert werden
-					mForm = new MesswerteForm(z.getMWert(mId), df, d);
-					}
-					
-				}else{
-						//neuer Zählerstand soll angegeben werden (default - beim Aufruf der Seite)
-						mForm = new MesswerteForm(df, d);
+					}else if(request.getParameter("mid")!=null){
+						mId = Integer.parseInt(request.getParameter("mid"));
+						if(request.getParameter("del")!=null){
+							//ein Zählerstand soll gelöscht werden
+							m = pdbuffer.getZaehler(zId).getMWert(mId);
+							mDao.delete(mId);
+							pdbuffer.getZaehler(zId).getmList().remove(m);
+							mForm = new MesswerteForm(df, d);
+						}else{
+						//vorhandener Zählerstand soll geändert werden
+						mForm = new MesswerteForm(z.getMWert(mId), df, d);
+						}
 						
-					 }
-				mForm.setZaehlerId(z.getId());
-				request.setAttribute("mform",mForm);
-				request.setAttribute("entnahmestelle", pdbuffer.getEntnahmestelle(eId));
-				request.setAttribute("zaehler", z);
-				request.setAttribute("unit", EnergieArt.getEnergieArt(z.getEnergieArt()).getUnitMesswert());
-					}
+					}else{
+							//neuer Zählerstand soll angegeben werden (default - beim Aufruf der Seite)
+							mForm = new MesswerteForm(df, d);
+							
+						 }
+					mForm.setZaehlerId(z.getId());
+					request.setAttribute("mform",mForm);
+					request.setAttribute("entnahmestelle", pdbuffer.getEntnahmestelle(eId));
+					request.setAttribute("zaehler", z);
+					request.setAttribute("unit", EnergieArt.getEnergieArt(z.getEnergieArt()).getUnitMesswert());
+				}
 				break;
 				
 			case "verbrauch":
@@ -311,59 +310,55 @@ public class DispatcherServlet extends HttpServlet {
 					request.setAttribute("verbrauchsForm", vrform);
 					request.setAttribute("errors", errors);
 				}else{
-				Verbrauchsrechner vr = vrform.getVerbrauchsrechner();
-				
-				//den Verbrauch nur berechenen, wenn der Zähler und Entnahmetelle auch zur Person gehört!
-				if (pdbuffer.checkZaehler(request.getParameter("zid")) &&
-				    pdbuffer.checkEntnahmestelle(request.getParameter("eid"))){
+					Verbrauchsrechner vr = vrform.getVerbrauchsrechner();
+					
 					//den Verbrauch nur berechenen, wenn der Zähler und Entnahmetelle auch zur Person gehört!
-					vr.setZ(pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))));
-					if (vr.getZ().getmList().size()==0){
-						//wenn die Messwerte leer sind dann von der DB lesen
-						// es kann auch sein, dass der Zähler keine Messwerte hat... aber warum dann Verbauch anzeigen?!
-						vr.getZ().setmList(mDao.listByZaehler(Integer.parseInt(request.getParameter("zid"))));
+					if (pdbuffer.checkZaehler(request.getParameter("zid")) &&
+					    pdbuffer.checkEntnahmestelle(request.getParameter("eid"))){
+						//den Verbrauch nur berechenen, wenn der Zähler und Entnahmetelle auch zur Person gehört!
+						vr.setZ(pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))));
+						if (vr.getZ().getmList().size()==0){
+							//wenn die Messwerte leer sind dann von der DB lesen
+							// es kann auch sein, dass der Zähler keine Messwerte hat... aber warum dann Verbauch anzeigen?!
+							vr.getZ().setmList(mDao.listByZaehler(Integer.parseInt(request.getParameter("zid"))));
+						}
+						//hier wird der Verbauch berechnet auf basis der Parameter aus der VerbrauchsForm und an diese Übergeben.
+						List<Verbrauchswert> vlsort = vr.ListVerbrauch();
+						Collections.sort(vlsort, new VerbrauchswertComparator(VerbrauchswertComparator.descending, VerbrauchswertComparator.field_date_from));
+						vrform.setVl(vlsort);
+						Collections.sort(vlsort, new VerbrauchswertComparator(VerbrauchswertComparator.ascending, VerbrauchswertComparator.field_date_from));
+						vrform.setVlchart(vlsort);
+						request.setAttribute("verbrauchsForm", vrform);
+						request.setAttribute("entnahmestelle",pdbuffer.getEntnahmestelle(Integer.parseInt(request.getParameter("eid"))));
+						request.setAttribute("zaehler",pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))));
+				    //sonst Redirect auf Welcome!
+					}else{
+						response.sendRedirect(request.getContextPath() + "/welcome.html");
+						forward=null;
 					}
-					//hier wird der Verbauch berechnet auf basis der Parameter aus der VerbrauchsForm und an diese Übergeben.
-					List<Verbrauchswert> vlsort = vr.ListVerbrauch();
-					Collections.sort(vlsort, new VerbrauchswertComparator(VerbrauchswertComparator.descending, VerbrauchswertComparator.field_date_from));
-					vrform.setVl(vlsort);
-					Collections.sort(vlsort, new VerbrauchswertComparator(VerbrauchswertComparator.ascending, VerbrauchswertComparator.field_date_from));
-					vrform.setVlchart(vlsort);
-					request.setAttribute("verbrauchsForm", vrform);
-					request.setAttribute("entnahmestelle",pdbuffer.getEntnahmestelle(Integer.parseInt(request.getParameter("eid"))));
-					request.setAttribute("zaehler",pdbuffer.getZaehler(Integer.parseInt(request.getParameter("zid"))));
-			    //sonst Redirect auf Welcome!
-				}else{
-					response.sendRedirect(request.getContextPath() + "/welcome.html");
-					forward=null;
-				}}
-				break;
-			case "contact":
+				}
 				break;
 				
 			case "logout":
 				request.getSession().invalidate();
+				logout = true;
 				response.sendRedirect(request.getContextPath()+"/login.jsp");
 				break;
 				
 			default:
 				break;
-			}
-			
-			request.getSession().setAttribute("pdbuffer",pdbuffer);
-			
-			if(forward!=null){
-				request.setAttribute("forward", forward);
-				request.getRequestDispatcher("/WEB-INF/jsp/"+forward+".jsp").forward(request, response);
-			}
+		}
 		
-	}
+		if(!logout){
+			request.getSession().setAttribute("pdbuffer",pdbuffer);
+		}
 
-	private String list(HttpServletRequest request) throws DaoException {
-		String forward;
-		request.setAttribute("personlist", personDao.list());
-		forward = "personlist";
-		return forward;
+		
+		if(forward!=null){
+			request.setAttribute("forward", forward);
+			request.getRequestDispatcher("/WEB-INF/jsp/"+forward+".jsp").forward(request, response);
+		}
+		
 	}
 
 	@Override

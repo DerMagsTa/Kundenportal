@@ -1,7 +1,5 @@
 package de.fom.kp.model;
 
-import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,9 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.openejb.server.httpd.HttpRequest;
 
-import de.fom.kp.persistence.Messwert;
 import de.fom.kp.persistence.Verbrauchsrechner;
 import de.fom.kp.persistence.Verbrauchswert;
 import de.fom.kp.view.Message;
@@ -34,13 +30,11 @@ public class VerbrauchsRechnerForm {
 	}
 
 	public VerbrauchsRechnerForm(SimpleDateFormat df, NumberFormat d) {
-		// TODO Auto-generated constructor stub
 		this.d = d;
 		this.df = df;
 	}
 
 	public VerbrauchsRechnerForm(HttpServletRequest request, SimpleDateFormat df, NumberFormat d) {
-		// TODO Auto-generated constructor stub
 		this.d = (NumberFormat) d.clone();
 		this.df = (SimpleDateFormat) df.clone();
 		this.from = request.getParameter("Datumvon");
@@ -62,6 +56,7 @@ public class VerbrauchsRechnerForm {
 				e.printStackTrace();
 			}
 		}else {
+			//Standardm‰ﬂig wird Datum nicht eingegrenzt 
 			v.setFrom(new Date(1901-1900,0,1));
 		}
 		if(to!=null){
@@ -71,6 +66,7 @@ public class VerbrauchsRechnerForm {
 				e.printStackTrace();
 			}
 		}else {
+			//Standardm‰ﬂig wird Datum nicht eingegrenzt 
 			v.setTo(new Date(2099-1900,11,31));
 		}
 		v.setMode(this.mode);

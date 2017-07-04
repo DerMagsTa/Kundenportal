@@ -2,15 +2,10 @@ package de.fom.kp.dao;
 
 import java.security.*;
 import java.sql.*;
-import java.sql.Date;
 import java.util.*;
 
-import javax.annotation.Resource;
 import javax.enterprise.inject.Alternative;
 import javax.sql.*;
-
-import org.apache.commons.lang3.*;
-import org.apache.commons.validator.routines.EmailValidator;
 
 import de.fom.kp.controller.*;
 import de.fom.kp.persistence.*;
@@ -18,7 +13,6 @@ import de.fom.kp.persistence.*;
 @Alternative
 public class JdbcPersonDao implements PersonDao {
 	
-	//@Resource(mappedName="java:comp/env/tomee/kpdatasource")
 	private DataSource ds;
 
 	public JdbcPersonDao() {

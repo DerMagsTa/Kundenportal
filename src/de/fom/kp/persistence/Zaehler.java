@@ -13,6 +13,7 @@ public class Zaehler {
 	private List<Messwert> mList = new ArrayList<Messwert>();
 	
 	public Zaehler() {
+		
 	}
 	
 	public Zaehler(String zaehlerNr, String energieArt) {

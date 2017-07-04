@@ -52,13 +52,12 @@ public class ZaehlerForm {
 	}
 
 	public ZaehlerForm() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	public ZaehlerForm(HttpServletRequest request) {
-		// TODO Auto-generated constructor stub
 		if(StringUtils.isNotBlank(request.getParameter("id"))){
-		id = Integer.parseInt(request.getParameter("id"));
+			id = Integer.parseInt(request.getParameter("id"));
 		}else{
 			id = null;
 		}

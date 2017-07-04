@@ -1,13 +1,8 @@
 package de.fom.kp.model;
 
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.persistence.internal.helper.SimpleDatabaseType;
 
 import de.fom.kp.persistence.Verbrauchswert;
 

@@ -32,8 +32,6 @@ import de.fom.kp.persistence.*;
 public class ReportServlet extends HttpServlet{
 
 	private static final long serialVersionUID = 1L;
-	@SuppressWarnings("unused")
-	private PersonDao dao;
 	private ZaehlerDao zDao;
 	private MesswertDao mDao;
 	
@@ -45,7 +43,6 @@ public class ReportServlet extends HttpServlet{
 			String s = config.getServletContext().getInitParameter("datasource");
 			InitialContext initialContext = new InitialContext();
 			DataSource kp = (DataSource) initialContext.lookup(s);			
-			dao = new JdbcPersonDao(kp);
 			zDao = new JdbcZaehlerDao(kp);
 			mDao = new JdbcMesswertDao(kp);
 		} catch (Exception e) {
@@ -83,7 +80,8 @@ public class ReportServlet extends HttpServlet{
 				    wb = new XSSFWorkbook();
 				    createHelper = wb.getCreationHelper();
 				    sheet = wb.createSheet("new sheet");
-	
+				    
+				    //Überschriften
 				    row = sheet.createRow((short)0);
 				    row.createCell(0).setCellValue(createHelper.createRichTextString("Zählerstände"));
 				    sheet.addMergedRegion(new CellRangeAddress( 0, 0, 0, 1 ));
@@ -102,6 +100,7 @@ public class ReportServlet extends HttpServlet{
 				    row.createCell(0).setCellValue(createHelper.createRichTextString("Ablesedatum"));
 				    row.createCell(1).setCellValue(createHelper.createRichTextString("Messwert"));
 				    
+				    //Datentabelle
 				    dateStyle = wb.createCellStyle();
 				    dateStyle.setDataFormat(createHelper.createDataFormat().getFormat(df.toPattern()));
 					Integer rowId = 5;
@@ -141,6 +140,7 @@ public class ReportServlet extends HttpServlet{
 				    createHelper = wb.getCreationHelper();
 				    sheet = wb.createSheet("new sheet");
 	
+				    //Überschriften
 				    row = sheet.createRow((short)0);
 				    row.createCell(0).setCellValue(createHelper.createRichTextString("Verbrauchswerte"));
 				    sheet.addMergedRegion(new CellRangeAddress( 0, 0, 0, 1 ));
@@ -161,6 +161,7 @@ public class ReportServlet extends HttpServlet{
 				    row.createCell(2).setCellValue(createHelper.createRichTextString("Verbrauch"));
 				    row.createCell(3).setCellValue(createHelper.createRichTextString("Einheit"));
 				    
+				    //Datentabelle
 				    dateStyle = wb.createCellStyle();
 				    dateStyle.setDataFormat(createHelper.createDataFormat().getFormat(df.toPattern()));
 					rowId = 5;

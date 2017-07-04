@@ -1,9 +1,7 @@
 package de.fom.kp.dao;
 
-import java.sql.*;
 import java.text.*;
 import java.util.*;
-import java.util.Date;
 
 import javax.enterprise.inject.Alternative;
 

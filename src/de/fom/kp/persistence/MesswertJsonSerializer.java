@@ -16,14 +16,12 @@ public class MesswertJsonSerializer implements JsonSerializer<Messwert> {
 	private NumberFormat nf;
 	
 	public MesswertJsonSerializer(DateFormat df, NumberFormat nf) {
-		// TODO Auto-generated constructor stub
 		this.df = (DateFormat) df.clone();
 		this.nf = (NumberFormat) nf.clone();
 	}
 
 	@Override
 	public JsonElement serialize(Messwert m, Type arg1, JsonSerializationContext arg2) {
-		// TODO Auto-generated method stub
 		nf.setMaximumFractionDigits(2);
 		nf.setMinimumFractionDigits(2);
 		JsonObject result = new JsonObject();

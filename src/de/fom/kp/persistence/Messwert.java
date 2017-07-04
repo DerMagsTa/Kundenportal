@@ -10,8 +10,7 @@ public class Messwert {
 	private Double messwert;
 	
 	public Messwert() {
-		// TODO Auto-generated constructor stub
-	
+
 	}
 
 	public Messwert( Integer zaehlerId,Date ablesedatum, double messwert) {

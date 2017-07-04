@@ -1,7 +1,6 @@
 package de.fom.kp.dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,7 +12,6 @@ import javax.sql.DataSource;
 
 import de.fom.kp.controller.DaoException;
 import de.fom.kp.persistence.Messwert;
-import de.fom.kp.persistence.Zaehler;
 
 public class JdbcMesswertDao extends JdbcDao implements MesswertDao {
 
@@ -134,5 +132,4 @@ public class JdbcMesswertDao extends JdbcDao implements MesswertDao {
 			m.setMesswert(rs.getDouble("Messwert"));
 			return m;
 		}
-
 }

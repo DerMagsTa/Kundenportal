@@ -13,11 +13,6 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li<c:if test="${forward eq 'personlist' }"> class="active"</c:if>><a href="<c:url value="/personlist.html"/>">Personen</a></li>
-            <li<c:if test="${forward eq 'entnahmestelle' }"> class="active"</c:if>><a href="<c:url value="/entnahmestelle.html"/>">Entnahmestellen</a></li>
-            <li<c:if test="${forward eq 'zaehlerliste' }"> class="active"</c:if>><a href="<c:url value="/zaehlerliste.html"/>">Zählerliste</a></li>
-            <li<c:if test="${forward eq 'register' }"> class="active"</c:if>><a href="<c:url value="/register.html"/>">Register</a></li>
-            <li<c:if test="${forward eq 'contact' }"> class="active"</c:if>><a href="<c:url value="/contact.html"/>">Kontakt</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               <img src="<c:url value="${flag}"/>">
@@ -29,6 +24,6 @@
             </li>
             <li><a href="<c:url value="/logout.html"/>">Logout</a></li>
           </ul>
-        </div><!--/.nav-collapse -->
+        </div>
       </div>
     </nav>

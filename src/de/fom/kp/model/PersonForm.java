@@ -3,11 +3,8 @@ package de.fom.kp.model;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
-import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -41,10 +38,7 @@ public class PersonForm {
 	private String plzRegex = "^([0]{1}[1-9]{1}|[1-9]{1}[0-9]{1})[0-9]{3}$";
 	//Regex für: Am Anfang muss eine Zahl stehen, rest beliebige Zeichen
 	private String hausNrRegex = "^[\\d].*";
-	//Regex für: E-Mail Adressen. Diese wird auch vom W3C in ihrem email Tag verwendet. 
-	//Damit aber alle Prüfungen an der selben Stelle erfolgen und alle Fehlermeldungen gleich aussehen
-	//verwenden wir diese hier erst im validate() 
-	private String emailRegex = "^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)+$";
+
 	
 	public PersonForm() {
 		
@@ -112,7 +106,6 @@ public class PersonForm {
 		}else{
 			EmailValidator v = EmailValidator.getInstance();
 			if(!v.isValid(email)){
-			//if(email.matches(emailRegex)==false){
 				errors.add(new Message("email", "Emailadresse nicht gültig"));
 			}else{
 				try {
@@ -120,7 +113,6 @@ public class PersonForm {
 						errors.add(new Message("email", "Emailadresse wird bereits verwendet"));
 					}
 				} catch (DaoException e1) {
-					// TODO Auto-generated catch block
 					errors.add(new Message("email", "Fehler beim Prüfen der Emailadresse"));
 				}
 			}

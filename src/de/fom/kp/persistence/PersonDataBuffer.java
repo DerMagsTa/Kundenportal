@@ -1,9 +1,7 @@
 package de.fom.kp.persistence;
 
-import java.text.ParseException;
 import java.util.List;
 
-import de.fom.kp.view.Message;
 
 public class PersonDataBuffer {
 	
@@ -13,7 +11,7 @@ public class PersonDataBuffer {
 	private List<Messwert> ms;
 	
 	public PersonDataBuffer() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	public Person getP() {

@@ -8,15 +8,14 @@ import javax.servlet.http.*;
 import org.apache.commons.lang3.*;
 
 //In dieser Webanwendung wird für alle Links die auf html enden ein authentifizierter Benutzer benötigt 
-//@WebFilter(urlPatterns="*.html")
 public class SecurityFilter extends BaseFilter {
 
 	@Override
-	public void httpDoFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-			throws IOException, ServletException {
+	public void httpDoFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 		String registerURL = request.getContextPath() + "/register.html";
 
 		if (!request.getRequestURI().equals(registerURL)) {
+			//beim Registrieren benötigt man natürlich keinen eingelogten Benutzer
 			if(request.getSession().getAttribute("user")==null){
 				if(request.getMethod().toLowerCase().equals("get")){
 					String path = request.getRequestURI();
