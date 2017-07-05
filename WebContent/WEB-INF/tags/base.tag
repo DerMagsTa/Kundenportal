@@ -51,7 +51,7 @@
 
     <footer class="footer">
       <div class="container">
-        <p class="text-muted">Current User: ${user.email}</p>
+        <p class="text-muted"><fmt:message key="i18n.Benutzer"/>: ${user.email}</p>
       </div>
     </footer>
     

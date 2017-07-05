@@ -3,10 +3,10 @@
 <%@taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <my:base>
 	<jsp:attribute name="title">
-	Entnahmestelle
+	<fmt:message key="i18n.Titel_Entnahmestelle"/>
 	</jsp:attribute>
 	<jsp:attribute name="headline">
-	Entnahmestelle anlegen / bearbeiten
+	<fmt:message key="i18n.Titel_Entnahmestelle"/>
 	</jsp:attribute>
 	<jsp:body>
 		<div class="container">
@@ -23,7 +23,7 @@
 			</div>
 			
 			<div class="form-group">
-				<label for="hausNr" class="col-sm-2 control-label"><fmt:message key="i18n.Haus-Nr" />*</label> 
+				<label for="hausNr" class="col-sm-2 control-label"><fmt:message key="i18n.HausNr" />*</label> 
 				<div class="col-sm-10">
 				<input type="text" class="form-control" id="hausNr" name="hausNr" placeholder="1a-3b" value="${eform.hausNr}">
 				</div>
@@ -62,15 +62,15 @@
 			</div>
 			
 			<div class="col-sm-offset-2 col-sm-10">
-				<p>* benötigt</p>
-				<input type="submit" class="btn btn-success" value=<fmt:message key="i18n.save"/> name="espeichern" id="esave">
-				<input type="submit" class="btn btn-danger" value=<fmt:message key="i18n.dele"/> name="edele" id="edele">
+				<p>* <fmt:message key="i18n.benötigt"/></p>
+				<input type="submit" class="btn btn-success" value=<fmt:message key="i18n.speichern"/> name="espeichern" id="esave">
+				<input type="submit" class="btn btn-danger" value=<fmt:message key="i18n.löschen"/> name="edele" id="edele">
 				<script>
 				//wenn die ID nicht angegeben ist soll ein zähler angelegt werden, daher "löschen" Button ausbelden
 				//un den Text auf "anlegen" ändern!
 			    if ("${eform.id}" == "") {
 			    	 document.getElementById('edele').style.visibility = 'hidden';
-			    	 document.getElementById('esave').setAttribute('value','<fmt:message key="i18n.create"/>');
+			    	 document.getElementById('esave').setAttribute('value','<fmt:message key="i18n.anlegen"/>');
 			    }
 				</script>
 			</div>

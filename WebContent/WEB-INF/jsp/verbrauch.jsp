@@ -10,11 +10,11 @@
   
 <my:base>
 	<jsp:attribute name="title">
-	Test Verbrauch
+	<fmt:message key="i18n.Titel_Verbrauch"/>
 	</jsp:attribute>
 	<jsp:attribute name="headline">
-	Verbrauch für ${zaehler.energieArt}zähler: ${zaehler.zaehlerNr} <br>
-	auf Entnahmestelle: ${entnahmestelle.straße} ${entnahmestelle.hausNr}, ${entnahmestelle.plz} ${entnahmestelle.ort}
+	<fmt:message key="i18n.Überschrift_Verbrauch1"/> ${zaehler.energieArt}<fmt:message key="i18n.Überschrift_Verbrauch2"/> ${zaehler.zaehlerNr} <br>
+	<fmt:message key="i18n.Überschrift_Verbrauch3"/> ${entnahmestelle.straße} ${entnahmestelle.hausNr}, ${entnahmestelle.plz} ${entnahmestelle.ort}
 	</jsp:attribute>
 	<jsp:attribute name="zusatz">
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -71,11 +71,11 @@
 				${e.message }<br/>
 			</c:forEach>
 				<div class="form-group">
-					<label for="Datumvon"><fmt:message key="i18n.DatumVon" /></label> 
+					<label for="Datumvon"><fmt:message key="i18n.Datum_Von" /></label> 
 					<input type="text" class="form-control" id="Datumvon" name="Datumvon"size="20" value="${verbrauchsForm.from}" placeholder="<fmt:message key="i18n.datepattern"/>">
 				</div>
 				<div class="form-group">
-					<label for="Datumbis"><fmt:message key="i18n.DatumBis" /></label> 
+					<label for="Datumbis"><fmt:message key="i18n.Datum_Bis" /></label> 
 					<input type="text" class="form-control" id="Datumbis" name="Datumbis" size="20" value="${verbrauchsForm.to}" placeholder="<fmt:message key="i18n.datepattern"/>">
 				</div>
 				<br>
@@ -91,15 +91,15 @@
 				</div>
 			<br>
 			<br>
-			<input type="submit" class="btn btn-success" id="anzeigen" value="<fmt:message key="i18n.Anzeigen"/>" name="anzeigen" />
+			<input type="submit" class="btn btn-success" id="anzeigen" value="<fmt:message key="i18n.anzeigen"/>" name="anzeigen" />
 		</div>
 		</form>
 		
 		<table class="table table-hover" style="margin-top: 20px; max-width: 450px;">
 		<thead>
 			<tr>
-				<th><fmt:message key="i18n.DatumVon" /></th>
-				<th><fmt:message key="i18n.DatumBis" /></th>
+				<th><fmt:message key="i18n.Datum_Von" /></th>
+				<th><fmt:message key="i18n.Datum_Bis" /></th>
 				<th><fmt:message key="i18n.Verbrauch" /></th>
 				<th><fmt:message key="i18n.Einheit" /></th>
 				

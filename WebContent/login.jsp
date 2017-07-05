@@ -1,4 +1,5 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,7 +11,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Kundenportal Login</title>
+    <title><fmt:message key="i18n.Titel_Login"/></title>
 
         <!-- Bootstrap core CSS -->
     <link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet">
@@ -70,17 +71,17 @@
 
       <form class="form-signin" method="post" action="j_security_check">
 		
-        <h2 class="form-signin-heading">Please sign in</h2>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" name="j_username" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" name="j_password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <h2 class="form-signin-heading"><fmt:message key="i18n.Überschrift_Login"/></h2>
+        <label for="inputEmail" class="sr-only"><fmt:message key="i18n.Email"/></label>
+        <input type="email" name="j_username" id="inputEmail" class="form-control" placeholder=<fmt:message key="i18n.Email"/> required autofocus>
+        <label for="inputPassword" class="sr-only"><fmt:message key="i18n.Passwort"/></label>
+        <input type="password" name="j_password" id="inputPassword" class="form-control" placeholder=<fmt:message key="i18n.Passwort"/> required>
 
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit"><fmt:message key="i18n.einloggen"/></button>
       </form>
       
       <div class="register">
-      	<a href="<c:url value="/register.html"/>"><button class="btn btn-lg btn-success btn-block">Register</button></a>
+      	<a href="<c:url value="/register.html"/>"><button class="btn btn-lg btn-success btn-block"><fmt:message key="i18n.registrieren"/></button></a>
 		</div>
 		
     </div>   

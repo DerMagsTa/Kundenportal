@@ -3,11 +3,11 @@
 <%@taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <my:base>
 	<jsp:attribute name="title">
-	Zählerstände
+	<fmt:message key="i18n.Titel_Zählerstände"/>
 	</jsp:attribute>
 	<jsp:attribute name="headline">
-	Zählerstände für ${zaehler.energieArt}zähler: ${zaehler.zaehlerNr} <br>
-	auf Entnahmestelle: ${entnahmestelle.straße} ${entnahmestelle.hausNr}, ${entnahmestelle.plz} ${entnahmestelle.ort}
+	<fmt:message key="i18n.Überschrift_Zählerstände1"/> ${zaehler.energieArt}<fmt:message key="i18n.Überschrift_Zählerstände2"/> ${zaehler.zaehlerNr} <br>
+	<fmt:message key="i18n.Überschrift_Zählerstände3"/> ${entnahmestelle.straße} ${entnahmestelle.hausNr}, ${entnahmestelle.plz} ${entnahmestelle.ort}
 	</jsp:attribute>
 	<jsp:body>
 	
@@ -37,7 +37,7 @@
 					html += "<tr><td>" + m.ablesedatum + "</td>";
 					html += "<td style='text-align: right;'>" + m.messwert + "</td>";
 					html += "<td>" + "<a href='${pageContext.request.contextPath}/zaehlerstaende.html?zid=" + getUrlParameter("zid") + "&eid=" + getUrlParameter("eid") +"&mid=" + m.id + "'><button type='button' class='btn btn-success btn-xs'><fmt:message key='i18n.ändern'/></button></a>" + "</td>";
-					html += "<td>" + "<a href='${pageContext.request.contextPath}/zaehlerstaende.html?zid=" + getUrlParameter("zid") + "&eid=" + getUrlParameter("eid") +"&mid=" + m.id + "&del=true" + "'><button type='button' class='btn btn-danger btn-xs'><fmt:message key='i18n.dele'/></button></a>" + "</td></tr>";
+					html += "<td>" + "<a href='${pageContext.request.contextPath}/zaehlerstaende.html?zid=" + getUrlParameter("zid") + "&eid=" + getUrlParameter("eid") +"&mid=" + m.id + "&del=true" + "'><button type='button' class='btn btn-danger btn-xs'><fmt:message key='i18n.löschen'/></button></a>" + "</td></tr>";
 				});
 				$("#Messwerte > tbody").append(html);
 			});
@@ -92,10 +92,10 @@
 					<input type="text" class="form-control" id="ablesedatum" name="ablesedatum" placeholder="${mform.dateFormatPattern}" value="${mform.ablesedatum}">
 				</div>
 				<div class="form-group">
-					<label for="messwert"><fmt:message key="i18n.Zählerstand" /> (<fmt:message key="i18n.ZählerstandUnit${unit}" />)</label> 
+					<label for="messwert"><fmt:message key="i18n.Zählerstand" /> (<fmt:message key="i18n.Zählerstand_Einheit_${unit}" />)</label> 
 					<input type="text" class="form-control" id="messwert" name="messwert" value="${mform.messwert}">
 				</div>
-				<input type="submit" class="btn btn-default" value="save" name="zspeichern">
+				<input type="submit" class="btn btn-default" value=<fmt:message key="i18n.speichern"/> name="zspeichern">
 			</form>
 			<br>
 			<!-- <button id="speichern" class="btn btn-primary"><fmt:message key="i18n.ZSpeichern" /></button> -->
@@ -105,7 +105,7 @@
 			<thead>
 				<tr>
 					<th><fmt:message key="i18n.Ablesedatum" /></th>
-					<th><fmt:message key="i18n.Zählerstand" /> (<fmt:message key="i18n.ZählerstandUnit${unit}" />)</th>
+					<th><fmt:message key="i18n.Zählerstand" /> (<fmt:message key="i18n.Zählerstand_Einheit_${unit}" />)</th>
 					<th></th>
 				</tr>
 			</thead>

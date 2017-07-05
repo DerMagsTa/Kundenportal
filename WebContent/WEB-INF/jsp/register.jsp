@@ -3,10 +3,10 @@
 <%@taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <my:base>
 	<jsp:attribute name="title">
-	Registrieren
+	<fmt:message key="i18n.Titel_Registrierung"/>
 	</jsp:attribute>
 	<jsp:attribute name="headline">
-	Registrierung
+	<fmt:message key="i18n.Titel_Registrierung"/>
 	</jsp:attribute>
 	<jsp:body>
 		<div class="container">
@@ -70,7 +70,7 @@
 			</div>
 			
 			<div class="form-group">
-				<label for="hausNr" class="col-sm-2 control-label"><fmt:message key="i18n.Haus-Nr" />*</label> 
+				<label for="hausNr" class="col-sm-2 control-label"><fmt:message key="i18n.Haus_Nr" />*</label> 
 				<div class="col-sm-10">
 				<input type="text" class="form-control" id="hausNr" name="hausNr" placeholder="1a-3b" value="${form.hausNr}">
 				</div>
@@ -102,15 +102,15 @@
 			</div>
 			
 			<div class="col-sm-offset-2 col-sm-10">
-				<p>* benötigt</p>
-				<input type="submit" class="btn btn-success" value=<fmt:message key="i18n.save"/> name="psave" id="psave">
-				<input type="submit" class="btn btn-danger" value=<fmt:message key="i18n.dele"/> name="pdele" id="pdele">
+				<p>* <fmt:message key="i18n.benötigt"/></p>
+				<input type="submit" class="btn btn-success" value=<fmt:message key="i18n.speichern"/> name="psave" id="psave">
+				<input type="submit" class="btn btn-danger" value=<fmt:message key="i18n.löschen"/> name="pdele" id="pdele">
 				<script>
 				//wenn die ID nicht angegeben ist soll ein zähler angelegt werden, daher "löschen" Button ausbelden
 				//un den Text auf "anlegen" ändern!
 			    if ("${form.id}" == "") {
 			    	 document.getElementById('pdele').style.visibility = 'hidden';
-			    	 document.getElementById('psave').setAttribute('value','<fmt:message key="i18n.create"/>');
+			    	 document.getElementById('psave').setAttribute('value','<fmt:message key="i18n.anlegen"/>');
 			    }
 				</script>
 			</div>

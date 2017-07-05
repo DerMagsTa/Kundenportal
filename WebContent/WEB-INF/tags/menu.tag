@@ -1,4 +1,5 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
@@ -9,7 +10,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="<c:url value="/welcome.html"/>">Meine Übersicht</a>
+          <a class="navbar-brand" href="<c:url value="/welcome.html"/>"><fmt:message key="i18n.Titel_Meine_Übersicht"/></a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
@@ -19,7 +20,7 @@
                Locale <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="<c:url value="/welcome.html?locale=de"/>"><img src="<c:url value="/images/flag_de.png"/>"> Deutsch</a></li>
-                <li><a href="<c:url value="/welcome.html?locale=en"/>"><img src="<c:url value="/images/flag_en.png"/>"> Englisch</a></li>
+                <li><a href="<c:url value="/welcome.html?locale=en"/>"><img src="<c:url value="/images/flag_en.png"/>"> English</a></li>
               </ul>
             </li>
             <li><a href="<c:url value="/logout.html"/>">Logout</a></li>
