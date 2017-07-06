@@ -70,7 +70,7 @@
 			</div>
 			
 			<div class="form-group">
-				<label for="hausNr" class="col-sm-2 control-label"><fmt:message key="i18n.Haus_Nr" />*</label> 
+				<label for="hausNr" class="col-sm-2 control-label"><fmt:message key="i18n.HausNr" />*</label> 
 				<div class="col-sm-10">
 				<input type="text" class="form-control" id="hausNr" name="hausNr" placeholder="1a-3b" value="${form.hausNr}">
 				</div>

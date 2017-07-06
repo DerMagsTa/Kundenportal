@@ -1,5 +1,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<fmt:setBundle basename="MessageResources" scope="session" />
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -25,7 +26,7 @@
 		}
 		
 		.form-signin {
-		  max-width: 330px;
+		  max-width: 375px;
 		  padding: 15px;
 		  margin: 0 auto;
 		}
@@ -82,7 +83,7 @@
       
       <div class="register">
       	<a href="<c:url value="/register.html"/>"><button class="btn btn-lg btn-success btn-block"><fmt:message key="i18n.registrieren"/></button></a>
-		</div>
+	  </div>
 		
     </div>   
   </body>

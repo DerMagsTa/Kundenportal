@@ -139,13 +139,15 @@ public class VerbrauchsRechnerForm {
 			try {
 				d_from = df.parse(from);
 			} catch (ParseException e) {
-				errors.add(new Message("Datumvon", "Datum von kein gültiges Datum"));
+				//Datum von kein gültiges Datum
+				errors.add(new Message("Datumvon", "i18n.Fehler_DatumVon"));
 			}
 		if(StringUtils.isNotBlank(to)){
 			try {
 				d_to = df.parse(to);
 			} catch (ParseException e) {
-				errors.add(new Message("Datumbis", "Datum bis kein gültiges Datum"));
+				//Datum bis kein gültiges Datum
+				errors.add(new Message("Datumbis", "i18n.Fehler_DatumBis"));
 			}
 		}
 		}
@@ -153,7 +155,8 @@ public class VerbrauchsRechnerForm {
 			
 			if (d_to.compareTo(d_from) < 1){
 				//das to datum ist kleiner dem from datum!	
-				errors.add(new Message("Datumbis", "Datum bis muss größer Datum von sein"));
+				//Datum bis muss größer Datum von sein
+				errors.add(new Message("Datumbis", "i18n.Fehler_DatumVonBis"));
 					}
 		}
 	}

@@ -84,16 +84,20 @@ public class ZaehlerForm {
 	
 	public void validate(List<Message> errors){
 		if(StringUtils.isBlank(energieArt)){
-			errors.add(new Message("energieart", "Energieart nicht angegeben"));
+			//Energieart nicht angegeben
+			errors.add(new Message("energieart", "i18n.Fehler_Energieart"));
 		}else{
 		if (EnergieArt.getEnergieArten().contains(energieArt)==false){
-			errors.add(new Message("energieart", (energieArt+" ist keine gültige Energieart")));
+			//Energieart ist nicht gültig
+			errors.add(new Message("energieart", ("i18n.Fehler_Energieart2")));
 		}
 		if(StringUtils.isBlank(zaehlerNr)){
-			errors.add(new Message("zaehlerNr", "Zähler-Nr. nicht angegeben"));
+			//Zähler-Nr. nicht angegeben
+			errors.add(new Message("zaehlerNr", "i18n.Fehler_ZählerNr"));
 		}
 		if(entnahmestellenId==null){
-			errors.add(new Message("entnahemstellenId", "Zähler ist keiner Entnahmestelle zugeordnet"));
+			//Zähler ist keiner Entnahmestelle zugeordnet
+			errors.add(new Message("entnahemstellenId", "i18n.Fehler_Zuordnung"));
 		}
 		}
 		

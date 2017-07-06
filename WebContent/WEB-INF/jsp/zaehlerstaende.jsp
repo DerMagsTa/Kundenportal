@@ -82,7 +82,7 @@
 				
 		<div class="container">
 			<c:forEach items="${errors}" var="e">
-				${e.message }<br/>
+				<fmt:message key= "${e.message}"/><br/>
 			</c:forEach>
 			<form class="form-inline" method="post">
 				<input type="hidden" name="id" value="${mform.id}">

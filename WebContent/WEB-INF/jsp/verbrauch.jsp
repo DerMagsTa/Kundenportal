@@ -68,7 +68,7 @@
 		<form method="post" class="form-inline">
 		<div class="container">
 			<c:forEach items="${errors}" var="e">
-				${e.message }<br/>
+				<fmt:message key= "${e.message}"/><br/>
 			</c:forEach>
 				<div class="form-group">
 					<label for="Datumvon"><fmt:message key="i18n.Datum_Von" /></label> 

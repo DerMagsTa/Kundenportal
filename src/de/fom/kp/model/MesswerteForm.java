@@ -136,24 +136,28 @@ public class MesswerteForm {
 	
 	public void validate(List<Message> errors, List<Messwert> mList){ 
 		if(StringUtils.isBlank(messwert)){
-			errors.add(new Message("messwert", "Messwert nicht angegeben"));
+			//Messwert nicht angegeben
+			errors.add(new Message("messwert", "i18n.Fehler_Messwert"));
 		}
 		if(StringUtils.isBlank(ablesedatum)){
-			errors.add(new Message("ablesedatum", "Ablesedatum nicht angegeben"));
+			//Ablesedatum nicht angegeben
+			errors.add(new Message("ablesedatum", "i18n.Fehler_Ablesedatum"));
 		}
 		
 		if(StringUtils.isNotBlank(messwert)){
 			try {
 				decimalFormat.parse(messwert);
 			} catch (ParseException e) {
-				errors.add(new Message("messwert", "Messwert ist keine gültige Zahl / im falschem Format"));
+				//Messwert ist keine gültige Zahl / im falschem Format
+				errors.add(new Message("messwert", "i18n.Fehler_Messwert2"));
 			}
 		}
 		if(StringUtils.isNotBlank(ablesedatum)){
 			try {
 				dateFormat.parse(ablesedatum);
 			} catch (ParseException e) {
-				errors.add(new Message("ablesedatum", "Ablesedatum ist nicht im richtigen Format"));
+				//Ablesedatum ist nicht im richtigen Format
+				errors.add(new Message("ablesedatum", "i18n.Fehler_Ablesedatum2"));
 			}
 		}
 
@@ -177,17 +181,20 @@ public class MesswerteForm {
 				}
 				if (m.getAblesedatum().equals(w.getAblesedatum())&&w.getId()==null){
 					//der Messwert soll neu angelegt werden, aber zu dem Datum gibt es schon einen Wert!
-					errors.add(new Message("ablesedatum", "Zum angegebene Datum ist bereits ein Messwert gepflegt"));
+					//Zum angegebene Datum ist bereits ein Messwert gepflegt
+					errors.add(new Message("ablesedatum", "i18n.Fehler_Messwert3"));
 				}
 			}
 			if(last.getId()!=null){
 				if (last.getMesswert() > w.getMesswert()){
-					errors.add(new Message("messwert", "Der angegebene Messwert ist kleiner dem vorherigen"));
+					//Der angegebene Messwert ist kleiner dem vorherigen
+					errors.add(new Message("messwert", "i18n.Fehler_Messwert4"));
 				}
 			}
 			if(next.getId()!=null){
 				if (next.getMesswert() < w.getMesswert()){
-					errors.add(new Message("messwert", "Der angegebene Messwert ist größer dem nachfolgenden"));
+					//Der angegebene Messwert ist größer dem nachfolgenden
+					errors.add(new Message("messwert", "i18n.Fehler_Messwert5"));
 				}
 			}
 		}

@@ -72,33 +72,44 @@ public class EStellenForm {
 	}
 	
 	public void validate(List<Message> errors) {
+		
+		//Zur besseren Lesbarkeit sind die deutschen Fehlermeldungen jeweils als Kommentar angegeben.
+		
 		if(StringUtils.isBlank(straße)){
-			errors.add(new Message("straße", "Straße nicht angegeben"));
+			//Straße nicht angegeben
+			errors.add(new Message("straße", "i18n.Fehler_Straße"));
 		}
 		if(StringUtils.isBlank(hausNr)){
-			errors.add(new Message("hausNr", "Haus-Nr nicht angegeben"));
+			//Haus-Nr nicht angegeben
+			errors.add(new Message("hausNr", "i18n.Fehler_HausNr"));
 		}
 		if(!hausNr.matches(hausNrRegex)){
-			errors.add(new Message("hausNr", "Haus-Nr nicht gültig"));
+			//Haus-Nr nicht gültig
+			errors.add(new Message("hausNr", "i18n.Fehler_HausNr2"));
 		}
 		if(StringUtils.isBlank(plz)){
-			errors.add(new Message("plz", "PLZ nicht angegeben"));
+			//PLZ nicht angegeben
+			errors.add(new Message("plz", "i18n.Fehler_PLZ"));
 		}
 		if(StringUtils.isBlank(ort)){
-			errors.add(new Message("ort", "Ort nicht angegeben"));
+			//Ort nicht angegeben
+			errors.add(new Message("ort", "i18n.Fehler_Ort"));
 		}
 		if(StringUtils.isBlank(land)){
-			errors.add(new Message("land", "Land nicht angegeben"));
+			//Land nicht angegeben
+			errors.add(new Message("land", "i18n.Fehler_Land"));
 		}
 		try {
 			if(StringUtils.isNotBlank(plz)){
 				Integer.parseInt(plz);
 			}
 		} catch (NumberFormatException e) {
-			errors.add(new Message("plz", "PLZ ist keine Zahl"));
+			//PLZ ist keine Zahl
+			errors.add(new Message("plz", "i18n.Fehler_PLZ2"));
 		}
 		if(!plz.matches(plzRegex)){
-			errors.add(new Message("plz", "PLZ ist keine gültige Zahl"));
+			//PLZ ist keine gültige Zahl
+			errors.add(new Message("plz", "i18n.Fehler_PLZ3"));
 		} 
 	}
 

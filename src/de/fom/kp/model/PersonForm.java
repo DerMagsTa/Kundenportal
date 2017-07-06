@@ -92,75 +92,94 @@ public class PersonForm {
 	}
 
 	public void validate(List<Message> errors, PersonDao pDao) {
+		
+		//Zur besseren Lesbarkeit sind die deutschen Fehlermeldungen jeweils als Kommentar angegeben.
+		
 		if(StringUtils.isBlank(anrede)){
-			errors.add(new Message("anrede", "Anrede nicht angegeben"));
+			//Anrede nicht angegeben
+			errors.add(new Message("anrede", "i18n.Fehler_Anrede"));
 		}
 		if(StringUtils.isBlank(vorname)){
-			errors.add(new Message("vorname", "Vorname nicht angegeben"));
+			//Vorname nicht angegeben
+			errors.add(new Message("vorname", "i18n.Fehler_Vorname"));
 		}
 		if(StringUtils.isBlank(nachname)){
-			errors.add(new Message("nachname", "Nachname nicht angegeben"));
+			//Nachname nicht angegeben
+			errors.add(new Message("nachname", "i18n.Fehler_Nachname"));
 		}
 		if(StringUtils.isBlank(email)){
-			errors.add(new Message("email", "Email nicht angegeben"));
+			//Email nicht angegeben
+			errors.add(new Message("email", "i18n.Fehler_Email"));
 		}else{
 			EmailValidator v = EmailValidator.getInstance();
 			if(!v.isValid(email)){
-				errors.add(new Message("email", "Emailadresse nicht gültig"));
+				//Emailadresse nicht gültig
+				errors.add(new Message("email", "i18n.Fehler_Email2"));
 			}else{
 				try {
 					if (pDao.checkEmail(email, id)>200){
-						errors.add(new Message("email", "Emailadresse wird bereits verwendet"));
+						//Emailadresse wird bereits verwendet
+						errors.add(new Message("email", "i18n.Fehler_Email3"));
 					}
 				} catch (DaoException e1) {
-					errors.add(new Message("email", "Fehler beim Prüfen der Emailadresse"));
+					//Fehler beim Prüfen der Emailadresse
+					errors.add(new Message("email", "i18n.Fehler_Email4"));
 				}
 			}
 		}
 		
 		if(StringUtils.isBlank(geburtsdatum)){
-			errors.add(new Message("geburtsdatum", "Geburtsdatum nicht angegeben"));
+			//Geburtsdatum nicht angegeben
+			errors.add(new Message("geburtsdatum", "i18n.Fehler_Geburtsdatum"));
 		}
 		if(StringUtils.isNotBlank(geburtsdatum)){
 			try {
 				dateFormat.parse(geburtsdatum);
 			} catch (ParseException e) {
-				errors.add(new Message("geburtsdatum", "Geburtsdatum ist nicht im richtigen Format"));
+				//Geburtsdatum ist nicht im richtigen Format
+				errors.add(new Message("geburtsdatum", "i18n.Fehler_Geburtsdatum2"));
 			}
 		}
 		if(StringUtils.isBlank(straße)){
-			errors.add(new Message("straße", "Straße nicht angegeben"));
+			//Straße nicht angegeben
+			errors.add(new Message("straße", "i18n.Fehler_Straße"));
 		}
 		if(StringUtils.isBlank(hausNr)){
-			errors.add(new Message("hausNr", "Haus-Nr nicht angegeben"));
+			//Haus-Nr. nicht angegeben
+			errors.add(new Message("hausNr", "i18n.Fehler_HausNr"));
 		}
 		if(!hausNr.matches(hausNrRegex)){
-			errors.add(new Message("hausNr", "Haus-Nr nicht gültig"));
+			//Haus-Nr nicht gültig
+			errors.add(new Message("hausNr", "i18n.Fehler_HausNr2"));
 		}
 		if(StringUtils.isBlank(plz)){
-			errors.add(new Message("plz", "PLZ nicht angegeben"));
+			//PLZ nicht angegeben
+			errors.add(new Message("plz", "i18n.Fehler_PLZ"));
 		}
 		try {
 			if(StringUtils.isNotBlank(plz)){
 				Integer.parseInt(plz);
 			}
 		} catch (NumberFormatException e) {
-			errors.add(new Message("plz", "PLZ ist keine Zahl"));
+			//PLZ ist keine Zahl
+			errors.add(new Message("plz", "i18n.Fehler_PLZ2"));
 		}
 		if(!plz.matches(plzRegex)){
-			errors.add(new Message("plz", "PLZ ist keine gültige Zahl"));
+			//PLZ ist nicht gültig
+			errors.add(new Message("plz", "i18n.Fehler_PLZ3"));
 		} 
 		if(StringUtils.isBlank(ort)){
-			errors.add(new Message("ort", "Ort nicht angegeben"));
+			//Ort nicht angegeben
+			errors.add(new Message("ort", "i18n.Fehler_Ort"));
 		}
 		if(StringUtils.isBlank(land)){
-			errors.add(new Message("land", "Land nicht angegeben"));
+			errors.add(new Message("land", "i18n.Fehler_Land"));
 		}
 		if(StringUtils.isBlank(passwort)){
-			errors.add(new Message("passwort", "Passwort nicht angegeben"));
+			errors.add(new Message("passwort", "i18n.Fehler_Passwort"));
 		}
 		if(passwort.length()<6){
-			errors.add(new Message("passwort", "Passwort braucht mindestens 6 Zeichen"));
+			errors.add(new Message("passwort", "i18n.Fehler_Passwort2"));
 		}
 	}
 	
