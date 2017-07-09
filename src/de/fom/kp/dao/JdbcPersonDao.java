@@ -27,7 +27,7 @@ public class JdbcPersonDao extends JdbcDao implements PersonDao {
 	public Person read(Integer id) throws DaoException {
 		try (Connection c = ds.getConnection()) {
 			PreparedStatement pst = c.prepareStatement(
-					"select * from kundenportal.person p where p.id = ?");
+					"SELECT * from kundenportal.person p WHERE p.id = ?");
 			pst.setInt(1, id);
 			ResultSet rs = pst.executeQuery();
 			Person p = null;
@@ -60,8 +60,8 @@ public class JdbcPersonDao extends JdbcDao implements PersonDao {
 				pst.setString(13, encodedSalt);
 			} else {
 				pst = c.prepareStatement(
-						"UPDATE person set Vorname=?, Nachname=?, EMail=?, Geburtstag=?, Anrede=?, Straﬂe=?, HausNr=?, PLZ=?, Ort=?, Land=?, Adminrechte=? WHERE (id=?)");
-				pst.setInt(12, person.getId());
+						"UPDATE person set Vorname=?, Nachname=?, EMail=?, Geburtstag=?, Anrede=?, Straﬂe=?, HausNr=?, PLZ=?, Ort=?, Land=? WHERE id=?");
+				pst.setInt(11, person.getId());
 			}
 			pst.setString(1, person.getVorname());
 			pst.setString(2, person.getNachname());
@@ -73,7 +73,6 @@ public class JdbcPersonDao extends JdbcDao implements PersonDao {
 			pst.setInt(8, person.getPlz());
 			pst.setString(9, person.getOrt());
 			pst.setString(10, person.getLand());
-			pst.setInt(11, person.isAdminrechte() == true ? 1 : 0);
 			
 			pst.executeUpdate();
 			
@@ -93,7 +92,6 @@ public class JdbcPersonDao extends JdbcDao implements PersonDao {
 
 	@Override
 	public Person delete(Integer id) throws DaoException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -101,7 +99,7 @@ public class JdbcPersonDao extends JdbcDao implements PersonDao {
 	public List<Person> list() throws DaoException {
 		List<Person> list = new ArrayList<>();
 		try (Connection c = ds.getConnection()) {
-			PreparedStatement pst = c.prepareStatement("select * from kundenportal.person");
+			PreparedStatement pst = c.prepareStatement("SELECT * from kundenportal.person");
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				Person p = readPersonFromResultset(rs);
@@ -117,7 +115,7 @@ public class JdbcPersonDao extends JdbcDao implements PersonDao {
 	public Person login(String email, String password) throws DaoException {
 		try (Connection c = ds.getConnection()) {
 			PreparedStatement pst = c.prepareStatement(
-					"select * from kundenportal.person p where p.EMail = ? and p.Passwort = sha2(CONCAT(?, salt), 512)");
+					"SELECT * from kundenportal.person p where p.EMail = ? and p.Passwort = sha2(CONCAT(?, salt), 512)");
 			pst.setString(1, email);
 			pst.setString(2, password);
 			ResultSet rs = pst.executeQuery();
@@ -131,16 +129,37 @@ public class JdbcPersonDao extends JdbcDao implements PersonDao {
 		return null;
 	}
 
+
 	@Override
-	public boolean updatePassword(String email, String oldpassword, String newpassword) throws DaoException {
-		// TODO Auto-generated method stub
+	public boolean updatePassword(Integer id, String Passwort_alt, String Passwort_neu) throws DaoException {
+		try (Connection c = ds.getConnection()) {
+			PreparedStatement pst = c.prepareStatement(
+					"SELECT * from kundenportal.person p WHERE p.ID = ? and p.Passwort = sha2(CONCAT(?, salt), 512)");
+			pst.setInt(1, id);
+			pst.setString(2, Passwort_alt);
+			ResultSet rs = pst.executeQuery();
+			if (rs.next()) {
+				final Random r = new SecureRandom();
+				byte[] salt = new byte[32];
+				r.nextBytes(salt);
+				String encodedSalt = Base64.getEncoder().encodeToString(salt);
+				pst = c.prepareStatement("UPDATE Person set Passwort=sha2(?, 512), Salt=? WHERE id=?");
+				pst.setString(1, Passwort_neu + encodedSalt);
+				pst.setString(2, encodedSalt);
+				pst.setInt(3, id);
+				pst.executeUpdate();
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return false;
-	}
+	}	
 
 	@Override
 	public int checkEmail(String value, Integer id) throws DaoException {
 		try(Connection c = ds.getConnection()){
-				PreparedStatement pst = c.prepareStatement("select id from kundenportal.person where email = ?");
+				PreparedStatement pst = c.prepareStatement("SELECT id from kundenportal.person WHERE email = ?");
 				pst.setString(1, value);
 				ResultSet rs = pst.executeQuery();
 				if(rs.next()){
@@ -177,7 +196,6 @@ public class JdbcPersonDao extends JdbcDao implements PersonDao {
 		p.setPlz(rs.getInt("PLZ"));
 		p.setOrt(rs.getString("Ort"));
 		p.setLand(rs.getString("Land"));
-		p.setAdminrechte(rs.getInt("Adminrechte") == 1 ? true : false);
 		return p;
 	}
 }

@@ -26,7 +26,7 @@ public class JdbcMesswertDao extends JdbcDao implements MesswertDao {
 	public Messwert read(Integer id) throws DaoException {
 		try (Connection c = ds.getConnection()) {
 			PreparedStatement pst = c.prepareStatement(
-					"select * from kundenportal.messwerte m where m.id = ?");
+					"SELECT * from kundenportal.messwerte m WHERE m.id = ?");
 			pst.setInt(1, id);
 			ResultSet rs = pst.executeQuery();
 			Messwert m = null;
@@ -56,7 +56,7 @@ public class JdbcMesswertDao extends JdbcDao implements MesswertDao {
 			
 			else {
 				pst = c.prepareStatement(
-						"UPDATE kundenportal.messwerte set Messwert=?, Ablesedatum=? WHERE (ID=?)");
+						"UPDATE kundenportal.messwerte set Messwert=?, Ablesedatum=? WHERE ID=?");
 				pst.setDouble(1, m.getMesswert());
 				pst.setObject(2, m.getAblesedatum());
 				pst.setInt(3, m.getId());
@@ -80,7 +80,7 @@ public class JdbcMesswertDao extends JdbcDao implements MesswertDao {
 		try (Connection c = ds.getConnection()) {
 			PreparedStatement pst = null;
 			if (id != null) {
-				pst = c.prepareStatement("DELETE FROM kundenportal.messwerte WHERE(ID=?)");
+				pst = c.prepareStatement("DELETE FROM kundenportal.messwerte WHERE ID=?");
 				pst.setInt(1, id);
 				pst.executeUpdate();
 			}
@@ -94,7 +94,7 @@ public class JdbcMesswertDao extends JdbcDao implements MesswertDao {
 	public List<Messwert> list() throws DaoException {
 		List<Messwert> list = new ArrayList<>();
 		try (Connection c = ds.getConnection()) {
-			PreparedStatement pst = c.prepareStatement("select * from kundenportal.messwerte");
+			PreparedStatement pst = c.prepareStatement("SELECT * from kundenportal.messwerte");
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				Messwert m = readMesswertFromResultset(rs);
@@ -110,7 +110,7 @@ public class JdbcMesswertDao extends JdbcDao implements MesswertDao {
 	public List<Messwert> listByZaehler(Integer zId) throws DaoException {
 		List<Messwert> list = new ArrayList<>();
 		try (Connection c = ds.getConnection()) {
-			PreparedStatement pst = c.prepareStatement("select * from kundenportal.messwerte m where m.ZaehlerID = ?");
+			PreparedStatement pst = c.prepareStatement("SELECT * from kundenportal.messwerte m WHERE m.ZaehlerID = ?");
 			pst.setInt(1, zId);
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {

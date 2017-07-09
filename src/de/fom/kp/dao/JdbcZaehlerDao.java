@@ -26,7 +26,7 @@ public class JdbcZaehlerDao extends JdbcDao implements ZaehlerDao {
 	public Zaehler read(Integer id) throws DaoException {
 		try (Connection c = ds.getConnection()) {
 			PreparedStatement pst = c.prepareStatement(
-					"select * from kundenportal.zaehler z where z.id = ?");
+					"SELECT * from kundenportal.zaehler z WHERE z.id = ?");
 			pst.setInt(1, id);
 			ResultSet rs = pst.executeQuery();
 			Zaehler z = null;
@@ -55,7 +55,7 @@ public class JdbcZaehlerDao extends JdbcDao implements ZaehlerDao {
 			}				
 			else {
 				pst = c.prepareStatement(
-						"UPDATE kundenportal.zaehler set EntnahmestellenID=?, Energieart=?, ZaehlerNr=? WHERE (ID=?)");
+						"UPDATE kundenportal.zaehler set EntnahmestellenID=?, Energieart=?, ZaehlerNr=? WHERE ID=?");
 				pst.setInt(1,  z.getEntnahmestelleId());
 				pst.setString(2, z.getEnergieArt());
 				pst.setString(3, z.getZaehlerNr());
@@ -78,7 +78,7 @@ public class JdbcZaehlerDao extends JdbcDao implements ZaehlerDao {
 		try (Connection c = ds.getConnection()) {
 			PreparedStatement pst = null;
 			if (id != null) {
-				pst = c.prepareStatement("DELETE FROM kundenportal.zaehler WHERE(ID=?)");
+				pst = c.prepareStatement("DELETE FROM kundenportal.zaehler WHERE ID=?");
 				pst.setInt(1, id);
 				pst.executeUpdate();
 			}
@@ -92,7 +92,7 @@ public class JdbcZaehlerDao extends JdbcDao implements ZaehlerDao {
 	public List<Zaehler> list() throws DaoException {
 		List<Zaehler> list = new ArrayList<>();
 		try (Connection c = ds.getConnection()) {
-			PreparedStatement pst = c.prepareStatement("select * from kundenportal.zaehler");
+			PreparedStatement pst = c.prepareStatement("SELECT * from kundenportal.zaehler");
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				Zaehler z = readZaehlerFromResultset(rs);
@@ -108,7 +108,7 @@ public class JdbcZaehlerDao extends JdbcDao implements ZaehlerDao {
 	public List<Zaehler> listByEStelle(Integer eId) throws DaoException {
 		List<Zaehler> list = new ArrayList<>();
 		try (Connection c = ds.getConnection()) {
-			PreparedStatement pst = c.prepareStatement("select * from kundenportal.zaehler z where z.EntnahmestellenID = ?");
+			PreparedStatement pst = c.prepareStatement("SELECT * from kundenportal.zaehler z WHERE z.EntnahmestellenID = ?");
 			pst.setInt(1, eId);
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {

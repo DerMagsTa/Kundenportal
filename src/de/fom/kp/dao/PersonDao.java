@@ -12,7 +12,7 @@ public interface PersonDao {
 	public Person delete(Integer id) throws DaoException;
 	public List<Person> list() throws DaoException;
 	public Person login(String email, String password) throws DaoException;
-	public boolean updatePassword(String email, String oldpassword, String newpassword) throws DaoException;
+	public boolean updatePassword(Integer id, String Passwort_alt, String Passwort_neu) throws DaoException;
 	public int checkEmail(String value, Integer id) throws DaoException;
 	
 }

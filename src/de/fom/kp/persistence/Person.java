@@ -19,14 +19,13 @@ public class Person {
 	private Integer plz;
 	private String ort;
 	private String land;
-	private boolean adminrechte;
-	
+
 	public Person(){
 		
 	}
 	
 	public Person(Integer id, String email, String passwort, String vorname, String nachname, String anrede, Date geburtsdatum,
-			String straﬂe, String hausNr, Integer plz, String ort, String land, boolean adminrechte) {
+			String straﬂe, String hausNr, Integer plz, String ort, String land) {
 		this.id = id;
 		this.email = email;
 		this.passwort = passwort;
@@ -39,7 +38,6 @@ public class Person {
 		this.plz = plz;
 		this.ort = ort;
 		this.land = land;
-		this.adminrechte = adminrechte;
 	}
 	
 	public Integer getId() {
@@ -113,12 +111,6 @@ public class Person {
 	}
 	public void setLand(String land) {
 		this.land = land;
-	}
-	public boolean isAdminrechte() {
-		return adminrechte;
-	}
-	public void setAdminrechte(boolean adminrechte) {
-		this.adminrechte = adminrechte;
 	}
 	
 }

@@ -53,6 +53,7 @@
 		<span class="col-md-6">${personform.land}</span><br/>
 		</p>
 		<p class="col-md-6"><a href="<c:url value="/register.html?id=${personform.id}"/>"><button type="button" class="btn btn-warning btn-xs"><fmt:message key="i18n.ändern"/></button></a></p>
+		<p class="col-md-6"><a href="<c:url value="/passwort.html"/>"><button type="button" class="btn btn-warning btn-xs"><fmt:message key="i18n.Titel_Passwort"/></button></a></p>
 	</div>
 	
 	<div class="col-md-8">

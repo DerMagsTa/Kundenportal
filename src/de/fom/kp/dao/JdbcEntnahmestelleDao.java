@@ -27,7 +27,7 @@ public class JdbcEntnahmestelleDao extends JdbcDao implements EntnahmestelleDao 
 	public Entnahmestelle read(Integer id) throws DaoException {
 		try (Connection c = ds.getConnection()) {
 			PreparedStatement pst = c.prepareStatement(
-					"select * from kundenportal.entnahmestelle e where e.id = ?");
+					"SELECT * from kundenportal.entnahmestelle e WHERE e.id = ?");
 			pst.setInt(1, id);
 			ResultSet rs = pst.executeQuery();
 			Entnahmestelle e = null;
@@ -60,7 +60,7 @@ public class JdbcEntnahmestelleDao extends JdbcDao implements EntnahmestelleDao 
 			} 
 			else {
 				pst = c.prepareStatement(
-						"UPDATE kundenportal.entnahmestelle set PersonId=?, Straﬂe=?, HausNr=?, Plz=?, Ort=?, Land=?, Hinweis=? WHERE (ID=?)");
+						"UPDATE kundenportal.entnahmestelle set PersonId=?, Straﬂe=?, HausNr=?, Plz=?, Ort=?, Land=?, Hinweis=? WHERE ID=?");
 				pst.setInt(1, e.getPersonId());
 				pst.setString(2, e.getStraﬂe());
 				pst.setString(3, e.getHausNr());
@@ -87,7 +87,7 @@ public class JdbcEntnahmestelleDao extends JdbcDao implements EntnahmestelleDao 
 		try (Connection c = ds.getConnection()) {
 			PreparedStatement pst = null;
 			if (id != null) {
-				pst = c.prepareStatement("DELETE FROM kundenportal.entnahmestelle WHERE(ID=?)");
+				pst = c.prepareStatement("DELETE FROM kundenportal.entnahmestelle WHERE ID=?");
 				pst.setInt(1, id);
 				pst.executeUpdate();
 			}
@@ -101,7 +101,7 @@ public class JdbcEntnahmestelleDao extends JdbcDao implements EntnahmestelleDao 
 	public List<Entnahmestelle> list() throws DaoException {
 		List<Entnahmestelle> list = new ArrayList<>();
 		try (Connection c = ds.getConnection()) {
-			PreparedStatement pst = c.prepareStatement("select * from kundenportal.entnahmestelle");
+			PreparedStatement pst = c.prepareStatement("SELECT * from kundenportal.entnahmestelle");
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				Entnahmestelle e = readEntnahmestelleFromResultset(rs);
@@ -117,7 +117,7 @@ public class JdbcEntnahmestelleDao extends JdbcDao implements EntnahmestelleDao 
 	public List<Entnahmestelle> listByPerson(Integer id) throws DaoException {
 		List<Entnahmestelle> list = new ArrayList<>();
 		try (Connection c = ds.getConnection()) {
-			PreparedStatement pst = c.prepareStatement("select * from kundenportal.entnahmestelle e Where e.PersonId = ?");
+			PreparedStatement pst = c.prepareStatement("SELECT * from kundenportal.entnahmestelle e WHERE e.PersonId = ?");
 			pst.setInt(1, id);
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {

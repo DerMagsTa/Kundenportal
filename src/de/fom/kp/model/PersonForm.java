@@ -30,8 +30,6 @@ public class PersonForm {
 	private String plz;
 	private String ort;
 	private String land;
-	private Integer admin;
-	private boolean changemode = false;
 	private String passwort;
 	
 	//Regex für: 0 darf nur im ersten Zeichen ODER im zweiten Zeichen vorkommen (00123 ist keine PLZ 01234 schon und 10234 auch)
@@ -63,7 +61,6 @@ public class PersonForm {
 		this.plz 			= Integer.toString(p.getPlz());
 		this.ort 			= p.getOrt();
 		this.land			= p.getLand();
-		this.admin 			= p.isAdminrechte() == true ? 1 : 0;
 		this.passwort		= p.getPasswort();
 	}
 	
@@ -85,8 +82,6 @@ public class PersonForm {
 		this.plz 			= request.getParameter("plz");
 		this.ort 			= request.getParameter("ort");
 		this.land 			= request.getParameter("land");
-		this.admin 			= 0;
-		this.changemode 	= Boolean.parseBoolean(request.getParameter("changemode"));
 		this.passwort		= request.getParameter("passwort");
 
 	}
@@ -200,7 +195,6 @@ public class PersonForm {
 		p.setHausNr(hausNr);
 		p.setOrt(ort);
 		p.setLand(land);
-		p.setAdminrechte(admin == 1 ? true : false);
 		p.setPasswort(passwort);
 		return p;
 	}
@@ -311,22 +305,6 @@ public class PersonForm {
 
 	public void setLand(String land) {
 		this.land = land;
-	}
-	
-	public Integer getAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(Integer admin) {
-		this.admin = admin;
-	}
-
-	public boolean getChangemode() {
-		return changemode;
-	}
-
-	public void setChangemode(boolean changemode) {
-		this.changemode = changemode;
 	}
 	
 	public String getPasswort() {

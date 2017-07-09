@@ -112,6 +112,35 @@ public class DispatcherServlet extends HttpServlet {
 					request.setAttribute("form",form);
 				}
 				break;
+				
+			case "passwort":
+				forward = "passwort";
+				if(request.getParameter("pwsave")!=null){
+					//abgeschicktes Formular
+					PasswortForm pwForm = new PasswortForm(request);
+					List<Message> errors = new ArrayList<Message>();
+					pwForm.validate(errors);
+					if(errors.size()!=0){
+						//error
+						request.setAttribute("pwform", pwForm);
+						request.setAttribute("errors", errors);
+					}else{
+						//success
+						Person p = (Person) request.getSession().getAttribute("user");
+						if ( personDao.updatePassword(p.getId(), pwForm.getPasswort_alt(), pwForm.getPasswort_neu())) {
+							//Passwort wurde geändert
+							request.setAttribute("pwupdate", "erfolgreich");
+						} else {
+							// Fehler
+							request.setAttribute("pwupdate", "fehlgeschlagen");
+						}
+					}
+				}else {
+					//Passwort soll geändert werden
+					PasswortForm pwForm = new PasswortForm(request);
+					request.setAttribute("pwform", pwForm);
+				}
+				break;
 			
 			case "entnahmestelle":
 				forward = "entnahmestelle";
