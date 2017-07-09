@@ -170,11 +170,12 @@ public class PersonForm {
 		if(StringUtils.isBlank(land)){
 			errors.add(new Message("land", "i18n.Fehler_Land"));
 		}
-		if(StringUtils.isBlank(passwort)){
-			errors.add(new Message("passwort", "i18n.Fehler_Passwort"));
-		}
-		if(passwort.length()<6){
-			errors.add(new Message("passwort", "i18n.Fehler_Passwort2"));
+		if(id == null){ //Passwort nur bei Neuanlage testen
+			if(StringUtils.isBlank(passwort)){
+				errors.add(new Message("passwort", "i18n.Fehler_Passwort"));
+			} else if(passwort.length()<6){
+				errors.add(new Message("passwort", "i18n.Fehler_Passwort2"));
+			}
 		}
 	}
 	

@@ -3,11 +3,27 @@
 <%@taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <my:base>
 	<jsp:attribute name="title">
-	<fmt:message key="i18n.Titel_Registrierung"/>
+		<c:choose>
+			<c:when test="${empty form.id}">
+				<fmt:message key="i18n.Titel_Registrierung"/>
+			</c:when>
+			<c:otherwise>
+				<fmt:message key="i18n.Titel_Kundendaten_ändern"/>
+			</c:otherwise>
+		</c:choose>
 	</jsp:attribute>
+	
 	<jsp:attribute name="headline">
-	<fmt:message key="i18n.Titel_Registrierung"/>
+		<c:choose>
+			<c:when test="${empty form.id}">
+				<fmt:message key="i18n.Titel_Registrierung"/>
+			</c:when>
+			<c:otherwise>
+				<fmt:message key="i18n.Titel_Kundendaten_ändern"/>
+			</c:otherwise>
+		</c:choose>
 	</jsp:attribute>
+	
 	<jsp:body>
 		<div class="container">
 		<form class="form-horizontal" method="post">
@@ -21,13 +37,16 @@
 				<my:error field="email" errorlist="${errors}"></my:error>
 			</div>
 			
-			<div class="form-group">
-				<label for="straße" class="col-sm-2 control-label"><fmt:message key="i18n.Passwort" />*</label> 
-				<div class="col-sm-10">
-				<input type="password" class="form-control" id="passwort" name="passwort" value="${form.passwort}">
+			<c:if test="${empty form.id}"> 
+			<!-- nur bei Registrierung einblenden -->
+				<div class="form-group">
+					<label for="straße" class="col-sm-2 control-label"><fmt:message key="i18n.Passwort" />*</label> 
+					<div class="col-sm-10">
+					<input type="password" class="form-control" id="passwort" name="passwort" value="${form.passwort}">
+					</div>
+					<my:error field="passwort" errorlist="${errors}"></my:error>
 				</div>
-				<my:error field="passwort" errorlist="${errors}"></my:error>
-			</div>
+			</c:if>
 			
 			<div class="form-group">
 				<label for="straße" class="col-sm-2 control-label"><fmt:message key="i18n.Anrede" />*</label> 
@@ -104,12 +123,9 @@
 			<div class="col-sm-offset-2 col-sm-10">
 				<p>* <fmt:message key="i18n.benötigt"/></p>
 				<input type="submit" class="btn btn-success" value=<fmt:message key="i18n.speichern"/> name="psave" id="psave">
-				<input type="submit" class="btn btn-danger" value=<fmt:message key="i18n.löschen"/> name="pdele" id="pdele">
 				<script>
-				//wenn die ID nicht angegeben ist soll ein zähler angelegt werden, daher "löschen" Button ausbelden
-				//un den Text auf "anlegen" ändern!
+				//wenn die ID nicht angegeben ist soll eine neue Person angelegt werden
 			    if ("${form.id}" == "") {
-			    	 document.getElementById('pdele').style.visibility = 'hidden';
 			    	 document.getElementById('psave').setAttribute('value','<fmt:message key="i18n.anlegen"/>');
 			    }
 				</script>

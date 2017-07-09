@@ -15,17 +15,7 @@
 	<c:if test="${pwupdate eq 'fehlgeschlagen'}">
 		<span style="color: red"><fmt:message key="i18n.Passwort_fehlgeschlagen"/></span>
 	</c:if>
-<%-- 	<%
-	if (request.getParameter("pwupdate").equals("erfolgreich")){     
-		%>
-		<span style="color: green"><fmt:message key="i18n.Passwort_erfolgreich"/></span>
-		<%
-	}else if (request.getParameter("pwupdate").equals("fehlgeschlagen")){
-		%>
-		<span style="color: red"><fmt:message key="i18n.Passwort_fehlgeschlagen"/></span>
-		<%
-	}
-	%> --%>
+
 		<div class="container">
 		<form class="form-horizontal" method="post">
 			
