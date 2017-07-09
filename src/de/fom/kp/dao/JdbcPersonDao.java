@@ -53,11 +53,11 @@ public class JdbcPersonDao extends JdbcDao implements PersonDao {
 				r.nextBytes(salt);
 				String encodedSalt = Base64.getEncoder().encodeToString(salt);
 				pst = c.prepareStatement(
-						"INSERT INTO person (Vorname, Nachname, EMail, Geburtstag, Anrede, Straﬂe, HausNr, PLZ, Ort, Land, Adminrechte, Passwort, salt)"
-								+ "VALUES (?,?,?,?,?,?,?,?,?,?,?, sha2(?, 512), ?)", Statement.RETURN_GENERATED_KEYS);
+						"INSERT INTO person (Vorname, Nachname, EMail, Geburtstag, Anrede, Straﬂe, HausNr, PLZ, Ort, Land, Passwort, salt)"
+								+ "VALUES (?,?,?,?,?,?,?,?,?,?, sha2(?, 512), ?)", Statement.RETURN_GENERATED_KEYS);
 
-				pst.setString(12, person.getPasswort() + encodedSalt);
-				pst.setString(13, encodedSalt);
+				pst.setString(11, person.getPasswort() + encodedSalt);
+				pst.setString(12, encodedSalt);
 			} else {
 				pst = c.prepareStatement(
 						"UPDATE person set Vorname=?, Nachname=?, EMail=?, Geburtstag=?, Anrede=?, Straﬂe=?, HausNr=?, PLZ=?, Ort=?, Land=? WHERE id=?");
