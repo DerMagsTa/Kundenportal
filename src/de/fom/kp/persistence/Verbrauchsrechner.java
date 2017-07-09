@@ -68,6 +68,7 @@ public class Verbrauchsrechner {
 			vList = this.calc_for_each(mList);
 			break;
 		case con_mode_for_year:
+			vList = this.calc_for_year(mList);
 			break;
 		default:
 			break;
@@ -85,36 +86,28 @@ public class Verbrauchsrechner {
 	}
 
 	public List<Verbrauchswert> ListVerbrauch(){
-		List<Verbrauchswert> vList = new ArrayList<Verbrauchswert>();
-		List<Messwert> mList = z.getmList(this.from, this.to);
-		Collections.sort(mList, new MesswertAblesdatumComparator());
-		
+	
 		if (this.mode == null){
 			this.mode = con_mode_for_each;
 		}
-		switch (mode) {	
-		case  con_mode_month:
-			vList = this.calc_by_month(mList);
-			break;
-		case  con_mode_for_each:
-			vList = this.calc_for_each(mList);
-			break;
-		case  con_mode_for_year:
-			vList = this.calc_for_year(mList);
-			break;
-		default:
-			break;
-		}
-		return vList;
+		return this.ListVerbrauch(this.mode);
 		
 	}
 	
 	
 	private List<Verbrauchswert> calc_for_year(List<Messwert> mList) {
+		//Hier wird der Verbrauch je Jahr berechnet.
+		//dazu wird für jedes Jahr der frühete und älteste Messwert ermittelt
+		//und zwischen dieses Messerten die Differenz der Zählerstände gebildet über methode
+		//this.berechneVerbrauch.
+		//Bsp:: 01.01.2017 - 10 kWh; 31.12.2017 - 10000 kWh
+		//Ergebnis: Zeitraum = 01.01.-31.12.2017,  Verbrauch = 9990 kWh.
+		
 		List<Verbrauchswert> vList = new ArrayList<Verbrauchswert>();
 		List<Integer> jahre = new ArrayList<Integer>();
 		
-		//Welche Jahre gibt es im Zeitraum?
+		//Zunächst die Verschiedenen Jahre im zeitraum bestimmen
+		//z.B. 2017, 2016, 2015, ...
 		for (Messwert m : mList) {
 			Integer year = (m.getAblesedatum().getYear()+1990); //Im Integer steht jetzt z.B: 201705
 			if (jahre.contains(year)==false){
@@ -126,9 +119,9 @@ public class Verbrauchsrechner {
 		for (Integer integer : jahre) {
 			Messwert min  = null;
 			Messwert max  = null;
-			//jüngsten und ältesten Messwert je Monat bestimmen
+			//jüngsten und ältesten Messwert je Jahr bestimmen
 			for (Messwert m : mList) {
-				//Wenn der Messwert zum aktuellen Monat gehört
+				//Wenn der Messwert zum aktuellen Jahr gehört
 				if ((m.getAblesedatum().getYear()+1990) == integer){
 					if ((min==null)||(max==null)){
 						min = m;
@@ -153,16 +146,23 @@ public class Verbrauchsrechner {
 			vList.add(e);
 		}
 		
-		
 		return vList;
 	}
 
 	@SuppressWarnings("deprecation")
 	private List<Verbrauchswert> calc_by_month(List<Messwert> mList){
+		//Hier wird der Verbrauch je Monat berechnet.
+		//dazu wird für jeden Monat der frühete und älteste Messwert ermittelt
+		//und zwischen dieses Messerten die Differenz der Zählerstände gebildet über methode
+		//this.berechneVerbrauch.
+		//Bsp:: 01.01.2017 - 10 kWh; 31.01.2017 - 100 kWh
+		//Ergebnis: Zeitraum = 01.01.-31.01.2017,  Verbrauch = 90 kWh.
 		List<Verbrauchswert> vList = new ArrayList<Verbrauchswert>();
 		List<Integer> monate = new ArrayList<Integer>();
 		
 		//Welche Monate gibt es im Zeitraum?
+		//Diese werden als Integer gepspeichert und sind wie folgt aufgebaut: JAHR*100+MONAT
+		//z.Bp.: 201702, 201701, .... 201602, 201601.
 		for (Messwert m : mList) {
 			Integer month = (m.getAblesedatum().getYear()+1990)*100+(m.getAblesedatum().getMonth()+1); //Im Integer steht jetzt z.B: 201705
 			if (monate.contains(month)==false){
@@ -206,6 +206,8 @@ public class Verbrauchsrechner {
 	}
 	
 	private List<Verbrauchswert> calc_for_each(List<Messwert> mList){
+		//Hier wird der Verbauch zwischen dein einzelnnen Messwerten ermittelt.
+		//dazu einfach über alle Messwerte gehen und jeweils den Verbrauch ermitteln.
 		List<Verbrauchswert> vList = new ArrayList<Verbrauchswert>();
 		Messwert last = null;		
 		for (Messwert m : mList) {
@@ -230,6 +232,9 @@ public class Verbrauchsrechner {
 		Double verbrauch = null;
 		verbrauch = high - low;
 		if (this.z.getEnergieArt()==EnergieArt.eart_gas){
+			//Im fall von Energie-Art gas muss von einem Messwert in m³ in einen
+			//Verbrauchswert von kWh umgerechnet werden. Daher muss diese 
+			//Formel verwendet werden
 			verbrauch = verbrauch * con_brennwert * con_zustandszahl;
 		}
 		return verbrauch;

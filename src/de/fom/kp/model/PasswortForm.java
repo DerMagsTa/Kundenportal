@@ -7,9 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 
-import de.fom.kp.controller.DaoException;
-import de.fom.kp.dao.PersonDao;
-import de.fom.kp.persistence.Person;
 import de.fom.kp.view.Message;
 
 public class PasswortForm {
