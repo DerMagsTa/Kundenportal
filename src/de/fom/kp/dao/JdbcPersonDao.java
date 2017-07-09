@@ -11,17 +11,16 @@ import de.fom.kp.controller.*;
 import de.fom.kp.persistence.*;
 
 @Alternative
-public class JdbcPersonDao implements PersonDao {
+public class JdbcPersonDao extends JdbcDao implements PersonDao {
 	
-	private DataSource ds;
 
 	public JdbcPersonDao() {
-		
+		super();
 	}
 	
 	public JdbcPersonDao(DataSource ds) {
 		// DB Verbindungen zur Verfügung stellen
-		this.ds = ds;
+		super(ds);
 	}
 
 	@Override
