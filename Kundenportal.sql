@@ -23,7 +23,6 @@ CREATE TABLE `person` (
   `PLZ` int(5) DEFAULT NULL,
   `Ort` varchar(255) DEFAULT NULL,
   `Land` varchar(255) DEFAULT NULL,
-  `Adminrechte` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `EMail` (`EMail`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -70,7 +69,7 @@ CREATE TABLE `messwerte` (
 
 
 Insert Into Person VALUES (NULL,"test@test.de","3aaa73fbc8ebdd728463b8480ad091508dc5af7a8f39ed73d6192316def8727164530ec357e69ae0631a11b98f128a1b909c674ced22535126a74bf8aa97dea4" ,"8wk8Sr5Pd98B6yLwyzSK9qEe0EAEQ4AjogY1YE1OPbs",
-"Max" ,"Mustermann" ,"Herr" ,"1990-12-24" ,"Teststr." ,1 ,"12345" ,"Testort" , "DE" , "1");
+"Max" ,"Mustermann" ,"Herr" ,"1990-12-24" ,"Teststr." ,1 ,"12345" ,"Testort" , "DE" );
 
 Insert Into Entnahmestelle VALUES (NULL, 1, "Ortsstr." ,"1a" , 10115 ,"Ortsort" ,"DE" ,"steht leer.");
 Insert Into Entnahmestelle VALUES (NULL, 1, "Zweitstr." ,"2a" , 10115 ,"Ortsort" ,"DE" ,"steht voll.");
@@ -98,7 +97,7 @@ INSERT INTO Messwerte VALUES(NULL, 4, "2017-02-01", 124);
 INSERT INTO Messwerte VALUES(NULL, 4, "2017-03-01", 125);
 
 Insert Into Person VALUES (NULL,"test2@test.de","3aaa73fbc8ebdd728463b8480ad091508dc5af7a8f39ed73d6192316def8727164530ec357e69ae0631a11b98f128a1b909c674ced22535126a74bf8aa97dea4" ,"8wk8Sr5Pd98B6yLwyzSK9qEe0EAEQ4AjogY1YE1OPbs",
-"Andi" ,"Mustermann" ,"Herr" ,"1990-12-24" ,"Teststr." ,"2a" ,12345 ,"Testort" , "DE" , "1");
+"Andi" ,"Mustermann" ,"Herr" ,"1990-12-24" ,"Teststr." ,"2a" ,12345 ,"Testort" , "DE" );
 
 Insert Into Entnahmestelle VALUES (NULL, 2, "Ortsstr." ,"1a" , 10115 ,"Ortsort" ,"DE" ,"Andi wohnt hier");
 

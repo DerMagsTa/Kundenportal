@@ -20,6 +20,43 @@
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	<script type="text/javascript">
 		google.charts.load('current', {packages: ['corechart']});
+		google.charts.setOnLoadCallback(drawColColors);
+		
+		function drawColColors() {
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', '<fmt:message key="i18n.Zeitraum" />');
+		data.addColumn('number', '<fmt:message key="i18n.Verbrauch" />');
+
+		<c:forEach items="${verbrauchsForm.vlchart}" var="v">
+			data.addRow(['${v.from}-${v.to}', ${v.verbrauchD} ]);
+		</c:forEach>
+
+		var options = {
+			title: '<fmt:message key="i18n.Verbrauch" />',
+		        colors: ['#9575cd', '#33ac71'],
+		        hAxis: {
+	        title: '<fmt:message key="i18n.Zeitraum" />',
+		        viewWindow: {
+		            min: [100, 300, 0],
+		            max: [100, 300, 0]
+		        }
+	        },
+	        vAxis: {
+	         
+	          title: '<fmt:message key="i18n.Verbrauch" />',
+	          minValue: 0,
+	          viewWindow: {
+	              min: [100, 300, 0],
+	              max: [100, 300, 0]
+	          }
+	        }
+      	};
+      var formatter = new google.visualization.NumberFormat({decimalSymbol: '<fmt:message key="i18n.decimalSymbol" />', groupingSymbol: '<fmt:message key="i18n.groupingSymbol" />' });
+      formatter.format(data, 1);
+      
+      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+	} 
 	</script>
 	</jsp:attribute>
 	<jsp:body>
@@ -118,49 +155,6 @@
 		</table>
 		<a href="<c:url value="/report/verbrauch?id=${zaehler.id}"/>"><button type="button" class="btn btn-warning btn-xs"><fmt:message key="i18n.exportieren"/></button></a>
 		<div id="chart_div"></div>
-		<script>
-		google.charts.load('current', {packages: ['corechart']});
-		  google.charts.setOnLoadCallback(drawColColors);
-		  
-function drawColColors() {
-      var data = new google.visualization.DataTable();
-      data.addColumn('string', '<fmt:message key="i18n.Zeitraum" />');
-      data.addColumn('number', '<fmt:message key="i18n.Verbrauch" />');
-
-
-      <c:forEach items="${verbrauchsForm.vlchart}" var="v">
-      data.addRow(['${v.from}-${v.to}', ${v.verbrauchD} ]);
-      </c:forEach>
-
-      var options = {
-        title: '<fmt:message key="i18n.Verbrauch" />',
-        colors: ['#9575cd', '#33ac71'],
-        hAxis: {
-          title: '<fmt:message key="i18n.Zeitraum" />',
-         
-          viewWindow: {
-            min: [100, 300, 0],
-            max: [100, 300, 0]
-          }
-        },
-        vAxis: {
-         
-          title: '<fmt:message key="i18n.Verbrauch" />',
-          minValue: 0,
-          viewWindow: {
-              min: [100, 300, 0],
-              max: [100, 300, 0]
-            }
-        }
-        
-      };
-      var formatter = new google.visualization.NumberFormat({decimalSymbol: '<fmt:message key="i18n.decimalSymbol" />', groupingSymbol: '<fmt:message key="i18n.groupingSymbol" />' });
-      formatter.format(data, 1);
-      
-      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-      chart.draw(data, options);
-}
-      </script>
       </jsp:body>
 
 </my:base>
