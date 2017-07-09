@@ -87,10 +87,10 @@ public class DispatcherServlet extends HttpServlet {
 						//success
 						Person p = form.getPerson();
 						personDao.save(p);
-						request.getSession().setAttribute("user", p);
 						if (pdbuffer==null){
 							pdbuffer = new PersonDataBuffer();
 						}
+						request.getSession().setAttribute("user", p);
 						pdbuffer.setP(p);
 						response.sendRedirect(request.getContextPath() + "/welcome.html");
 						forward=null;

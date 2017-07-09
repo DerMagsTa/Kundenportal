@@ -1,14 +1,15 @@
 package de.fom.kp.persistence;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class PersonDataBuffer {
 	
 	private Person p;
-	private List<Entnahmestelle> es;
-	private List<Zaehler> zs;
-	private List<Messwert> ms;
+	private List<Entnahmestelle> es = new ArrayList<Entnahmestelle>();
+	private List<Zaehler> zs = new ArrayList<Zaehler>();
+	private List<Messwert> ms = new ArrayList<Messwert>();
 	
 	public PersonDataBuffer() {
 
